@@ -1,0 +1,109 @@
+%% tfgmarcas.sty — Marcas invisibles para la comprobación automática de la memoria en TFGTool.
+%%
+%% Inserta texto invisible (no se ve ni se imprime, pero se extrae del PDF) en:
+%%   TFGTOOL:PORTADA:<version>;        la portada oficial
+%%   TFGTOOL:CUERPO:INICIO:<version>;  la primera página del cuerpo (capítulo 1)
+%%   TFGTOOL:CUERPO:FIN:<version>;     la primera página tras el cuerpo (bibliografía,
+%%                                     glosario o apéndices, lo que llegue antes)
+%%   TFGTOOL:BLANCA:<version>;         las páginas en blanco que inserta \cleardoublepage
+%%                                     (no cuentan para el límite de páginas)
+%% El ';' final delimita la marca. Las marcas se dibujan en el fondo de la página al
+%% imprimirla, así que no alteran la maquetación.
+%%
+%% La clase tfgtfmthesisuam carga este paquete y llama a \tfgmarcaportada,
+%% \tfgmarcainicio, \tfgmarcafin, \tfgmarcablanca y \tfgmarcasfinal en los puntos
+%% adecuados. Si se usa con otra clase basada en book, bastan los hooks genéricos de
+%% \mainmatter, \backmatter, \appendix y la bibliografía definidos al final.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tfgmarcas}[2026/10/04 v2.1 Marcas para la comprobacion automatica de TFGTool]
+
+\newcommand\tfg@version{2}
+
+% --- Texto invisible (modo de renderizado 3 del PDF) -------------------------------
+% pdfrender (TeX Live, oberdiek) lo hace para pdfTeX, XeTeX y LuaTeX; si no está,
+% se emiten los literales directamente según el motor.
+\IfFileExists{pdfrender.sty}{\@tempswatrue}{\@tempswafalse}
+\if@tempswa
+  \RequirePackage{pdfrender}
+  \newcommand\tfg@invisible[1]{%
+    \pdfrender{TextRenderingMode=3}#1\pdfrender{TextRenderingMode=0}}
+\else
+  \RequirePackage{iftex}
+  \ifPDFTeX
+    \newcommand\tfg@invisible[1]{\pdfliteral{3 Tr}#1\pdfliteral{0 Tr}}
+  \else\ifLuaTeX
+    \newcommand\tfg@invisible[1]{\pdfextension literal{3 Tr}#1\pdfextension literal{0 Tr}}
+  \else\ifXeTeX
+    \newcommand\tfg@invisible[1]{\special{pdf:literal 3 Tr}#1\special{pdf:literal 0 Tr}}
+  \else
+    \newcommand\tfg@invisible[1]{}% DVI u otros: sin marcas (el PDF no pasará la comprobación)
+  \fi\fi\fi
+\fi
+
+% La marca, en fuente monoespaciada (el kerning de otras fuentes parte el texto al extraerlo)
+\newcommand\tfg@texto[1]{%
+  \normalfont\ttfamily\tiny\tfg@invisible{TFGTOOL:#1:\tfg@version;}}
+
+% --- Dibujar la marca en la próxima página que se imprima -----------------------------
+% Esquina inferior izquierda de la página (a 10 pt del borde). Con LaTeX 2020-10 o
+% posterior se usa el hook shipout/background (origen en la esquina superior izquierda,
+% y hacia arriba); con formatos antiguos, atbegshi.
+\newif\iftfg@finimpreso
+\ifdefined\AddToHookNext
+  \newcommand\tfg@marcarsiguiente[1]{%
+    \AddToHookNext{shipout/background}{%
+      \put(10,-\strip@pt\dimexpr\paperheight-12pt\relax){\makebox(0,0)[lb]{\tfg@texto{#1}}}}}
+\else
+  \RequirePackage{atbegshi}
+  \newcommand\tfg@marcarsiguiente[1]{%
+    \AtBeginShipoutNext{\AtBeginShipoutUpperLeft{%
+      \raisebox{-\dimexpr\paperheight-12pt\relax}[0pt][0pt]{\hspace*{10pt}\tfg@texto{#1}}}}}
+\fi
+
+% --- Puntos de marcado (los llama la clase) -------------------------------------------
+\newif\iftfg@iniciomarcado
+\newif\iftfg@finmarcado
+
+% La próxima página impresa es la portada oficial
+\newcommand\tfgmarcaportada{\tfg@marcarsiguiente{PORTADA}}
+
+% La próxima página impresa es la primera del cuerpo (solo la primera vez)
+\newcommand\tfgmarcainicio{%
+  \iftfg@iniciomarcado\else
+    \global\tfg@iniciomarcadotrue
+    \tfg@marcarsiguiente{CUERPO:INICIO}%
+  \fi}
+
+% Termina el cuerpo: salta a página impar y marca la siguiente (solo la primera vez).
+% La página en blanco que pueda insertar \cleardoublepage queda marcada como BLANCA.
+\newcommand\tfgmarcafin{%
+  \iftfg@iniciomarcado\iftfg@finmarcado\else
+    \global\tfg@finmarcadotrue
+    \cleardoublepage
+    \tfg@marcarsiguiente{CUERPO:FIN}%
+    \AddToHookNext{shipout/before}{\global\tfg@finimpresotrue}%
+  \fi\fi}
+
+% Página en blanco insertada por \cleardoublepage: la llama la clase justo antes del
+% \newpage de la página vacía
+\newcommand\tfgmarcablanca{\tfg@marcarsiguiente{BLANCA}}
+
+% Al final del documento: si el cuerpo acabó sin que hubiera ninguna página después
+% (sin bibliografía, glosario, apéndices ni índice), se añade una página vacía que
+% lleve la marca de fin; sin ella no se podría calcular la extensión.
+\newcommand\tfgmarcasfinal{%
+  \iftfg@iniciomarcado
+    \iftfg@finmarcado\else\tfgmarcafin\fi
+    \iftfg@finimpreso\else\null\thispagestyle{empty}\clearpage\fi
+  \else
+    \PackageWarningNoLine{tfgmarcas}{No se ha marcado el inicio del cuerpo: falta el primer capitulo numerado}%
+  \fi}
+
+% --- Hooks genéricos para clases que usan \mainmatter / \backmatter --------------------
+\ifdefined\AddToHook
+  \AddToHook{cmd/mainmatter/after}{\tfgmarcainicio}
+  \AddToHook{cmd/backmatter/before}{\tfgmarcafin}
+  \AddToHook{env/thebibliography/before}{\tfgmarcafin}
+  \AtBeginDocument{\ifdefined\printbibliography\AddToHook{cmd/printbibliography/before}{\tfgmarcafin}\fi}
+\fi
+\endinput

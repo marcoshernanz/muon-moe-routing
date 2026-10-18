@@ -1,0 +1,43 @@
+% Esqueleto de memoria de TFG con la clase tfgtfmthesisuam (EPS-UAM).
+% Compilar con pdfLaTeX o XeLaTeX (en Overleaf, el compilador por defecto vale).
+% Las marcas invisibles para la comprobación automática de TFGTool las pone la clase.
+\documentclass[epsbased,copyright,final,printable,extendedindex,firstnumbered,tfg,overleaf]{tfgtfmthesisuam}
+
+\advisor{Nombre del tutor o tutora}
+\levelin{Ingeniería Informática}
+\title{Título del Trabajo Fin de Grado}
+\author{Nombre del autor o autora}
+\copyrightdate{Junio de 2027}
+
+\resumenfile{inicio/resumen}
+\abstractfile{inicio/abstract}
+\keywords{Palabra clave 1, palabra clave 2}
+\palabrasclave{Palabra clave 1, palabra clave 2}
+
+\coverdata
+{
+  Escuela Politécnica Superior \\
+  Universidad Autónoma de Madrid \\
+  C\textbackslash Francisco Tomás y Valiente nº 11
+}
+
+\bibliographyconfig{tfgtfmthesisuam}
+
+\graphicsdir{img}
+\logosdir{img}
+
+\begin{document}
+
+% El cuerpo de la memoria (máximo 40 páginas) va desde aquí hasta las conclusiones
+\chapter{Introducción\label{CAP:INTRO}}{capitulos/introduccion}
+\chapter{Estado del arte\label{CAP:ESTADO}}{capitulos/estado}
+\chapter{Diseño y desarrollo\label{CAP:DESARROLLO}}{capitulos/desarrollo}
+\chapter{Pruebas y resultados\label{CAP:PRUEBAS}}{capitulos/pruebas}
+\chapter{Conclusiones y trabajo futuro\label{CAP:CONCLUSIONES}}{capitulos/conclusiones}
+
+% La bibliografía (y el glosario, si lo hay) se incluyen automáticamente aquí
+\appendix
+
+\chapter{Manual de usuario\label{AP:MANUAL}}{apendices/manual}
+
+\end{document}
