@@ -1,0 +1,76 @@
+% The MoE layer of Section 2.1 for one token: the data path on the left, the router on the right. Dashed arrows carry what no gradient flows through.
+\definecolor{moeblue}{RGB}{49,101,156}
+\definecolor{moegreen}{RGB}{84,130,53}
+\definecolor{moeamber}{RGB}{176,124,0}
+\begin{tikzpicture}[
+    x=1cm, y=1cm, font=\footnotesize, line width=0.5pt,
+    >={Stealth[length=4.5pt, width=3.6pt]},
+    box/.style={draw, rounded corners=1.5pt, minimum width=1.1cm, minimum height=0.72cm, inner sep=1pt},
+    shared/.style={box, draw=moegreen, fill=moegreen!14},
+    active/.style={box, draw=moeblue, fill=moeblue!13},
+    idle/.style={box, draw=black!35, text=black!45},
+    op/.style={box, draw=moeamber, fill=moeamber!13},
+    circ/.style={draw, circle, inner sep=0pt, minimum size=0.36cm},
+    frame/.style={draw=black!40, rounded corners=3pt, fill=black!3},
+    tag/.style={font=\scriptsize, text=black!65},
+    nograd/.style={dashed, dash pattern=on 2.2pt off 1.6pt},
+  ]
+  % Frames first, so that everything else is drawn over them.
+  \draw[frame] (1.15, 1.75) rectangle (7.15, 4.5);
+  \draw[frame] (8.45, 0.2) rectangle (13.65, 4.5);
+  \node[tag, anchor=north west] at (1.2, 4.47) {routed experts};
+  \node[tag, anchor=north east] at (13.6, 4.47) {router};
+
+  % Experts.
+  \node[shared] (s) at (-0.5, 2.4) {$\operatorname{FFN}_{\mathrm{s}}$};
+  \node[idle] (e1) at (1.9, 2.4) {$\operatorname{FFN}_1$};
+  \node[idle] (e2) at (3.2, 2.4) {$\operatorname{FFN}_2$};
+  \node[active] (e3) at (4.5, 2.4) {$\operatorname{FFN}_3$};
+  \node[text=black!45] at (5.45, 2.4) {$\cdots$};
+  \node[active] (eE) at (6.4, 2.4) {$\operatorname{FFN}_E$};
+  \node[tag, anchor=west, align=left] at (-0.42, 3.14) {shared\\expert};
+
+  % Input and the bus that carries it.
+  \node (x) at (4.5, 0) {$\mathbf{x}$};
+  \draw[->] (x) -- (e3);
+  \draw[->] (4.5, 0.8) -| (s);
+  \draw[->] (4.5, 0.8) -| (eE);
+  \fill (4.5, 0.8) circle (1.3pt);
+  \fill (6.4, 0.8) circle (1.3pt);
+
+  % Router: scores.
+  \node[op] (w) at (9.35, 0.8) {$\mathbf{W}_{\mathrm{r}}$};
+  \node[op, minimum width=0.8cm] (sig) at (10.85, 0.8) {$\sigma$};
+  \draw[->] (6.4, 0.8) -- (w);
+  \draw[->] (w) -- (sig);
+  % Router: selection on score plus bias.
+  \node[circ] (plus) at (11.6, 2.4) {$+$};
+  \node[op] (top) at (9.6, 2.4) {$\operatorname{Top}_k$};
+  \node (b) at (11.6, 1.55) {$b_i$};
+  \draw[->, nograd] (b) -- (plus);
+  \draw[->] (sig) -- (13.2, 0.8) |- (plus);
+  \node[anchor=south] at (12.3, 0.8) {$s_i$};
+  \draw[->] (plus) -- (top);
+  \draw[->, nograd] (top) -- (7.15, 2.4);
+  \node[anchor=south] at (7.8, 2.4) {$\mathcal{T}(\mathbf{x})$};
+  % Router: mixing weights from the scores alone.
+  \node[op, minimum width=2.3cm] (norm) at (10.0, 3.55) {$s_i \big/ \sum_{j \in \mathcal{T}} s_j$};
+  \draw[->] (13.2, 2.4) |- (norm);
+  \fill (13.2, 2.4) circle (1.3pt);
+  \draw[->, nograd] (9.6, 2.76) -- (9.6, 3.19);
+
+  % Weighting and sum.
+  \node[circ] (m3) at (4.5, 3.55) {$\times$};
+  \node[circ] (mE) at (6.4, 3.55) {$\times$};
+  \draw[->] (e3) -- (m3);
+  \draw[->] (eE) -- (mE);
+  \draw[->] (norm) -- (mE);
+  \node[anchor=south] at (7.8, 3.55) {$g_i$};
+  \draw[->] (mE) -- (m3);
+  \node[circ] (sum) at (4.5, 5.15) {$+$};
+  \draw[->] (m3) -- (sum);
+  \draw[->] (s) |- (sum);
+  \draw[->] (mE.north) |- (sum);
+  \node (y) at (4.5, 6.0) {$\mathbf{y}$};
+  \draw[->] (sum) -- (y);
+\end{tikzpicture}

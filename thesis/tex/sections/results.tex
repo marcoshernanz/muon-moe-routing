@@ -1,0 +1,204 @@
+% !TEX root = ../main.tex
+\chapter{Results}
+\label{sec:results}
+
+This chapter reports six experiments, one per section. \Crefrange{sec:results-rq1}{sec:results-rq3} answer the three research questions of \cref{sec:introduction-objectives}. The results of RQ3 led to two more experiments on the balancer. They test whether Muon still raises the span when the bias moves four times faster (\cref{sec:results-bias-speed}) and when we add the balance loss of DeepSeek-V3 (\cref{sec:results-balance-loss}). \Cref{sec:results-large} repeats the main comparisons on the large model.
+
+Every section states its finding, describes the experiment, and reports the runs. The partitions have the names of \cref{tab:method-partitions}, and the value of an arm is its mean over the seeds. The tables give each difference between two arms, computed before rounding, with its range over the seeds (\cref{sec:method-statistics}).
+
+\section{RQ1: Muon Against AdamW}
+\label{sec:results-rq1}
+At the tuned rates, the bias worked harder under Muon than under AdamW, mostly in the first MoE layer and early in training. This happened although Muon made the size of the update of an expert independent of its load.
+
+RQ1 compares AdamW with Muon on the small model, with 1B tokens and seeds 0 to 2. Each optimizer trains at its tuned rate, $2 \times 10^{-3}$ for AdamW and $4 \times 10^{-3}$ for Muon. Under Muon, the update of an expert has the same size for any load (\cref{sec:background-orthogonalization}). We therefore expected no correlation between the size of the update and the load under Muon, unlike under AdamW\@. The feedback in which busy experts become busier (\cref{sec:background-feedback}) would then be weaker under Muon, so we expected a lower span and load churn.
+
+\begin{table}[The results of RQ1]{tab:results-rq1}{The results of RQ1, on the small model with 1B tokens and seeds 0 to 2. Every metric is the integrated value averaged over the MoE layers, unless the row names another layer or window. The exceptions are the validation loss, taken at the last step, and the specialization, measured at the last checkpoint. The range is that of the three paired differences (\cref{sec:method-statistics}).}
+  \begin{tabular}{lrrrl}
+    \toprule
+    Metric                            & AdamW   & Muon    & Difference  & Range                  \\
+    \midrule
+    Validation loss                   & 3.255   & 3.177   & $-0.078$    & [$-0.086$, $-0.062$]   \\
+    Span                              & 0.105   & 0.137   & $+0.033$    & [$+0.030$, $+0.036$]   \\
+    Span, first MoE layer             & 0.084   & 0.194   & $+0.110$    & [$+0.085$, $+0.151$]   \\
+    Update--load correlation          & 0.379   & 0.024   & $-0.355$    & [$-0.362$, $-0.345$]   \\
+    Update--load correlation, spectral norm & 0.102   & 0.035   & $-0.068$    & [$-0.073$, $-0.061$]   \\
+    Load churn                        & 0.032   & 0.038   & $+0.006$    & [$+0.004$, $+0.008$]   \\
+    Load churn, early                 & 0.049   & 0.064   & $+0.015$    & [$+0.011$, $+0.017$]   \\
+    Load churn, warmup                & 0.102   & 0.083   & $-0.019$    & [$-0.020$, $-0.018$]   \\
+    Specialization                    & 0.105   & 0.118   & $+0.014$    & [$+0.006$, $+0.017$]   \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The premise held: the update--load correlation was 0.38 under AdamW and 0.02 under Muon (\cref{tab:results-rq1}). The prediction did not. After the warmup, the span and the load churn were both higher under Muon, at every seed. The span was about a third higher, 0.137 against 0.105. It remained higher when the two runs of a pair were compared at matched loss, so the difference does not come from one model being further along in training. Muon also reached a lower validation loss and a higher specialization.
+
+A higher span does not mean that the loads were less even. Outside the first MoE layer, the busiest expert received at most 1.3 times its fair share after the warmup, under both optimizers. In these layers, the bias kept the loads close to even, and the optimizers differed only in how far it had to move.
+
+Most of the difference was in the first MoE layer (\cref{fig:results-rq1}). Its span was more than twice as large under Muon, whereas in the other six layers the difference was 0.02 on average. The difference was also largest early in training. Over steps 501 to 1,000, the span was 0.74 under Muon against 0.19 under AdamW\@. By the end of the run, it had fallen under both optimizers, but under Muon it was still about twice that of AdamW\@. We call this higher span of the first MoE layer the \emph{rise}.
+
+\begin{figure}[The span under AdamW and Muon in RQ1 and in the tuning]{fig:results-rq1}{The span under AdamW and Muon. Left: the span of every MoE layer in RQ1, with the range over the seeds. Center: the span of the first MoE layer over training in RQ1, in bins of 100 steps. The range over the seeds is shaded, and the dashed lines are the mean span of the other six layers. Right: the span averaged over the layers in the tuning runs of AdamW, Muon, and the control, with 0.5B tokens and seed 0, against the peak learning rate. Filled marks are the selected rates.}
+  \input{figures/results-rq1}
+\end{figure}
+
+The inputs of the first router also differed. In an exploratory analysis at the last checkpoint, on the panel of \cref{sec:method-data}, we measured a variant of the similarity that Wang et~al.\ use \cite{wang2026myth}: the mean cosine between the inputs of a router for two tokens of the same domain. In the first MoE layer, it was about 0.4 under Muon against 0.1 under AdamW, at every seed, so under Muon the inputs of the first router shared a direction. The difference shrank with depth, and in the last layer the cosine was lower under Muon, 0.21 against 0.26. By \cref{sec:background-offset}, a shared direction gives the scores an offset that the bias has to cancel. We designed RQ3 to find which part of the model produces this direction.
+
+The tuning runs, which are exploratory, point to a second factor, the learning rate (\cref{fig:results-rq1}, right). In the tuning, the span grew with the rate under Muon but stayed flat under AdamW\@. Part of the rise may therefore come from the rate of Muon, which is twice that of AdamW, and RQ3 tests this. The control, Muon without the orthogonalization, also had a higher span than AdamW at every rate above its best (\cref{app:results-tuning}).
+
+\section{RQ2: Learning-Rate Stress}
+\label{sec:results-rq2}
+Under learning-rate stress, no run diverged. The two Muon partitions reached the same loss, and at high multiples it exceeded that of AdamW\@. Contrary to what we expected from the Qwen3.8-Flash-Next report, the loads shifted more in the warmup with the router on AdamW than under Muon.
+
+RQ2 applies the stress test of \cref{sec:related-stress-test} to AdamW, Muon, and Muon with the router on AdamW, the partition of the Qwen3.8-Flash-Next report \cite{qiu2026qwennext}. Each partition is trained with 0.5B tokens and seeds 0 to 2, at 1, 2, 4, 8, and 16 times its tuned rates, held constant after the warmup (\cref{sec:method-tuning}). Muon is also trained at four times its rates with the fast bias, which moves by $4u$ per step (\cref{sec:method-experiments}). Following the report, we expected the two Muon partitions to reach the same loss at every multiple, lower than that of AdamW\@. The report found that Muon made the router unstable early in training. We therefore also expected the loads to shift less during the warmup with the router on AdamW than under Muon. We measure this shift by the \emph{warmup churn}, the load churn of \cref{sec:method-readings} over the warmup.
+
+\begin{figure}[The stress runs of RQ2]{fig:results-rq2}{The stress runs of RQ2 against the multiple of the tuned rates. The panels show the final validation loss, the load churn of the warmup averaged over the MoE layers, and the largest entries of the residual stream and of the router logits over the run. Lines join the means over the seeds, and in the last three panels the small marks are the seeds.}
+  \input{figures/results-rq2}
+\end{figure}
+
+No run diverged (\cref{fig:results-rq2}). At the tuned rates, the three partitions reached nearly the same loss. At higher multiples, the loss of AdamW rose less than that of the two Muon partitions. Over the multiples 1 to 8, the learning-rate sensitivity (\cref{eq:lr-sensitivity}) was 0.18 for AdamW and 0.24 for the Muon partitions. As expected, the losses of the two Muon partitions differed by at most 0.002 at every multiple.
+
+The warmup churn went against what we expected. At every multiple, it was highest with the router on AdamW and lowest under Muon, and the ranges of these two partitions over the seeds did not overlap. With the fast bias, Muon at four times its rates reached the same loss as with the usual bias, and its warmup churn was lower. RQ3 found the same higher churn with the router on AdamW at the tuned rates, and \cref{sec:results-offset} traces it to how this router responds to the shared direction.
+
+The largest activations grew with the rate under every partition. Up to four times the tuned rates, the largest entries of the residual stream under the Muon partitions were two to three times those of AdamW, as the report found. From eight times the tuned rates, those of AdamW grew faster. The largest activations therefore did not rank the partitions as the loss did. The largest router logits stayed below 36 at every multiple when AdamW trained the router, whereas under Muon they grew to 98 at 16 times the tuned rates. The 45 runs at the five multiples had seven episodes of loss spikes, six of them at 16 times the tuned rates. These are too few to relate to the routing (\cref{app:results-stress}).
+
+\section{RQ3: Where the Rise Comes From}
+\label{sec:results-rq3}
+The optimizer of the router barely changed the span of the first MoE layer, whereas Muon on the backbone made it about twice as large. With Muon at the rate of AdamW, three quarters of this rise disappeared. Only the whole backbone on Muon gave the inputs of the first router a shared direction. Yet the routed experts alone on Muon raised the span the most, without as strong a direction.
+
+RQ3 asks which group of parameters, trained with Muon, raises the span of the first MoE layer. The input of its router comes from the embedding table, the attention and the dense FFN of block 0, and the attention of block 1 (\cref{fig:background-model}). AdamW trains the embedding table in every partition. The routed experts affect this input only through the gradients that they send back to these layers.
+
+Four partitions combine each optimizer of the router with each optimizer of the backbone: AdamW, the router alone on Muon, Muon with the router on AdamW, and Muon. Muon is also trained at half its rate, the rate of AdamW, to separate the optimizer from its larger rate. Four more partitions put Muon on one part of the backbone: the routed experts, the attention, the dense FFN, or the attention and the dense FFN together. Finally, AdamW and Muon are trained without the bias, and we call the other arms \emph{balanced}. Every arm is trained on the small model with 1B tokens and seeds 3 to 5. \Cref{fig:results-rq3} shows the balanced arms in three groups, which the next three subsections take in turn, and \cref{tab:results-rq3} gives their results. The \emph{early overload} is the early value of the overload (\cref{sec:method-windows}).
+
+\begin{figure}[The first MoE layer in the balanced arms of RQ3]{fig:results-rq3}{The span, the input cosine, and the score offset of the first MoE layer in the balanced arms of RQ3, on the small model with 1B tokens. Dashed lines separate three groups: the four combinations of the optimizers of the router and of the backbone, Muon at half rate, and the four partitions with one part of the backbone on Muon. The bars are the means over seeds 3 to 5, and the marks are the seeds. The three arms with the whole backbone on Muon are in blue.}
+  \input{figures/results-rq3}
+\end{figure}
+
+\begin{table}[The results of RQ3]{tab:results-rq3}{The results of RQ3, on the small model with 1B tokens and seeds 3 to 5. The span, the input cosine, the score offset, the early overload, and the common share are measured in the first MoE layer, and the last two columns are averaged over the MoE layers. The early overload is the mean over steps 501 to 1,262, and the churn is that of the warmup. The validation loss is that of the last step, and the other metrics are integrated values.}
+  \small
+  \begin{tabular}{lrrrrrrrr}
+    \toprule
+                                    & Validation & Span    & Input   & Score   & Early    & Common  & Span, all & Warmup \\
+    Arm                             & loss       &         & cosine  & offset  & overload & share   & layers    & churn  \\
+    \midrule
+    AdamW                           & 3.253      & 0.095   & 0.071   & 0.095   & 1.14     & 0.129   & 0.103     & 0.102  \\
+    Router on Muon                  & 3.248      & 0.099   & 0.074   & 0.100   & 1.16     & 0.151   & 0.117     & 0.092  \\
+    Muon, router on AdamW           & 3.177      & 0.175   & 0.391   & 0.137   & 6.63     & 0.497   & 0.123     & 0.122  \\
+    Muon                            & 3.175      & 0.198   & 0.408   & 0.140   & 4.06     & 0.160   & 0.140     & 0.084  \\
+    Muon, half rate                 & 3.166      & 0.119   & 0.401   & 0.100   & 1.73     & 0.161   & 0.115     & 0.074  \\
+    Experts on Muon                 & 3.205      & 0.409   & 0.146   & 0.298   & 3.24     & 0.201   & 0.175     & 0.103  \\
+    Attention on Muon               & 3.220      & 0.130   & 0.053   & 0.109   & 2.06     & 0.213   & 0.118     & 0.104  \\
+    Dense FFN on Muon               & 3.227      & 0.094   & 0.033   & 0.090   & 1.24     & 0.169   & 0.110     & 0.100  \\
+    Attention, dense FFN on Muon    & 3.210      & 0.229   & 0.054   & 0.183   & 5.07     & 0.226   & 0.140     & 0.100  \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{The Router and the Backbone}
+\label{sec:results-rq3-backbone}
+The span of the first MoE layer depended on the optimizer of the backbone and not on that of the router (\cref{fig:results-rq3}). With the backbone on Muon, the span was 0.17 when AdamW trained the router and 0.20 when Muon trained it. With the backbone on AdamW, it was 0.10 with either optimizer on the router. Each of the four differences between a partition with the backbone on Muon and one with the backbone on AdamW had the same sign at every seed. Changing only the optimizer of the router changed this span little, and not in the same direction at all three seeds. Averaged over the layers, however, the router on Muon raised the span at every seed, with either backbone. The input cosine followed the backbone in the same way: about 0.4 with the backbone on Muon, against 0.07 on AdamW.
+
+The results of RQ1 and RQ2 held at every one of these new seeds. Under Muon, the span averaged over the layers and the specialization were higher than under AdamW, and the loss was lower, by 0.077. The update--load correlation was near zero whenever the routed experts were on Muon. Among the three partitions of RQ2, the warmup churn was again highest with the router on AdamW and lowest under Muon. With the backbone on Muon, moving the router to AdamW raised the loss by 0.002.
+
+\subsection{The Learning Rate of Muon}
+\label{sec:results-rq3-rate}
+Most of the rise came with the larger learning rate of Muon. At half its tuned rate, Muon still raised the span of the first MoE layer at every seed. The rise, however, was 25\% of the span of AdamW, against 108\% at the tuned rate. Averaged over the layers, the excess of Muon over AdamW fell from 0.038 to 0.012 and was positive at only two seeds. This agrees with the tuning runs (\cref{fig:results-rq1}, right). At half its rate, Muon also reached a lower loss at every seed, by 0.010 on average, although the tuning with 0.5B tokens had favored the higher rate by 0.003. This is expected, since the best rate falls as a run gets longer (\cref{sec:method-tuning}). The rate changed the score offset, which fell to about that of AdamW, but not the input cosine. The early overload fell from 4.1 to 1.7 times the fair share.
+
+\subsection{One Part of the Backbone}
+\label{sec:results-rq3-parts}
+Two of the partitions with one part of the backbone on Muon raised the span more than the whole backbone did. Yet none of the four gave the inputs of the router as strong a shared direction as the whole backbone. With the routed experts on Muon, the span was 0.41, four times that of AdamW and the largest of any arm. With the attention and the dense FFN on Muon, it was 0.23. Both spans were above those of AdamW and of Muon at every seed. Neither the attention alone nor the dense FFN alone raised the span at all three seeds. In all four partitions, the input cosine was below that of both partitions with the whole backbone on Muon, at every seed. It was 0.15 with the routed experts on Muon and about 0.05 or less in the other three. The rise of the whole backbone is therefore not the sum of the rises of its parts. The two parts that raised the span did so through a large score offset rather than through a shared direction. With the attention and the dense FFN, the rise was mostly early in training. With the routed experts, it lasted to the end, and at one seed one expert gave about half of the span (\cref{app:results-rq3}). \Cref{sec:discussion-mechanism} returns to the routed experts.
+
+\subsection{Without the Bias}
+\label{sec:results-rq3-unbalanced}
+Without the bias, Muon kept the usage of the experts more even than AdamW on average over the layers, as Wang et~al.\ found \cite{wang2026depth}. In the first MoE layer, however, the loads collapsed further under Muon. At the end of training, the usage perplexity, which counts the experts in even use, was about 17 of 32 under Muon against 11 under AdamW, averaged over the layers. In the first MoE layer, it was 6.5 under Muon against 9.6 under AdamW\@. Both differences had the same sign at every seed. Over steps 501 to 1,262, the busiest expert of this layer received 7.7 to 7.9 times its fair share under Muon. This is close to the ceiling of 8, at which the same four experts receive every token. Without the bias, both optimizers reached a higher loss, by 0.051 under AdamW and 0.013 under Muon.
+
+\subsection{How the Shared Direction Raises the Span}
+\label{sec:results-offset}
+This subsection is exploratory. It reports analyses of the logs of RQ3 that we chose after seeing the runs, and one probe. The span of the first MoE layer followed the score offset much more closely than the input cosine (\cref{fig:results-rq3,fig:results-geometry}). Across the 27 balanced runs, the logarithm of the score offset explained 93\% of the variance of the logarithm of the span, and the logarithm of the cosine explained 11\%. That the span follows the score offset is expected, since the bias exists to cancel it. The question is what sets the score offset. The cosine split the runs into two groups: those with the whole backbone on Muon, and the rest. Within each group, the span grew with the score offset.
+
+By \cref{eq:background-offset}, the offset of the logit of expert $i$ is $\mathbf{w}_i^{\top} \mathbf{c}$, the length of the mean input times the component of the row of the expert along it. The score offset is the spread of this offset across the experts, after the sigmoid. A shared direction therefore gives a score offset only to the extent that the rows of the router differ along it. With the whole backbone on Muon, the mean input of the router, relative to a single input, was three times as long as under AdamW, at both rates of Muon. How much the rows of the router differed along it depended on the rate: 3.0 times as much as under AdamW at the tuned rate, and 1.4 times at half the rate (\cref{app:results-rq3}). The backbone therefore sets the shared direction, and the training of the router sets how large a score offset this direction gives. Rows that differ enough give a score offset even without a shared direction, as with the routed experts on Muon and with the attention and the dense FFN on Muon.
+
+\begin{figure}[The span against the score offset and the input cosine in RQ3]{fig:results-geometry}{The span of the first MoE layer against its score offset (left) and against its input cosine (right), with one mark per balanced run of RQ3. Only the cosine axis is linear, and the left panel shows the least-squares line of the logarithms. Squares mark the three arms with the whole backbone on Muon, and circles the other six.}
+  \input{figures/results-geometry}
+\end{figure}
+
+The first 4,000 steps show how the score offset becomes a span (\cref{fig:results-early}). In every arm, the inputs of the first router shared a direction at the start of training, but by step 100 their cosine had fallen to 0.2 or less. Under AdamW, it then stayed low. Under both Muon partitions, it rose again, crossed 0.2 near step 320, and stayed near 0.45 over steps 501 to 1,262. The score offset rose with the cosine. The span peaked 200 to 290 steps after the score offset, at 0.74 to 0.99. Until the bias caught up, the favored experts received more tokens. The early overload was about 4 times the fair share under Muon and 6.6 times with the router on AdamW\@. The bias could not catch up faster. A difference between two biases grows by at most $2u = 0.002$ per step, so a span of 0.8 takes at least 400 steps to build. The score offset, in contrast, rose from 0.2 to its peak in 200 to 500 steps. After this peak, the score offset fell while the cosine stayed near 0.4, and the span fell with it. Over the last 1,000 steps, the excess span of Muon over AdamW was a tenth of its value over steps 501 to 1,262.
+
+\begin{figure}[The first 4,000 steps of the first MoE layer in RQ3]{fig:results-early}{The first 4,000 steps of the first MoE layer under AdamW, Muon, and Muon with the router on AdamW in RQ3, in bins of 30 steps. Lines are the means over the seeds, and the bands are their range. The dotted line marks the end of the warmup.}
+  \input{figures/results-early}
+\end{figure}
+
+The optimizer of the router decides how it responds to the shared direction. When the inputs share a direction, the gradient of the router has a large component along it. The common share of \cref{eq:method-common-share} measures how much of the update of the router acts on this direction. Over steps 301 to 1,262, it was about 0.48 with the router on AdamW and 0.19 under Muon, close to the bound of $1 / \sqrt{32} \approx 0.18$ for an orthogonalized update. With the router on AdamW, the early overload and the warmup churn were also higher than under Muon, at every seed. The higher overload remained when both partitions trained at the better rate of Muon, $2 \times 10^{-3}$ (\cref{app:results-rq3}).
+
+To test whether the shared direction causes the overload and the extra span, we repeated the first 3,000 steps of the three runs of Muon with one change. We subtracted the mean input of the batch from the input of the first router. The router then no longer sees the shared direction, while the experts and every other layer receive their inputs as before. With the input centered, the early overload was 1.1 times the fair share, as under AdamW, against about 4 times without the change. Over steps 501 to 3,000, 79\% of the excess span of Muon over AdamW disappeared, while the input cosine and the loss stayed as they were. With the fast bias in place of the centering, 75\% of the excess disappeared over these steps, and the early overload was 1.4 to 1.8 times the fair share.
+
+\section{The Speed of the Bias}
+\label{sec:results-bias-speed}
+Over whole runs, a bias four times faster removed most of the early overload of Muon and about half of its extra span, but the rise remained.
+
+The bias moves by $u = 0.001$ per step, so part of the rise may come from the time the bias takes to catch up with the score offset. The bias-speed experiment asks whether the rise is more than this lag over a whole run. It trains AdamW and Muon with the usual and with the fast bias, which moves by $4u = 0.004$ per step. Every arm is trained on the small model with 1B tokens and seeds~6~to~8.
+
+\begin{table}[The differences in the bias-speed and balance-loss experiments]{tab:results-balancer}{The paired differences in the bias-speed experiment, with seeds 6 to 8, and in the balance-loss experiment, with seeds 3 to 5, where the runs without the loss are those of RQ3. The span, the early overload, and the input cosine are measured in the first MoE layer, and each difference is followed by its range over the seeds.}
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{@{}lllll@{}}
+    \toprule
+    Difference                  & Span                            & Early overload               & Input cosine                   & Validation loss                \\
+    \midrule
+    \multicolumn{5}{l}{\emph{Bias speed: Muon $-$ AdamW}} \\
+    \hspace{0.4em}usual bias            & $+0.075$ \seedrange{+0.041}{+0.095}   & $+2.84$ \seedrange{+2.20}{+3.34}   & $+0.329$ \seedrange{+0.324}{+0.332}  & $-0.082$ \seedrange{-0.094}{-0.069}  \\
+    \hspace{0.4em}fast bias             & $+0.040$ \seedrange{+0.013}{+0.066}   & $+0.54$ \seedrange{+0.46}{+0.69}   & $+0.324$ \seedrange{+0.320}{+0.327}  & $-0.082$ \seedrange{-0.088}{-0.071}  \\
+    \multicolumn{5}{l}{\emph{Bias speed: fast $-$ usual bias}} \\
+    \hspace{0.4em}Muon                  & $-0.042$ \seedrange{-0.083}{-0.015}   & $-2.33$ \seedrange{-2.91}{-1.53}   & $-0.007$ \seedrange{-0.017}{+0.000}  & $-0.000$ \seedrange{-0.002}{+0.001}  \\
+    \hspace{0.4em}AdamW                 & $-0.007$ \seedrange{-0.014}{-0.002}   & $-0.03$ \seedrange{-0.06}{-0.02}   & $-0.002$ \seedrange{-0.007}{+0.001}  & $+0.001$ \seedrange{-0.005}{+0.007}  \\
+    \midrule
+    \multicolumn{5}{l}{\emph{Balance loss: arm $-$ AdamW, both with the loss}} \\
+    \hspace{0.4em}Muon                  & $+0.081$ \seedrange{+0.045}{+0.121}   & $+1.67$ \seedrange{+1.41}{+2.00}   & $+0.338$ \seedrange{+0.329}{+0.347}  & $-0.077$ \seedrange{-0.080}{-0.073}  \\
+    \hspace{0.4em}Muon, router on AdamW & $+0.055$ \seedrange{+0.039}{+0.073}   & $+5.11$ \seedrange{+4.97}{+5.34}   & $+0.328$ \seedrange{+0.321}{+0.338}  & $-0.076$ \seedrange{-0.079}{-0.071}  \\
+    \multicolumn{5}{l}{\emph{Balance loss: with $-$ without the loss}} \\
+    \hspace{0.4em}Muon                  & $-0.044$ \seedrange{-0.123}{+0.001}   & $-1.25$ \seedrange{-2.09}{-0.16}   & $-0.001$ \seedrange{-0.008}{+0.006}  & $+0.001$ \seedrange{-0.000}{+0.002}  \\
+    \hspace{0.4em}Muon, router on AdamW & $-0.047$ \seedrange{-0.054}{-0.037}   & $-0.38$ \seedrange{-0.72}{-0.02}   & $+0.006$ \seedrange{-0.002}{+0.012}  & $-0.000$ \seedrange{-0.001}{+0.000}  \\
+    \hspace{0.4em}AdamW                 & $-0.022$ \seedrange{-0.031}{-0.011}   & $+0.01$ \seedrange{-0.00}{+0.01}   & $-0.001$ \seedrange{-0.011}{+0.007}  & $+0.000$ \seedrange{-0.003}{+0.005}  \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+With the fast bias, the span of the first MoE layer was still higher under Muon at every seed, but by 0.040 instead of 0.075 (\cref{tab:results-balancer}). Over a whole run, the fast bias therefore removed about half of the excess, less than in the probe. Under Muon, it lowered the span at every seed and the early overload from about 4 to between 1.5 and 1.8 times the fair share. Under AdamW, it changed the span by only 0.007. It changed the input cosine and the loss by less than 0.01 under either optimizer. With the usual bias, each difference between Muon and AdamW fell within the range over the seeds of RQ3.
+
+\section{The Balance Loss}
+\label{sec:results-balance-loss}
+The balance loss did not remove the rise and left the shared direction unchanged. It cut the excess span of the Muon partitions by a fifth to a third, but under Muon it lowered the span at only two of the three seeds.
+
+DeepSeek-V3 and DeepSeek-V4 add a small balance loss to the bias (\cref{sec:background-loss-free}). By Proposition~2 of Wang et~al.~\cite{wang2026myth}, a balance loss teaches the router to suppress a direction that its inputs share, the direction behind the rise that \cref{sec:results-offset} found. The balance-loss experiment asks whether the loss removes the rise and takes over part of the work of the bias. It adds the sequence-wise loss of DeepSeek-V3 \cite{deepseek2024v3} to the cross-entropy and trains AdamW, Muon, and Muon with the router on AdamW\@. We compute \cref{eq:aux-loss} on each sequence of 1,024 tokens, with $\alpha = 10^{-4}$ (\cref{tab:configuration-optimizer}).
+
+With the loss, the span of the first MoE layer was still higher than under AdamW at every seed, by 0.081 under Muon and by 0.055 with the router on AdamW (\cref{tab:results-balancer}). The input cosine was higher by 0.33 to 0.34, as without the loss. On average, the balance loss lowered the span of all three partitions, and the excess over AdamW fell by about a fifth under Muon and by a third with the router on AdamW\@. The loss lowered the span at every seed under AdamW and with the router on AdamW, but under Muon only at two seeds. The reduction we predicted under Muon therefore did not hold at every seed.
+
+The balance loss acted on the scores of the router, not on its inputs. It lowered the score offset in every arm and the early overload of both Muon partitions at every seed. With the router on AdamW, however, the early overload fell by only 0.38 and stayed about twice that of Muon. In no arm did the input cosine, the common share, or the validation loss change in the same direction at every seed.
+
+\section{The Large Model}
+\label{sec:results-large}
+On the large model, nine of the ten planned differences held at every seed, and the inputs of the first router shared a stronger direction than on the small model. The exception was the early overload, which was higher with the router on AdamW than under Muon at only two seeds.
+
+On the large model, this experiment trains AdamW, Muon, and Muon with the router on AdamW, with 3B tokens and seeds 0 to 2. Each optimizer trains at the rate tuned for this model (\cref{sec:method-tuning}), and the rate of Muon is again twice that of AdamW\@. The experiment tests whether seven differences of the small model hold at this size, those in every row of \cref{tab:results-large} except the early overload and the common share. It also tests three differences that RQ3 found. The early overload should be higher under both Muon partitions than under AdamW, and higher with the router on AdamW than under Muon. The common share should be higher with the router on AdamW than under the other two partitions.
+
+\begin{table}[The results of the large model]{tab:results-large}{The results of the large model, with 3B tokens and seeds 0 to 2. The span, the input cosine, the early overload, and the common share are measured in the first MoE layer, and the early overload is the mean over steps 501 to 2,788. The last two columns give the difference of Muon from AdamW and that of Muon with the router on AdamW from Muon, each with its range over the seeds.}
+  \small
+  \begin{tabular}{lrrrll}
+    \toprule
+                               &         &         & Muon, router & Muon                           & Muon, router                   \\
+    Metric                     & AdamW   & Muon    & on AdamW     & $-$ AdamW                      & on AdamW $-$ Muon              \\
+    \midrule
+    Validation loss            & 2.940   & 2.896   & 2.899        & $-0.045$ \seedrange{-0.048}{-0.040}  & $+0.004$ \seedrange{+0.003}{+0.004}  \\
+    Span                       & 0.135   & 0.288   & 0.260        & $+0.152$ \seedrange{+0.087}{+0.240}  & $-0.027$ \seedrange{-0.119}{+0.058}  \\
+    Input cosine               & 0.085   & 0.610   & 0.728        & $+0.525$ \seedrange{+0.495}{+0.583}  & $+0.118$ \seedrange{+0.021}{+0.218}  \\
+    Early overload             & 1.14    & 6.32    & 7.23         & $+5.19$ \seedrange{+4.46}{+6.10}     & $+0.91$ \seedrange{-0.78}{+1.94}     \\
+    Common share               & 0.113   & 0.197   & 0.574        & $+0.083$ \seedrange{+0.057}{+0.102}  & $+0.377$ \seedrange{+0.339}{+0.429}  \\
+    Span, all layers           & 0.099   & 0.132   & 0.125        & $+0.033$ \seedrange{+0.027}{+0.045}  & $-0.008$ \seedrange{-0.024}{+0.004}  \\
+    Warmup churn               & 0.118   & 0.082   & 0.121        & $-0.035$ \seedrange{-0.036}{-0.034}  & $+0.038$ \seedrange{+0.037}{+0.039}  \\
+    Update--load correlation   & 0.404   & 0.005   & 0.008        & $-0.399$ \seedrange{-0.404}{-0.396}  & $+0.003$ \seedrange{-0.003}{+0.007}  \\
+    Specialization             & 0.119   & 0.139   & 0.142        & $+0.020$ \seedrange{+0.017}{+0.026}  & $+0.003$ \seedrange{-0.001}{+0.007}  \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The span of the first MoE layer was higher than under AdamW by 0.152 under Muon and by 0.125 with the router on AdamW (\cref{tab:results-large}). Relative to the span of AdamW, this rise was about as large as on the small model. The input cosine was 0.61 under Muon and 0.73 with the router on AdamW, against 0.41 and 0.39 on the small model. The early overload was higher with the router on AdamW than under Muon at two seeds and lower at the third. Both values, 7.2 and 6.3 times the fair share, were close to the ceiling of $E / k = 8$ (\cref{sec:method-readings}). Over steps 301 to 500, before either partition approached the ceiling, the overload was higher with the router on AdamW at every seed.
+
+The following results are exploratory (\cref{app:results-large}). At this size, the first MoE layer did not settle as it had on the small model. Under both Muon partitions, its busiest expert still received 2.2 to 2.8 times its fair share over the last 10,000 steps. The runs with the router on AdamW had the only loss spikes of the experiment, ten in three runs. All but one fell at a step where the span of this layer was within $2u$ of its ceiling of $1 + 2u$. A second probe repeated the first 3,000 steps of the three partitions. At seed 0, the scores of this layer sank toward zero, into the flat part of the sigmoid, under both Muon partitions but not under AdamW\@. At every seed, centering the input of the first router brought the overload of this layer back to that of AdamW\@. Its churn and span fell below those of AdamW, at the same loss.

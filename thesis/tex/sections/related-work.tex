@@ -1,0 +1,54 @@
+% !TEX root = ../main.tex
+\chapter{Related Work}
+\label{sec:related-work}
+
+We call the set of choices with which a model is trained, such as its optimizers and its balancer, its \emph{recipe}. \Cref{sec:related-router} reviews which optimizer current recipes use for the router. \Cref{sec:related-muon-balance} reviews how Muon affects the balance of the experts, and \cref{sec:related-balancer} reviews the loss-free balancer. \Cref{sec:related-stress} reviews how high learning rates are used to study instability in small models.
+
+\section{Where Training Recipes Put the Router}
+\label{sec:related-router}
+Most reports of current frontier models state which parameters Muon trains. Only one of them says why the router is or is not on Muon, and none show data that compare the options (\cref{tab:related-router}). DeepSeek-V4 excludes from Muon only the embedding table, the output head, the gains of the normalization layers, and a few small parameters \cite{deepseek2026v4}. Kimi K3 states that Muon trains its weight matrices and lists no exception \cite{kimi2026k3}. The router of both models is therefore on Muon, although neither report names it. GLM-5.3 refers to the GLM-5 report, which does not state the optimizer of the router \cite{glm2026glm5, zai2026glm53}.
+
+\begin{table}[Where training recipes put the router]{tab:related-router}{Where current frontier models put the router. In the Router column, Muon means that the report does not exclude the router from Muon. The balancer is as stated in the report or the released configuration. The last column summarizes what the report says about the router or the balance.}
+  \small
+  \begin{tabular}{@{}lll>{\raggedright\arraybackslash}p{8.6cm}@{}}
+    \toprule
+    Model               & Router     & Balancer                  & What the report says                                                             \\
+    \midrule
+    DeepSeek-V4         & Muon       & bias, balance loss        & loss spikes occurred with outliers in the MoE layers                             \\
+    Kimi K3             & Muon       & bias from scores          & a fixed bias step adapts slowly or oscillates                                    \\
+    GLM-5.3             & not stated & bias                      & nothing about the router                                                         \\
+    Qwen3.8-Flash-Next  & AdamW      & not stated                & Muon made the router unstable early, with no clear gain later                    \\
+    MiMo-V2.6           & AdamW      & not stated                & frozen in reinforcement learning after it unbalanced the loads                  \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Two recipes keep the router on AdamW\@. Qwen3.8-Flash-Next trains its attention and experts with Muon. It trains the router with AdamW, because Muon made the router unstable early in training and gave no clear gain later. As one possible explanation, its report notes that each output of the router is the score of one expert, largely independent of the others, so the orthogonalization has no shared structure to exploit \cite{qiu2026qwennext}. MiMo-V2.6 moved most of its weight matrices from AdamW to Muown, a variant of Muon \cite{lion2026muown}, in mid-training. Its router, embedding table, and output head stayed on AdamW, for no stated reason. During reinforcement learning, the router drifted until the busiest expert of a layer received 16 times its fair share, so it was frozen for that stage \cite{xiaomi2026mimov26}. The disagreement between the recipes therefore rests on no controlled experiment. Our research questions RQ2 and RQ3 (\cref{sec:introduction-objectives}) provide such an experiment at a small scale. At raised learning rates, RQ2 compares all parameters on AdamW, all on Muon, and all on Muon except the router. RQ3 moves each part of the network to Muon in turn.
+
+\section{Muon and the Balance of the Experts}
+\label{sec:related-muon-balance}
+The study closest to this thesis is that of Wang et~al.~\cite{wang2026depth}. They show that at initialization, the balance of a router with random weights is bounded by how similar the normalized hidden states of different tokens are. They then train a 500M-parameter MoE model with 2 of 16 experts selected and no balancer at all, for 2,000 steps with one seed. Under Muon, the usage of the experts stays balanced and the loss is lower, while under AdamW the balance decays during training. Their analysis concerns the update of the router (\cref{sec:background-orthogonalization}), but their experiments change the optimizer of the whole model. Our partitions separate the two. The analysis of the shared direction in \cref{sec:background-offset} comes from their companion paper \cite{wang2026myth}. Li \cite{li2026spectralcap} reports a related effect in a 64-expert MoE model trained with Muon and the bias. In its first MoE layer, one direction carries 0.995 of the variance of the logits plus the bias. The study uses one seed and has no run with AdamW.
+
+Two studies change the optimizer of the router alone. Lau and Su \cite{lau2026symmetry} derive update rules that respect the structure of the router. They train the attention and the experts with Muon-style updates, remove the auxiliary loss, and find that their rules reach a lower validation loss than AdamW on the router. With and without the auxiliary loss, their rules also make the loads more even. None of their runs use the bias. Srivastava \cite{srivastava2026lossfree} trains the router with Adam or with Muon in a 1.47B-parameter model that selects 2 of 64 experts. Muon trains the attention and the experts in every run, and one of three balancers, the bias among them, keeps the loads even. Under Muon, the router is better conditioned, that is, its largest and smallest singular values are closer together, and the loss is nearly the same.
+
+A study of another optimizer reports the balance as a side result. In an 8B-parameter model balanced by the bias, the busiest expert exceeds its fair share more under AdamW than under Muon \cite{xie2026spectralsphere}.
+
+None of the studies above measure the work of the balancer, vary the optimizer of the backbone apart from that of the router, or measure the inputs of the router under each optimizer.
+
+\section{The Loss-Free Balancer}
+\label{sec:related-balancer}
+The paper that introduced the bias tried three update rates for \cref{eq:bias-update}. A rate of $10^{-4}$ balanced the loads poorly early in training, and one of $10^{-2}$ made the balance worse late in training. The authors kept $10^{-3}$, which DeepSeek-V3 and Moonlight also use \cite{wang2024lossfree, deepseek2024v3, liu2025moonlight}. Two recipes trained with Muon replaced this fixed step. Trinity Large damps it, because near balance the rule oscillates \cite{singh2026trinity}. Kimi K3 sets every bias directly from the scores of the batch, since a fixed step either adapts slowly or makes the loads oscillate \cite{kimi2026k3}. Han and Zhong \cite{han2025lossfree} prove that the rule approximately balances the loads, and the optimizer plays no role in their analysis.
+
+Several reports find the lowest MoE layers the hardest to balance. In OLMoE, the routing of the first layer settles much later than that of the others, and the authors note that this may impair the balance \cite{muennighoff2025olmoe}. Sigma-MoE-Tiny, trained with AdamW, selects one of 96 experts. In preliminary runs with the loss-free balancer, the bias of its lower layers grew until it decided the routing, and one expert received about 40 times its fair share \cite{hu2025sigmamoe}. Motif 3 was trained with Muon. It gave the balance loss of its first MoE layers a larger coefficient, because they were the most unbalanced early in training. Their routing still collapsed occasionally \cite{motif2026motif3}. None of these reports compare optimizers.
+
+\section{Learning-Rate Stress Tests}
+\label{sec:related-stress}
+\label{sec:related-sensitivity}
+\label{sec:related-stress-test}
+Instabilities of large models are hard to study because small models with the same hyperparameters often do not show them. Wortsman et~al.~\cite{wortsman2024proxies} therefore reproduce divergences in small models trained at high learning rates, and they summarize the curve of the final loss against the learning rate in one number. Let $\mathcal{H}$ be a grid of learning rates, $\mathcal{L}_{\mathrm{val}}(\eta)$ the final validation loss of the model trained with the peak learning rate $\eta$, and $\mathcal{L}_{\mathrm{init}}$ the training loss at initialization. The \emph{learning-rate sensitivity} is
+\begin{equation}[eq:lr-sensitivity]{}
+  \operatorname{sens}(\mathcal{H}) = \frac{1}{\lvert \mathcal{H} \rvert} \sum_{\eta \in \mathcal{H}} \Bigl( \min \bigl( \mathcal{L}_{\mathrm{val}}(\eta), \, \mathcal{L}_{\mathrm{init}} \bigr) - \mathcal{L}^{*} \Bigr), \qquad \mathcal{L}^{*} = \min_{\eta \in \mathcal{H}} \mathcal{L}_{\mathrm{val}}(\eta),
+\end{equation}
+that is, the mean distance of the final loss from the best final loss of the grid. The minimum with $\mathcal{L}_{\mathrm{init}}$ counts a diverged run as a model that has learned nothing. A low sensitivity means that the loss changes little when the learning rate is far from its best value. Since the best rates of Muon and AdamW differ, we define each grid by multiples of the tuned rate of its optimizer, as the authors recommend.
+
+The Qwen3.8-Flash-Next report \cite{qiu2026qwennext} uses high learning rates as a stress test. After the warmup, the learning rate is held at a multiple of its best value without decay, as in the long period that a production run spends near its peak learning rate. The report trains an MoE model with 25B parameters, of which 3B are active, with AdamW and with two configurations of Muon, each at two and at four times the best learning rate. At twice the best rate, the run with AdamW had 4.3 spikes per 10,000 steps and the two runs with Muon had 0.2, even though their activations were larger. At four times the best rate, the run with AdamW had 183. The report describes one run per configuration and does not measure the routing. Moreover, AdamW trains the router in the Muon runs of the report, so these runs leave open what the optimizer of the router contributes. RQ2 applies this stress test to three partitions, with three seeds and with the routing recorded (\cref{sec:results-rq2}).

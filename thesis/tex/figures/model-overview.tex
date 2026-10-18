@@ -1,0 +1,46 @@
+% The decoder-only Transformer of Section 2.1 for one position: the residual stream from the embedding table to the output head, with every sublayer reading it and adding its output back. Gray marks what AdamW trains in every run; blue marks the MoE layer of Figure 2.2.
+\definecolor{moeblue}{RGB}{49,101,156}
+\definecolor{moeamber}{RGB}{176,124,0}
+\begin{tikzpicture}[
+    x=1cm, y=1cm, font=\footnotesize, line width=0.5pt,
+    >={Stealth[length=4.5pt, width=3.6pt]},
+    box/.style={draw, rounded corners=1.5pt, minimum height=0.85cm, inner sep=2pt, align=center},
+    sub/.style={box, fill=white, minimum width=1.35cm},
+    fixed/.style={box, draw=black!50, fill=black!8},
+    moe/.style={box, draw=moeblue, fill=moeblue!13, minimum width=1.75cm},
+    circ/.style={draw, circle, inner sep=0pt, minimum size=0.3cm, fill=white},
+    tag/.style={font=\scriptsize, text=black!65},
+  ]
+  % The residual stream.
+  \node[fixed] (emb) at (0.55, 0) {embedding\\table};
+  \node[fixed] (head) at (12.75, 0) {norm and\\output head};
+  \draw[->, line width=0.9pt] (emb) -- (head);
+  \node[anchor=north] (tok) at (0.55, -1.05) {$x_1, \dots, x_t$};
+  \draw[->] (tok) -- (emb);
+  \node[anchor=south] (out) at (12.75, 1.25) {$p(x_{t+1} \mid x_1, \dots, x_t)$};
+  \draw[->] (head) -- (out);
+
+  % A sublayer reads the stream through a normalization layer and adds its output back.
+  \newcommand{\sublayer}[4]{%
+    \node[#3] at (#2, 1.45) {#4};
+    \draw[->] (#2 - 0.42, 0) -- (#2 - 0.42, 1.025);
+    \node[circ] (#1) at (#2 + 0.42, 0) {};
+    \draw (#2 + 0.42 - 0.1, 0) -- (#2 + 0.42 + 0.1, 0);
+    \draw (#2 + 0.42, -0.1) -- (#2 + 0.42, 0.1);
+    \draw[->] (#2 + 0.42, 1.025) -- (#1);
+  }
+  \sublayer{plusa}{2.55}{sub}{attention}
+  \sublayer{plusb}{4.35}{sub}{dense\\FFN}
+  \sublayer{plusc}{6.35}{sub}{attention}
+  \sublayer{plusd}{8.3}{moe}{MoE layer}
+  \node at (10.15, 1.45) {$\cdots$};
+  \node[tag, anchor=south] at (10.15, 0.05) {residual stream};
+
+  % The blocks.
+  \draw[decorate, decoration={brace, amplitude=4pt, mirror}] (1.9, -0.32) -- (5.0, -0.32)
+    node[midway, below=4pt, align=center] {block 0\\(dense)};
+  \draw[decorate, decoration={brace, amplitude=4pt, mirror}] (5.7, -0.32) -- (9.2, -0.32)
+    node[midway, below=4pt, align=center] {block 1\\(with the first MoE layer)};
+  \draw[decorate, decoration={brace, amplitude=4pt, mirror}] (9.45, -0.32) -- (10.85, -0.32)
+    node[midway, below=4pt, align=center] {later blocks\\(as block 1)};
+\end{tikzpicture}

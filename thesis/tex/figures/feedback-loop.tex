@@ -1,0 +1,23 @@
+% The rich-get-richer feedback of Section 2.2.1, with the two points at which the balancer and the optimizer act on it.
+\definecolor{moeblue}{RGB}{49,101,156}
+\definecolor{moeamber}{RGB}{176,124,0}
+\begin{tikzpicture}[
+    x=1cm, y=1cm, font=\footnotesize, line width=0.5pt,
+    >={Stealth[length=4.5pt, width=3.6pt]},
+    stage/.style={draw=moeblue, fill=moeblue!13, rounded corners=1.5pt, align=center, inner sep=4pt, minimum height=0.95cm, text width=4.1cm},
+    op/.style={draw=moeamber, fill=moeamber!13, rounded corners=1.5pt, align=center, inner sep=3pt, text width=4.1cm},
+  ]
+  \node[stage] (load) at (0, 3.3) {expert $i$ has a high load $\ell_i$};
+  \node[stage] (grad) at (7.4, 3.3) {the gradient of $\operatorname{FFN}_i$ and of $\mathbf{w}_i$ sums many tokens};
+  \node[stage] (update) at (7.4, 0) {the weights of $\operatorname{FFN}_i$ and of $\mathbf{w}_i$ move far};
+  \node[stage] (score) at (0, 0) {expert $i$ improves and its scores $s_i$ rise};
+  % The two interventions sit on the edges they act on.
+  \node[op] (optim) at (7.4, 1.65) {the optimizer turns the gradient into an update (\cref{sec:background-optimizers})};
+  \node[op] (bias) at (0, 1.65) {the bias $b_i$ shifts\\the selection (\cref{sec:background-loss-free})};
+  \draw[->] (load) -- (grad);
+  \draw[->] (grad) -- (optim);
+  \draw[->] (optim) -- (update);
+  \draw[->] (update) -- (score);
+  \draw[->] (score) -- (bias);
+  \draw[->] (bias) -- (load);
+\end{tikzpicture}

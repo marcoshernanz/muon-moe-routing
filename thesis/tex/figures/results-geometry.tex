@@ -1,0 +1,36 @@
+% RQ3: the integrated span of the first MoE layer of the 27 balanced runs of RQ3 against the score offset of that layer (left, both axes logarithmic, with the least-squares line of the logarithms) and against its input cosine (right). Runs with the whole backbone on Muon (Muon, Muon with the router on AdamW, and Muon at half rate) are the squares; the other six arms are the circles, with the routed experts on Muon and the attention and dense FFN on Muon named. The data are figures/data/rq3-geometry-*.csv; the line is 1.711 x^1.18, the fit that extract.py prints.
+\begin{tikzpicture}
+  \begin{groupplot}[
+      thesis,
+      group style={group size=2 by 1, horizontal sep=1.7cm},
+      width=6.3cm, height=3.6cm,
+      ymode=log, ymin=0.07, ymax=0.7, ylabel={Span, first MoE layer},
+      ytick={0.1,0.2,0.4}, yticklabels={0.1, 0.2, 0.4},
+      yticklabel style={/pgf/number format/assume math mode=false},
+    ]
+    \nextgroupplot[
+      xlabel={Score offset, first MoE layer},
+      xmode=log, xmin=0.055, xmax=0.45,
+      xtick={0.1,0.2,0.4}, xticklabels={0.1, 0.2, 0.4},
+      xticklabel style={/pgf/number format/assume math mode=false},
+      legend pos=north west,
+    ]
+    \addplot[black!60, no marks, line width=0.5pt, domain=0.06:0.42, samples=2, forget plot] {1.711*x^1.18};
+    \addplot[arm a, only marks, black!55, mark options={fill=white}] table[x=mean_score_span_first, y=bias_span_first] {figures/data/rq3-geometry-low.csv};
+    \addlegendentry{other six arms}
+    \addplot[arm b, only marks] table[x=mean_score_span_first, y=bias_span_first] {figures/data/rq3-geometry-high.csv};
+    \addlegendentry{whole backbone on Muon}
+    \node[font=\footnotesize, anchor=east] at (axis cs:0.35, 0.58) {experts};
+    \node[font={\footnotesize\linespread{1}\selectfont}, anchor=north west, align=left] at (axis cs:0.195, 0.195) {attention,\\dense FFN};
+
+    \nextgroupplot[
+      xlabel={Input cosine, first MoE layer},
+      xmin=0, xmax=0.45, xtick={0,0.1,0.2,0.3,0.4},
+      xticklabel style={/pgf/number format/fixed, /pgf/number format/precision=1},
+    ]
+    \addplot[arm a, only marks, black!55, mark options={fill=white}] table[x=router_input_similarity_first, y=bias_span_first] {figures/data/rq3-geometry-low.csv};
+    \addplot[arm b, only marks] table[x=router_input_similarity_first, y=bias_span_first] {figures/data/rq3-geometry-high.csv};
+    \node[font=\footnotesize, anchor=west] at (axis cs:0.165, 0.42) {experts};
+    \node[font=\footnotesize, anchor=west] at (axis cs:0.07, 0.26) {attention, dense FFN};
+  \end{groupplot}
+\end{tikzpicture}

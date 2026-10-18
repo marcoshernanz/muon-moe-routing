@@ -1,0 +1,60 @@
+% RQ2 in four panels against the multiple of the tuned rates: the final validation loss, the load churn of the warmup over all the MoE layers, and the largest entries of the residual stream and of the router logits over the run. Lines join the means over the seeds and the small marks are the seeds. The data are figures/data/stress-*.csv.
+\begin{tikzpicture}
+  \begin{groupplot}[
+      thesis,
+      group style={group size=2 by 2, horizontal sep=1.7cm, vertical sep=1.25cm},
+      width=6.3cm, height=3.0cm,
+      xmode=log, log basis x=2, xmin=0.8, xmax=20,
+      xtick={1,2,4,8,16}, xticklabels={1, 2, 4, 8, 16},
+      xticklabel style={/pgf/number format/assume math mode=false},
+    ]
+    \nextgroupplot[
+      ylabel={Final validation loss},
+      ymin=3.5, ymax=4.5, ytick={3.6,3.8,4.0,4.2,4.4},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=1, /pgf/number format/fixed zerofill},
+      legend pos=north west,
+    ]
+    \addplot[arm a] table[x=lr_multiplier, y=loss_capped] {figures/data/stress-adamw-mean.csv};
+    \addlegendentry{AdamW}
+    \addplot[arm b] table[x=lr_multiplier, y=loss_capped] {figures/data/stress-muon-mean.csv};
+    \addlegendentry{Muon}
+    \addplot[arm c] table[x=lr_multiplier, y=loss_capped] {figures/data/stress-muon_except_router-mean.csv};
+    \addlegendentry{Muon, router on AdamW}
+
+    \nextgroupplot[
+      ylabel={Warmup churn},
+      ymin=0.07, ymax=0.17, ytick={0.08,0.1,0.12,0.14,0.16},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=2, /pgf/number format/fixed zerofill},
+    ]
+    \addplot[arm a, only marks, mark size=0.7pt, forget plot] table[x=lr_multiplier, y=load_churn_warmup] {figures/data/stress-adamw.csv};
+    \addplot[arm b, only marks, mark size=0.6pt, forget plot] table[x=lr_multiplier, y=load_churn_warmup] {figures/data/stress-muon.csv};
+    \addplot[arm c, only marks, mark size=0.8pt, forget plot] table[x=lr_multiplier, y=load_churn_warmup] {figures/data/stress-muon_except_router.csv};
+    \addplot[arm a] table[x=lr_multiplier, y=load_churn_warmup] {figures/data/stress-adamw-mean.csv};
+    \addplot[arm b] table[x=lr_multiplier, y=load_churn_warmup] {figures/data/stress-muon-mean.csv};
+    \addplot[arm c] table[x=lr_multiplier, y=load_churn_warmup] {figures/data/stress-muon_except_router-mean.csv};
+
+    \nextgroupplot[
+      xlabel={Multiple of the tuned rates}, ylabel={Largest residual entry},
+      ymode=log, ymin=500, ymax=1e6,
+    ]
+    \addplot[arm a, only marks, mark size=0.7pt, forget plot] table[x=lr_multiplier, y=residual_max_peak] {figures/data/stress-adamw.csv};
+    \addplot[arm b, only marks, mark size=0.6pt, forget plot] table[x=lr_multiplier, y=residual_max_peak] {figures/data/stress-muon.csv};
+    \addplot[arm c, only marks, mark size=0.8pt, forget plot] table[x=lr_multiplier, y=residual_max_peak] {figures/data/stress-muon_except_router.csv};
+    \addplot[arm a] table[x=lr_multiplier, y=residual_max_peak] {figures/data/stress-adamw-mean.csv};
+    \addplot[arm b] table[x=lr_multiplier, y=residual_max_peak] {figures/data/stress-muon-mean.csv};
+    \addplot[arm c] table[x=lr_multiplier, y=residual_max_peak] {figures/data/stress-muon_except_router-mean.csv};
+
+    \nextgroupplot[
+      xlabel={Multiple of the tuned rates}, ylabel={Largest router logit},
+      ymode=log, ymin=10, ymax=300,
+      ytick={10,30,100,300}, yticklabels={10, 30, 100, 300},
+      yticklabel style={/pgf/number format/assume math mode=false},
+    ]
+    \addplot[arm a, only marks, mark size=0.7pt, forget plot] table[x=lr_multiplier, y=router_logit_max_peak] {figures/data/stress-adamw.csv};
+    \addplot[arm b, only marks, mark size=0.6pt, forget plot] table[x=lr_multiplier, y=router_logit_max_peak] {figures/data/stress-muon.csv};
+    \addplot[arm c, only marks, mark size=0.8pt, forget plot] table[x=lr_multiplier, y=router_logit_max_peak] {figures/data/stress-muon_except_router.csv};
+    \addplot[arm a] table[x=lr_multiplier, y=router_logit_max_peak] {figures/data/stress-adamw-mean.csv};
+    \addplot[arm b] table[x=lr_multiplier, y=router_logit_max_peak] {figures/data/stress-muon-mean.csv};
+    \addplot[arm c] table[x=lr_multiplier, y=router_logit_max_peak] {figures/data/stress-muon_except_router-mean.csv};
+  \end{groupplot}
+\end{tikzpicture}

@@ -1,0 +1,55 @@
+% !TEX root = ../main.tex
+\chapter{Reproduction Instructions}
+\label{app:reproduction}
+
+This appendix explains how to train the runs of \cref{tab:method-program} and how to analyze them. The code of the thesis is the Python package \texttt{tfg} in the directory \texttt{code/} of the repository of this thesis. It has its own environment and tests, and every command below runs in that directory. The file \code{code/RUNBOOK.md} gives the full procedure on a rented host, including how much disk space it needs.
+
+\section{Environment and Hardware}
+\label{app:reproduction-environment}
+The models are implemented in PyTorch 2.14 \cite{paszke2019pytorch}. The runs were trained on hosts with four NVIDIA RTX 5090 GPUs, one run per GPU at a time. Training uses mixed precision in bfloat16, with the master weights and the router in single precision. The routed experts of a layer are computed together by a grouped matrix multiplication. The model is compiled with \texttt{torch.compile} \cite{ansel2024pytorch2}, and training uses only deterministic algorithms. A run trained again with the same seed on the same GPU model therefore gives the same numbers bit for bit, and so does a run resumed from one of its checkpoints. Two different GPU models, however, give different numbers from the first steps. Both runs of every pair that we compare were therefore trained on the RTX 5090. Computing the metrics costs about 14\% of the time of a run on the small model and 12\% on the large one.
+
+The environment is managed with \texttt{uv}. The command \texttt{uv sync -{}-frozen} installs the exact versions of the lockfile. The lockfile pins a PyTorch built for CUDA 13, which needs an NVIDIA driver of version 580 or newer. A run fits in the 32 GB of an RTX 5090 when the backward pass recomputes the activations of the first blocks after block 0 instead of storing them. The option \texttt{-{}-recompute} sets how many blocks are recomputed: one on the small model and nine on the large one. Every training command also accepts the option \texttt{-{}-tier kaggle\_t4}, which trains tiny models. With this option and the shorter settings that \code{code/RUNBOOK.md} lists, the whole program trains in about an hour on a T4 GPU\@. This checks the code, not the results.
+
+\section{Data}
+\label{app:reproduction-data}
+The training data are the FineWeb-Edu sample of \cref{sec:method-data}, already tokenized. They are published as shards in a public dataset on the Hugging Face Hub. Downloading them needs no account. All the shards must be fetched before the first run, since the order of the data depends on how many training windows there are.
+\begin{verbatim}
+uv run hf download \
+    marcoshernanz/llm-lab-fineweb-edu-sample10bt-bpe-16384-full \
+    --repo-type dataset --local-dir data/fineweb-edu --max-workers 16
+uv run python -c "from tfg.data import download; download()"
+uv run python -m tfg.panel build
+\end{verbatim}
+The first command fetches the shards, sixteen at a time. The second checks that every shard is present and fetches any that is missing. The third builds the specialization panel in \texttt{data/panel/}. It takes the web text from a held-out shard and streams the other three domains from the Hub, and it tokenizes them with the same tokenizer.
+
+\section{Running the Program}
+\label{app:reproduction-program}
+One command trains each experiment of \cref{tab:method-program}, and the command of the large model also trains its tuning. A command trains its runs one after another into a directory under \code{runs/}. It resumes an interrupted run from its last checkpoint and skips a finished one.
+\begin{verbatim}
+uv run python -m tfg.program tuning --recompute 1
+uv run python -m tfg.program gate1 --recompute 1          # RQ1
+uv run python -m tfg.program rq2 --recompute 1
+uv run python -m tfg.program rq3 --recompute 1
+uv run python -m tfg.program balancer --recompute 1       # bias speed
+uv run python -m tfg.program balance_loss --recompute 1
+uv run python -m tfg.program confirmation --recompute 9   # large model
+\end{verbatim}
+The tuning writes the selected rates to \code{runs/tuning/rates.json}, which every later command reads. The command of RQ2 first trains the calibration run of each partition, which sets the clipping thresholds of the other runs of that partition. The balance-loss command trains only the runs with the loss, since the runs without it are those of RQ3. The script \code{code/ai-experiments/balance_loss_2026_09/link.sh} links these into its directory before its analysis. The trainer refuses to resume a run whose settings differ from those it was started with, apart from a few that do not change its numbers, such as the interval between checkpoints.
+
+On a host with several GPUs, the same command is launched once per GPU, each time with a different GPU in \texttt{CUDA\_VISIBLE\_DEVICES}\@. These processes then share the experiment: each trains only runs that no other process holds.
+
+When the runs of an experiment have finished, the command \texttt{tfg.program evaluate} measures the specialization on the panel at the last checkpoint of each run. Its option \texttt{-{}-block} names the experiment by its directory under \texttt{runs/}, which is the name of its command above, except \texttt{rq1} for \texttt{gate1}. Its option \texttt{-{}-batch-size} is 32 on the small model and 16 on the large one. It also computes from the checkpoints a few metrics that this thesis does not report. A single run is trained with \texttt{tfg.train}. Its options set what the arms vary, such as the partition, the rates, and the bias. The other settings of \cref{app:configuration} are their defaults or constants of the code.
+
+\section{Analysis and Figures}
+\label{app:reproduction-analysis}
+The command \texttt{tfg.analysis} reads the runs of an experiment. It writes a table with one row per run and every metric in the windows of \cref{sec:method-windows}. It also writes the paired differences of \cref{sec:method-statistics} with their ranges, and figures of the metrics over training. The command \texttt{tfg.stress} reads the stress runs instead. It writes a table with one row per run, the learning-rate sensitivity of each partition, and the episodes of loss spikes. Its figures show the metrics against the multiple of the tuned rates, and the routing around each episode.
+\begin{verbatim}
+uv run python -m tfg.analysis --runs-dir runs/rq3 --reference adamw \
+    --tuning-dir runs/tuning
+uv run python -m tfg.stress --runs-dir runs/rq2
+\end{verbatim}
+The figures and the tables of \cref{sec:results} are made from the run directories by two scripts, \texttt{extract.py} and \texttt{tables.py}, in \code{code/ai-experiments/thesis_figures_2026_09/}. They write the data of the figures to \code{thesis/tex/figures/data/} and list the values from these runs that the text quotes. The numbers of the probes and of the other exploratory analyses come from their own scripts in \code{code/ai-experiments/}.
+
+\section{Test Suite}
+\label{app:reproduction-tests}
+The suite of 213 tests runs with \texttt{uv run pytest -q}, on a CPU or a GPU\@. It checks the grouped computation of the experts against a loop over the experts, and the optimizers against reference implementations. It checks that every parameter is trained by the optimizer that its partition assigns. It checks that a run resumed from a checkpoint matches an uninterrupted one bit for bit, and that, for a given set of shards, the order of the data depends only on the seed. It also checks the metrics against direct computations on small batches, and the analysis on synthetic runs whose results are known.

@@ -1,0 +1,100 @@
+% !TEX root = ../main.tex
+\chapter{Model and Training Configuration}
+\label{app:configuration}
+
+This appendix gives the settings that \cref{sec:method} leaves out. Each value is the one in the code that trained the runs.
+
+\section{Architecture of the Two Models}
+\label{app:configuration-architecture}
+
+\begin{table}[The architecture of the two model sizes]{tab:configuration-architecture}{The architecture of the two model sizes. An expert, routed or shared, is a SwiGLU FFN with three matrices, each of shape $p \times q$ up to transposition. The active parameters are those that one token uses. In every MoE layer, they include the router, the shared expert, and $k$ of the routed experts. The count leaves out the embedding table and the output head, which the total includes.}
+  \begin{tabular}{lrr}
+    \toprule
+                                                                 & Small model      & Large model      \\
+    \midrule
+    Blocks, of which dense, of which MoE                         & 8, 1, 7          & 12, 1, 11        \\
+    Width $d$                                                    & 512              & 768              \\
+    Attention heads, width of a head                             & 8, 64            & 12, 64           \\
+    Hidden width of the dense FFN, $4d$                          & 2,048            & 3,072            \\
+    Routed experts $E$, selected $k$, shared experts             & 32, 4, 1         & 32, 4, 1         \\
+    Hidden width of an expert, $d_{\mathrm{e}} = d_{\mathrm{s}}$ & 768              & 512              \\
+    Shape $p \times q$ of an expert matrix, up to transposition  & $512 \times 768$ & $768 \times 512$ \\
+    Vocabulary                                                   & 16,384           & 16,384           \\
+    Context, batch                                               & 1,024, 64        & 1,024, 64        \\
+    Tokens per step, fair share of an expert                     & 65,536, 8,192    & 65,536, 8,192    \\
+    Active parameters                                            & 55M              & 108M             \\
+    Total parameters                                             & 303M             & 496M             \\
+    Embedding table and output head                              & 17M              & 25M              \\
+    Tokens per run                                               & 0.5B or 1B       & 1B or 3B         \\
+    Steps per run                                                & 7,629 or 15,259  & 15,259 or 45,776 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\Cref{tab:configuration-architecture} gives the sizes of the two models. The output head is not tied to the embedding table. Every normalization layer is an RMSNorm with $\epsilon = 10^{-5}$ and gains initialized to one. Each block has one before the attention and one before the FFN, and a last one comes before the output head. The attention also normalizes the queries and the keys with RMSNorm, with one gain vector shared by the heads. The gate of the attention multiplies its result, entry by entry, by the sigmoid of another projection of the hidden state, before the output projection. The rotary position embeddings have base 10,000. No linear map has a bias term. Every weight matrix is initialized from a normal distribution with mean zero and standard deviation 0.02, and so are the embedding table and the output head. The router of an MoE layer is a linear map from $d$ to $E$ dimensions. It computes the scores, the selection, and the mixing weights of \cref{eq:moe-score,eq:moe-selection,eq:moe-weights} in single precision.
+
+\section{Optimizer, Schedule, and Balancer Settings}
+\label{app:configuration-optimizer}
+
+\begin{table}[The optimizer, schedule, and balancer settings]{tab:configuration-optimizer}{The optimizer, schedule, and balancer settings. The rates are peak rates. A stress run multiplies them by 1, 2, 4, 8, or 16.}
+  \begin{tabular}{l>{\raggedright\arraybackslash}p{11.6cm}}
+    \toprule
+    Setting            & Value                                                                                                                                                                                         \\
+    \midrule
+    Muon               & Nesterov momentum $\mu = 0.95$; five Newton--Schulz steps (\cref{eq:newton-schulz}); rate factor $0.2 \sqrt{\max(p, q)}$; $\lambda = 0.1$                                                       \\
+    AdamW              & $\beta_1 = 0.9$, $\beta_2 = 0.95$, $\epsilon = 10^{-8}$; $\lambda = 0.1$ on every matrix, the embedding table, and the output head, and none on the gains                                      \\
+    Control            & the Nesterov momentum of Muon rescaled to the Frobenius norm $\sqrt{\min(p, q)}$, then the rate factor and $\lambda$ of Muon                                                                    \\
+    Tuning grids       & AdamW from $2.5 \times 10^{-4}$ to $4 \times 10^{-3}$, five rates; Muon from $2 \times 10^{-3}$ to $3.2 \times 10^{-2}$, five rates; the control from $2.5 \times 10^{-4}$ to $8 \times 10^{-3}$, six rates; each rate twice the one before \\
+    Rates, small model & AdamW $2 \times 10^{-3}$, Muon $4 \times 10^{-3}$; the control $5 \times 10^{-4}$, in the tuning only                                                                                            \\
+    Rates, large model & selected with 1B tokens: AdamW $10^{-3}$, Muon $2 \times 10^{-3}$; used with 3B tokens: AdamW $7 \times 10^{-4}$, Muon $1.4 \times 10^{-3}$                                                             \\
+    Schedule           & linear warmup over 500 steps, then \cref{eq:configuration-schedule}; in the stress runs, constant after the warmup                                                                             \\
+    Clipping           & 1.0 for each optimizer. In the stress runs: 0.277 under AdamW; under Muon, 0.201 for the parameters on AdamW and 0.175 for those on Muon; with the router on AdamW, 0.207 for the parameters on AdamW and 0.170 for those on Muon \\
+    Balancer           & the bias updated by \cref{eq:bias-update} after every optimizer step, with $u = 0.001$, or $0.004$ with the fast bias                                                                         \\
+    Balance loss       & $\alpha = 10^{-4}$; \cref{eq:aux-loss} computed in each sequence of 1,024 tokens, averaged over the sequences, and summed over the MoE layers. The loads count the selections that the scores would make without the bias. The scores of each token are normalized to sum to one before their mean is taken. Used in the balance-loss experiment only \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\Cref{tab:configuration-optimizer} lists the settings of the optimizers, the schedule, and the balancer. Let $\eta$ denote the peak learning rate of an optimizer and $S$ the number of steps of a run. Outside the stress runs, the learning rate of step $t$, for $t = 1, \dots, S$, is
+\begin{equation}[eq:configuration-schedule]{}
+  \eta_t =
+  \begin{cases}
+    \eta \, t / 500,                                                                                   & t \leq 500,     \\[2pt]
+    \eta \Bigl( 0.1 + 0.45 \Bigl( 1 + \cos \Bigl( \pi \, \dfrac{t - 500}{S - 500} \Bigr) \Bigr) \Bigr), & 500 < t \leq S.
+  \end{cases}
+\end{equation}
+Every optimizer follows this schedule from its own peak, so the ratio between the rates of AdamW and Muon is the same at every step.
+
+Our implementation of Muon follows the one in PyTorch. It keeps an exponential moving average of the gradients in place of the sum $\mathbf{M}_t$ of \cref{eq:muon-update}. This average is a positive multiple of the sum. Neither the orthogonalization nor the rescaling of the control changes when its argument is multiplied by a positive number, so the updates are those of \cref{eq:muon-update}. We run the Newton--Schulz iteration in bfloat16 on all the matrices of one shape at once. On a CPU and on an NVIDIA T4 GPU, this reproduces the updates of PyTorch bit for bit. On the RTX 5090, PyTorch lets the products of the iteration accumulate in bfloat16, whereas our batched products accumulate at a higher precision, so the updates differ by rounding.
+
+The orthogonalization of \cref{eq:ortho} is approximated as Jordan et~al.~\cite{jordan2024muon} propose. The matrix is first divided by its Frobenius norm, $\mathbf{X} = \mathbf{A} / \lVert \mathbf{A} \rVert_{\mathrm{F}}$, so that its singular values lie in $[0, 1]$. The step
+\begin{equation}[eq:newton-schulz]{}
+  \mathbf{X} \leftarrow c_1 \mathbf{X} + c_3 \bigl( \mathbf{X} \mathbf{X}^{\top} \bigr) \mathbf{X} + c_5 \bigl( \mathbf{X} \mathbf{X}^{\top} \bigr)^{2} \mathbf{X}
+\end{equation}
+is then applied five times. Each step keeps the singular vectors and maps every singular value $z$ to $c_1 z + c_3 z^3 + c_5 z^5$. We use the coefficients of Jordan et~al., $(c_1, c_3, c_5) = (3.4445, -4.7750, 2.0315)$. With them, every singular value that starts above about 0.002 ends between about 0.7 and 1.2.
+
+No selected rate lay at either end of its grid. At the selected rates, the final validation losses of the tuning were 3.386 for AdamW, 3.300 for Muon, and 3.396 for the control. A run of AdamW at its selected rate with $\beta_2 = 0.98$ reached 3.389, against 3.386 with 0.95.
+
+\section{The Run Program}
+\label{app:configuration-program}
+\Cref{tab:configuration-program} lists the arms of every experiment. Every one of the 145 runs finished its planned steps, and none diverged. Training them took 73 hours and 12 minutes of wall-clock time on the hosts of \cref{app:reproduction-environment}. This time leaves out setting up the hosts, evaluating the runs on the panel, and the exploratory runs.
+
+\begin{table}[The arms of every experiment]{tab:configuration-program}{The arms of every experiment, named as in \cref{tab:method-partitions} and \cref{sec:method-experiments}. The 30 exploratory runs of the last row are not among the 145. In the stress runs, a multiple scales the tuned rates of both optimizers of a partition.}
+  \small
+  \begin{tabular}{l>{\raggedright\arraybackslash}p{11.6cm}r}
+    \toprule
+    Experiment    & Arms                                                                                                                                                                                       & Runs \\
+    \midrule
+    Tuning        & AdamW at five rates, Muon at five rates, and the control at six rates, all with seed 0; AdamW with $\beta_2 = 0.98$, seed 0                                                               & 17   \\
+    RQ1           & AdamW and Muon; seeds 0 to 2                                                                                                                                                               & 6    \\
+    RQ2, stress   & AdamW, Muon, and Muon with the router on AdamW, at multiples 1, 2, 4, 8, and 16, seeds 0 to 2; Muon with the fast bias at multiple 4, seeds 0 to 2; one calibration run of each partition, seed 0 & 51 \\
+    RQ3           & the eight partitions of \cref{tab:method-partitions} other than the control; Muon at half rate; AdamW and Muon without the bias; seeds 3 to 5                                                 & 33   \\
+    Bias speed    & AdamW and Muon, each with the usual and the fast bias; seeds 6 to 8                                                                                                                       & 12   \\
+    Balance loss  & AdamW, Muon, and Muon with the router on AdamW, each with the balance loss; seeds 3 to 5                                                                                                    & 9    \\
+    Tuning, large & AdamW and Muon, each at 0.125, 0.25, 0.5, and 1 times its rate on the small model; seed 0                                                                                               & 8    \\
+    Large model   & AdamW, Muon, and Muon with the router on AdamW; seeds 0 to 2                                                                                                                              & 9    \\
+    \midrule
+    Exploratory   & 8 runs before RQ3, one for each partition of RQ3, with seed 0 and 0.5B tokens; the three with Muon on the routed experts, on the dense FFN, and on the attention and the dense FFN stopped at step 3,000. The probe of RQ3, 12 runs, and the probe of the large model, 10 runs, all to step 3,000 and most with one change & 30 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

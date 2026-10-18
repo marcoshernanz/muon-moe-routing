@@ -1,0 +1,58 @@
+% RQ1 in three panels: the span of every MoE layer under AdamW and Muon; the span of the first MoE layer over training, with the mean of the other six layers dashed; and the span over all the layers against the learning rate in the tuning. The data are figures/data/rq1-layers-*.csv, rq1-span-*.csv and tuning-*.csv.
+\begin{tikzpicture}
+  \begin{groupplot}[
+      thesis,
+      group style={group size=3 by 1, horizontal sep=1.45cm},
+      width=4.05cm, height=3.3cm,
+    ]
+    \nextgroupplot[
+      xlabel={MoE layer}, ylabel={Span},
+      xtick={1,...,7}, xmin=0.5, xmax=7.5,
+      ymin=0, ymax=0.25, ytick={0,0.05,0.1,0.15,0.2,0.25},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=2},
+      legend pos=north east,
+    ]
+    \addplot[arm a, only marks, error bars/.cd, y dir=both, y explicit, error bar style={line width=0.5pt}]
+      table[x expr=\thisrow{layer}-0.14, y=mean, y error plus expr=\thisrow{high}-\thisrow{mean}, y error minus expr=\thisrow{mean}-\thisrow{low}] {figures/data/rq1-layers-adamw.csv};
+    \addlegendentry{AdamW}
+    \addplot[arm b, only marks, error bars/.cd, y dir=both, y explicit, error bar style={line width=0.5pt}]
+      table[x expr=\thisrow{layer}+0.14, y=mean, y error plus expr=\thisrow{high}-\thisrow{mean}, y error minus expr=\thisrow{mean}-\thisrow{low}] {figures/data/rq1-layers-muon.csv};
+    \addlegendentry{Muon}
+
+    \nextgroupplot[
+      xlabel={Step (thousands)}, ylabel={Span},
+      xmin=0, xmax=15.26, xtick={0,5,10,15},
+      ymin=0, ymax=0.9, ytick={0,0.2,0.4,0.6,0.8},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=1},
+    ]
+    \addplot[name path=alo, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=first_low] {figures/data/rq1-span-adamw.csv};
+    \addplot[name path=ahi, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=first_high] {figures/data/rq1-span-adamw.csv};
+    \addplot[band, fill=moeamber, forget plot] fill between[of=alo and ahi];
+    \addplot[name path=blo, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=first_low] {figures/data/rq1-span-muon.csv};
+    \addplot[name path=bhi, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=first_high] {figures/data/rq1-span-muon.csv};
+    \addplot[band, fill=moeblue, forget plot] fill between[of=blo and bhi];
+    \addplot[moeamber, no marks] table[x expr=\thisrow{step}/1000, y=first] {figures/data/rq1-span-adamw.csv};
+    \addplot[moeblue, no marks] table[x expr=\thisrow{step}/1000, y=first] {figures/data/rq1-span-muon.csv};
+    \addplot[moeamber, no marks, dashed, line width=0.6pt] table[x expr=\thisrow{step}/1000, y=rest] {figures/data/rq1-span-adamw.csv};
+    \addplot[moeblue, no marks, dashed, line width=0.6pt] table[x expr=\thisrow{step}/1000, y=rest] {figures/data/rq1-span-muon.csv};
+
+    \nextgroupplot[
+      xlabel={Learning rate ($\times 10^{-3}$)}, ylabel={Span},
+      xmode=log, log basis x=2, xmin=1.6e-4, xmax=4.4e-2,
+      xtick={2.5e-4,1e-3,4e-3,1.6e-2}, xticklabels={0.25, 1, 4, 16},
+      xticklabel style={/pgf/number format/assume math mode=false},
+      ymin=0, ymax=0.45, ytick={0,0.1,0.2,0.3,0.4},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=1},
+      legend pos=north west,
+    ]
+    \addplot[arm a, mark options={fill=white}] table[x=rate, y=span] {figures/data/tuning-adamw.csv};
+    \addlegendentry{AdamW}
+    \addplot[arm b, mark options={fill=white}] table[x=rate, y=span] {figures/data/tuning-muon.csv};
+    \addlegendentry{Muon}
+    \addplot[arm f, mark options={fill=white}] table[x=rate, y=span] {figures/data/tuning-momentum.csv};
+    \addlegendentry{Control}
+    \addplot[arm a, only marks, forget plot] coordinates {(2e-3, 0.11256)};
+    \addplot[arm b, only marks, forget plot] coordinates {(4e-3, 0.16235)};
+    \addplot[arm f, only marks, forget plot] coordinates {(5e-4, 0.10688)};
+  \end{groupplot}
+\end{tikzpicture}

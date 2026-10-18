@@ -1,0 +1,142 @@
+% !TEX root = ../main.tex
+\chapter{Method}
+\label{sec:method}
+
+We train one family of MoE language models many times on the same data and vary which optimizer, AdamW or Muon, trains each group of parameters. The bias of \cref{sec:background-loss-free} is the only balancer of our models, so the span of \cref{sec:background-span} measures all the work of balancing. The one exception is an experiment that adds a balance loss. This chapter describes what the experiments share and lists them in \cref{tab:method-program}. \Cref{app:configuration} gives every setting that this chapter leaves out.
+
+\section{Data}
+\label{sec:method-data}
+We train on the sample-10BT subset of FineWeb-Edu \cite{penedo2024fineweb}, a corpus of educational web text. It is split into tokens by byte-level byte-pair encoding \cite{radford2019language} with a vocabulary of 16,384 symbols, which gives 10.07B training tokens. We hold out 1\% of the data for validation. A training sequence is a window of 1,025 consecutive tokens, in which each of the last 1,024 tokens is predicted from the tokens before it. A permutation fixed by the seed of the run shuffles the windows, so two runs with the same seed see the same tokens in the same order. The validation loss is the mean cross-entropy on 2.1M held-out tokens, the same in every run. It is measured every 250 steps and at the last step.
+
+We measure the specialization of the experts (\cref{sec:method-readings}) on a panel of four domains with 2M tokens each: web text from a held-out shard of FineWeb-Edu, mathematics from OpenWebMath \cite{paster2024openwebmath}, source code from codeparrot-clean-valid \cite{codeparrot2022clean}, and articles from the English Wikipedia \cite{wikimedia2023wikipedia}.
+
+\section{Models}
+\label{sec:method-architecture}
+Our models are the decoder-only Transformers of \cref{fig:background-model} \cite{vaswani2017attention, radford2019language}. Their attention uses rotary position embeddings, which encode the order of the tokens \cite{su2024roformer}. It also normalizes the queries and the keys of each head \cite{henry2020qknorm, dehghani2023vit22b}, and it multiplies its result by a gate before the output projection \cite{qiu2025gated}. Block 0 has a dense SwiGLU FFN\@. Every other block has the MoE layer of \cref{sec:background-moe}, with one shared expert and $E = 32$ routed experts, of which $k = 4$ are selected for each token.
+
+After every optimizer step, the bias is updated by \cref{eq:bias-update} with $u = 0.001$, using the loads of the batch of that step. DeepSeek-V3 stops these updates toward the end of training \cite{deepseek2024v3}, but we keep them until the last step. We leave out the router z-loss (\cref{sec:background-instability}) and the changes that DeepSeek-V3 makes to the attention and to the training objective \cite{deepseek2024v3}.
+
+We train models of two sizes, whose full settings are in \cref{tab:configuration-architecture}. The \emph{small} model has 8 blocks of width 512, with 8 attention heads and experts of hidden width 768. It has 303M parameters in total, of which 55M are active, that is, used for each token. The \emph{large} model has 12 blocks of width 768, with 12 heads and experts of hidden width 512. It has 496M parameters in total, of which 108M are active. The active counts leave out the embedding table and the output head, which the totals include. Both sizes have the same number of experts and the same $k$, a dense block 0, a context of 1,024 tokens, and a batch of 64 sequences. An expert with the fair share of the load receives $64 \times 1{,}024 \times k / E = 8{,}192$ tokens per step. We call the MoE layer of block 1 the \emph{first MoE layer}.
+
+\section{Optimizers and Partitions}
+\label{sec:method-optimizers}
+We divide the parameters into six groups: the routers, the routed experts, the shared experts, the attention, the dense FFN of block 0, and a last group with the embedding table, the output head, and the gains of the normalization layers. The attention group holds the query, key, value, gate, and output projections. The last group is trained with AdamW in every run, as in the reports that use Muon (\cref{sec:background-muon}). We call an assignment of the optimizers to the other five groups a \emph{partition}. The four groups other than the routers form the backbone of \cref{sec:introduction-findings}, that is, every matrix of the model except the routers, the embedding table, and the output head.
+
+\Cref{tab:method-partitions} lists the partitions that we use and the names by which we refer to them. The partitions AdamW and Muon train all five groups with one optimizer, and most others are named by what they train with Muon. The first three partitions are the choices of current models. DeepSeek-V3 trains all five groups with AdamW \cite{deepseek2024v3}, and DeepSeek-V4 \cite{deepseek2026v4} and Moonlight \cite{liu2025moonlight} train all five with Muon. Qwen3.8-Flash-Next trains its attention and experts with Muon but its router with AdamW \cite{qiu2026qwennext}. The next five partitions put Muon on one or two groups, and the last one is a control, described below.
+
+\begin{table}[The partitions]{tab:method-partitions}{The partitions that we use. A partition trains with AdamW the groups that it does not put on Muon. The embedding table, the output head, and the gains are always trained with AdamW.}
+  \small
+  \begin{tabular}{lll}
+    \toprule
+    Partition                     & Groups trained with Muon                    & Used in                                     \\
+    \midrule
+    AdamW                         & none                                        & every experiment                            \\
+    Muon                          & all five                                    & every experiment                            \\
+    Muon, router on AdamW         & all but the router                          & RQ2, RQ3, balance loss, large model         \\
+    Router on Muon                & the router                                  & RQ3                                         \\
+    Experts on Muon               & the routed experts                          & RQ3                                         \\
+    Attention on Muon             & the attention                               & RQ3                                         \\
+    Dense FFN on Muon             & the dense FFN of block 0                    & RQ3                                         \\
+    Attention, dense FFN on Muon  & the attention and the dense FFN             & RQ3                                         \\
+    Control                       & all five, without the orthogonalization & tuning                                      \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Muon follows \cref{eq:muon-update} with $\mu = 0.95$, five Newton--Schulz steps, and $\lambda = 0.1$, as in Moonlight~\cite{liu2025moonlight}. AdamW follows \cref{eq:adamw-update} with $\beta_1 = 0.9$, $\beta_2 = 0.95$, and $\lambda = 0.1$, as in DeepSeek-V3 and DeepSeek-V4 \cite{deepseek2024v3, deepseek2026v4}. Muon treats the router of each MoE layer as one matrix. As in DeepSeek-V4 \cite{deepseek2026v4}, it treats each of the three matrices of every routed expert as a separate matrix.
+
+The \emph{control} keeps the momentum of Muon and the size of its update, but not the orthogonalization. It rescales the Nesterov momentum $\mu \mathbf{M}_t + \mathbf{G}_t$ of each matrix to the Frobenius norm $\sqrt{\min(p, q)}$ of an orthogonal matrix of full rank. It then applies the factor $0.2 \sqrt{\max(p, q)}$ and the weight decay of \cref{eq:muon-update}. The updates of all the experts therefore have the same size, as under Muon, but the singular values of each update remain as unequal as those of the momentum (\cref{sec:background-orthogonalization}).
+
+\section{Learning Rates, Schedule, and Clipping}
+\label{sec:method-tuning}
+The best learning rates of AdamW and Muon differ (\cref{sec:related-sensitivity}). Before any comparison, we therefore tune the peak learning rate of each optimizer separately, as benchmarks of optimizers do \cite{wen2025fantastic, semenov2025benchmarking}. We tune on the small model, with seed 0 and 0.5B tokens. We select the rate with the lowest validation loss at the end of the decay, since the loss curves of two optimizers can cross during it \cite{wen2025fantastic}. We try five rates for AdamW, five for Muon, and six for the control, each twice the one before (\cref{tab:configuration-optimizer}). Each optimizer is tuned on the partition that trains all five groups with it. In the runs of Muon and of the control, AdamW still trains the embedding table, the output head, and the gains, at the rate selected for AdamW\@. The tuned rates are $2 \times 10^{-3}$ for AdamW and $4 \times 10^{-3}$ for Muon. Every run of the small model uses them unless its design says otherwise.
+
+The best learning rate changes with the width and falls as a run gets longer. For AdamW, Bjorck et~al.~\cite{bjorck2025horizons} find that it falls approximately as the number of tokens to the power $-0.32$, and so does that of a variant of Muon \cite{ren2026hypersphere}. Both fits come from larger models or longer runs than ours, and Bjorck et~al.\ find a steeper fall in their smallest models. We therefore tune the large model again, with 1B tokens and seed 0, at 0.125 to 1 times the rates of the small model. This tuning selected $10^{-3}$ for AdamW and $2 \times 10^{-3}$ for Muon. The runs of the large model use 3B tokens, three times as many as its tuning, so we multiply these rates by $3^{-0.32} \approx 0.7$. This gives $7 \times 10^{-4}$ for AdamW and $1.4 \times 10^{-3}$ for Muon.
+
+The learning rate of each optimizer rises linearly from zero to its peak over a warmup of 500 steps. It then decays along a cosine to one tenth of the peak at the last step (\cref{eq:configuration-schedule}). The stress runs of RQ2 are the exception: after the warmup, they hold the rate at 1, 2, 4, 8, or 16 times the peak. The gradient is clipped separately for each optimizer, on the norm of the gradient of its own parameters. The threshold is 1.0. In the stress runs, it is instead twice the median gradient norm after the warmup of a calibration run, which trains the same partition at its tuned rates (\cref{tab:configuration-optimizer}).
+
+\section{Measurements}
+\label{sec:method-measurements}
+Every 10 steps, a run writes a log. The log holds the training loss of every step since the previous log, the norm of the gradient of each optimizer before clipping, and the metrics of \cref{tab:method-readings} for every MoE layer. Most of these metrics are computed on the batch of that step, during the forward pass of training. The rest of this section defines them. At the same steps, the run copies the parameters before the optimizer step, so that it can measure the change that the step makes. Two runs that differed only in which metrics they computed had bit-identical losses, so computing them does not change the training.
+
+\begin{table}[The metrics of a run]{tab:method-readings}{The metrics of a run, with what each says in words and its possible range in our models. Each metric is computed in one MoE layer or averaged over the MoE layers. The fair share of an expert is $1/E = 1/32$ of the routing slots.}
+  \small
+  \begin{tabular}{p{3.5cm}p{9.6cm}p{1.9cm}}
+    \toprule
+    Metric                   & What it says                                                                                          & Range                     \\
+    \midrule
+    Span                     & how far apart the biases are, that is, how hard the balancer works                   & 0 to $1 + 2u$             \\
+    Input cosine             & how strongly the inputs of the router point in one shared direction                                   & 0 to 1                    \\
+    Score offset             & how much more the router prefers some experts, equally for every token                        & 0 to 1                    \\
+    Overload                 & the load of the busiest expert as a multiple of the fair share                                        & 1 (even) to 8             \\
+    Usage perplexity         & the number of experts in even use                                                                      & 4 to 32 (even)            \\
+    Load churn               & the smallest share of the slots that must change expert between logs                          & 0 to 1                    \\
+    Specialization           & how differently the experts are used by text from four domains                                         & 0 to $\log 4$             \\
+    Update--load correlation & whether experts that receive more tokens also receive larger updates                                   & $-1$ to 1                 \\
+    Common share             & the share of the update of the router along the shared direction & 0 to 1 \\
+    Largest activation       & the largest entry of the residual stream, the logits, or the expert outputs & from 0                    \\
+    Spikes                   & the steps whose loss jumps well above that of the steps around them                          & a count                   \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Windows}
+\label{sec:method-windows}
+A metric becomes one number per run by averaging it over the logged steps of a window, either in the first MoE layer or over all the MoE layers. The \emph{integrated} value is the mean from the end of the warmup to the end of the run, that is, over the logged steps $t$ with $500 < t \leq S$ in a run of $S$ steps. We report it unless we name another window. The \emph{early} value is the mean over the $0.05\,S$ steps that follow the warmup, which are steps 501 to 1,262 in a run of 1B tokens. The \emph{warmup} value is the mean over steps 1 to 500, and the \emph{final} value is the value at the last log. A difference between two biases changes by at most $2u$ per step (\cref{sec:background-span}). The span therefore takes hundreds of steps to respond to a change in the scores, so we measure it over such windows and not at single steps.
+
+\subsection{Metrics of the Routing}
+\label{sec:method-readings}
+Besides the span of \cref{eq:bias-span}, two metrics describe the inputs of the router and the scores that it gives them. The \emph{input cosine} is the mean cosine similarity between the inputs of the router for two distinct tokens of the batch. With $\hat{\mathbf{x}}_t = \mathbf{x}_t / \lVert \mathbf{x}_t \rVert$, it is computed exactly from the sum of the $\hat{\mathbf{x}}_t$,
+\begin{equation}[eq:method-cosine]{}
+  \rho = \frac{1}{N (N - 1)} \sum_{t \neq t'} \hat{\mathbf{x}}_t^{\top} \hat{\mathbf{x}}_{t'} = \frac{\bigl\lVert \sum_{t=1}^{N} \hat{\mathbf{x}}_t \bigr\rVert^2 - N}{N (N - 1)}.
+\end{equation}
+It is close to the squared length of the mean of the normalized inputs. It therefore measures how strongly the inputs share the direction of \cref{sec:background-offset}: it is near zero when the inputs point in all directions, and one when they all point in the same direction. The \emph{score offset} is $\max_i \bar{s}_i - \min_i \bar{s}_i$, where $\bar{s}_i$ is the mean over the batch of the score $s_i$ of \cref{eq:moe-score}, not normalized. It is the spread of the offset of \cref{eq:background-offset} across the experts, as it appears in the scores. In other words, it is the preference for some experts that every token shares and that the bias has to cancel.
+
+Three metrics describe the loads of \cref{eq:moe-load}. The \emph{overload} $E \max_i \ell_i$ is the load of the busiest expert divided by the fair share. It is 1 when the loads are even, and $E / k = 8$ when the same $k$ experts receive every token. The \emph{usage perplexity} of Wang et~al.~\cite{wang2026depth} is the exponential of the entropy of the loads, $\exp(-\sum_i \ell_i \log \ell_i)$. It is the number of experts in even use, from 32 when the loads are even down to 4 in the same extreme. The \emph{load churn}, related to the routing fluctuation of StableMoE \cite{dai2022stablemoe}, is the total variation distance $\frac{1}{2} \sum_i \lvert \ell_i - \ell_i' \rvert$ between the loads $\boldsymbol{\ell}$ of a log and the loads $\boldsymbol{\ell}'$ of the previous log. It is the smallest fraction of the routing slots that would have to change expert to turn one distribution of the load into the other.
+
+The \emph{specialization} is measured on the panel of \cref{sec:method-data} at the last checkpoint. Following Muennighoff et~al.~\cite{muennighoff2025olmoe}, we compute the loads of \cref{eq:moe-load} over the tokens of each domain. We then summarize the four distributions of a layer by their Jensen--Shannon divergence, that is, the entropy of their mean minus the mean of their entropies. It is zero when the domains are routed alike and $\log 4$ when no two domains share an expert. The \emph{update--load correlation} is computed across the 32 routed experts of a layer. It is the Pearson correlation between the number of tokens routed to an expert in a step and the size of the change that the step makes to the expert. We measure this size by the Frobenius norm of the three matrices of the expert, taken as one. We also report the same correlation for the largest spectral norm of the three matrices, which is the size that Muon fixes (\cref{sec:background-orthogonalization}).
+
+The \emph{common share} measures how much of the update of the router acts on the shared direction of its inputs. Let $\Delta \mathbf{W}_{\mathrm{r}}$ denote the change that a step makes to the router, and let $\hat{\mathbf{c}}$ be the unit vector along $\sum_t \hat{\mathbf{x}}_t$. Since the normalization gives the inputs similar lengths, $\hat{\mathbf{c}}$ is close to the direction of the mean input $\mathbf{c}$ of \cref{eq:background-offset}. The common share is
+\begin{equation}[eq:method-common-share]{}
+  \kappa = \frac{\lVert \Delta \mathbf{W}_{\mathrm{r}} \, \hat{\mathbf{c}} \rVert}{\lVert \Delta \mathbf{W}_{\mathrm{r}} \rVert_{\mathrm{F}}},
+\end{equation}
+where the numerator is the change that the step makes to the logits of the experts for the direction $\hat{\mathbf{c}}$. The common share is one when the update moves every row of the router along $\hat{\mathbf{c}}$ only. For an update whose $E$ singular values are equal, the numerator is at most the spectral norm, and the denominator is $\sqrt{E}$ times the spectral norm. The common share of such an update is therefore at most $1 / \sqrt{32} \approx 0.18$. The update of Muon is close to this case, since the Newton--Schulz steps leave its singular values near one (\cref{sec:background-muon}) and the weight decay adds a small term. The update of AdamW has no such bound.
+
+\subsection{Metrics of Stability}
+\label{sec:method-stability}
+Every log also records, in every block, the largest absolute entry of the residual stream, of the attention logits (the dot products of the queries with the keys), of the router logits, and of the outputs of the routed experts. A step is a \emph{spike} if the excess of its training loss over the median of the 201 steps centered on it is above two thresholds. The first is 0.1, the threshold of the Qwen3.8-Flash-Next report \cite{qiu2026qwennext}. The second is five robust standard deviations of the excess in the same window, estimated from the median absolute deviation, as in the K2-V2 report \cite{k2team2025k2v2}. With our batch, this standard deviation is about 0.04, so the first threshold alone would flag the ordinary fluctuation of the loss. The second alone would flag negligible excesses where the loss is very smooth. Spikes on consecutive steps form one \emph{episode}. A run has \emph{diverged} when its training loss or a gradient norm stops being finite, or when its final validation loss is at or above its initial training loss. We compute the learning-rate sensitivity of a partition by \cref{eq:lr-sensitivity} over its stress runs at 1 to 8 times its tuned rates. There, $\mathcal{L}_{\mathrm{init}}$ is the initial training loss, and the final losses are averaged over the seeds.
+
+\section{Experiments}
+\label{sec:method-experiments}
+\Cref{tab:method-program} lists the experiments. Each experiment compares a few configurations, which we call its \emph{arms}, and \cref{app:configuration-program} lists them. Most arms are partitions, and some change one more setting. Muon at half rate trains with half the tuned rate of Muon, that is, at the rate of AdamW\@. AdamW and Muon without the bias hold the bias at zero, so that nothing balances the loads. The fast bias moves by $4u = 0.004$ per step instead of $u = 0.001$. The balance-loss experiment adds the balance loss of DeepSeek-V3 (\cref{sec:results-balance-loss}). No comparison is tested on the runs that suggested it. Every experiment designed from earlier results therefore trains new runs, with new seeds on the small model. The one exception is the balance-loss experiment, whose arms without the loss are the runs of RQ3.
+
+\begin{table}[The experiments]{tab:method-program}{The experiments. Every arm is trained at each seed of its row. The tuning trains one run per rate, and RQ2 adds one calibration run per partition. The 30 exploratory runs are not counted.}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}lll>{\raggedright\arraybackslash}p{9cm}rl@{}}
+    \toprule
+    Experiment    & Model & Tokens & Arms                                                   & Runs & Section                        \\
+    \midrule
+    Tuning        & small & 0.5B   & AdamW, Muon, control, over their rates; AdamW with $\beta_2 = 0.98$; seed 0 & 17   & \labelcref{sec:method-tuning}  \\
+    RQ1           & small & 1B     & AdamW, Muon; seeds 0--2                                & 6    & \labelcref{sec:results-rq1}    \\
+    RQ2, stress   & small & 0.5B   & AdamW, Muon, Muon with the router on AdamW, at five multiples; Muon with the fast bias at multiple 4; seeds 0--2 & 51 & \labelcref{sec:results-rq2}    \\
+    RQ3           & small & 1B     & every partition but the control, Muon at half rate, AdamW and Muon without the bias; seeds 3--5 & 33 & \labelcref{sec:results-rq3} \\
+    Bias speed    & small & 1B     & AdamW, Muon, with the usual and the fast bias; seeds 6--8 & 12 & \labelcref{sec:results-bias-speed} \\
+    Balance loss  & small & 1B     & AdamW, Muon, Muon with the router on AdamW, with the balance loss; seeds 3--5 & 9 & \labelcref{sec:results-balance-loss} \\
+    Tuning, large & large & 1B     & AdamW, Muon, over their rates; seed 0                 & 8    & \labelcref{sec:method-tuning}  \\
+    Large model   & large & 3B     & AdamW, Muon, Muon with the router on AdamW; seeds 0--2                 & 9    & \labelcref{sec:results-large}  \\
+    \midrule
+    Total         &       &        &                                                        & 145  &                                \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+We also report three sets of shorter runs as exploratory: eight runs that came before RQ3, and two probes. The eight runs, one for each partition of RQ3, used seed 0 and up to 0.5B tokens, and they suggested the design of RQ3. The two probes repeat the first 3,000 steps of runs of RQ3 and of the large model, most of them with one change. One such change subtracts the mean input of the batch from the input of the first router (Sections~\ref{sec:results-offset} and~\ref{sec:results-large}). A probe run without a change reproduces its full run bit for bit, so a changed run differs from its full run by the change alone.
+
+\section{Comparisons}
+\label{sec:method-statistics}
+Every comparison is paired by seed. Its unit is the difference $\delta$ between the values of two runs with the same seed. We report the mean of $\delta$ over the seeds, followed in brackets by its range, from the smallest of the three differences to the largest. With three seeds, this range is also the 95\% percentile bootstrap interval \cite{efron1993introduction}. A resample of the three differences repeats the smallest one three times with probability $(1/3)^3 = 1/27$, which is above 2.5\%, and likewise the largest. This interval is narrower than a true 95\% interval \cite{agarwal2021precipice}, so we read it as the spread of the difference over the seeds rather than as a test. Two arms that do not differ give a difference with the same sign at every seed with probability $2 \times (1/2)^3 = 1/4$. Every run is reported.
+
+We fixed the comparisons of each experiment, and the expected sign of each, before training its runs. \Cref{sec:results} notes the ones that went against what we expected. We apply no correction for the number of comparisons, and every unplanned analysis, including the probes, is exploratory.
+
+A metric of the routing could differ between two runs merely because one of them is further along in training. We therefore also compute every planned difference at matched loss. To do so, we cut both runs of a pair at the first evaluation at which each reaches the worse of their two final validation losses. The two views led to the same conclusion for every planned difference, so we report the values at equal tokens. The specialization and the loss are compared at equal tokens only.

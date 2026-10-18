@@ -1,0 +1,153 @@
+% !TEX root = ../main.tex
+\chapter{Background}
+\label{sec:background}
+
+This chapter introduces what is needed to follow the experiments. \Cref{sec:background-lm} describes how a language model is built and trained, and \cref{sec:background-moe} describes the mixture-of-experts layer that our models use. \Cref{sec:background-balancing} explains how its experts are kept equally busy, and \cref{sec:background-optimizers} presents the two optimizers that we compare. Finally, \cref{sec:background-instability} describes the instabilities of training.
+
+\section{Language Models and the Transformer}
+\label{sec:background-lm}
+A language model predicts the next piece of a text from the text before it. The text is first split into \emph{tokens}, which are words or pieces of words. A tokenizer, such as byte-pair encoding \cite{sennrich2016bpe}, fixes a vocabulary of $V$ symbols, so that a text becomes a sequence of integers $x_1, x_2, \dots$ between 1 and $V$. Given the tokens $x_1, \dots, x_t$, the model outputs a probability for every symbol of the vocabulary to be the next token $x_{t+1}$. It is trained to give a high probability to the token that actually comes next \cite{bengio2003neural, radford2019language}. On a sequence of $T + 1$ tokens, this means minimizing the cross-entropy
+\begin{equation}[eq:background-lm-loss]{}
+  \mathcal{L}(\boldsymbol{\theta}) = -\frac{1}{T} \sum_{t=1}^{T} \log p_{\boldsymbol{\theta}}(x_{t+1} \mid x_1, \dots, x_t),
+\end{equation}
+where $\boldsymbol{\theta}$ denotes all the parameters of the model and $p_{\boldsymbol{\theta}}$ the probability that it assigns. A model that spreads its probability evenly over $n$ symbols, one of which is correct, has a loss of $\log n$. The exponential of the loss, called the \emph{perplexity}, can therefore be read as the number of candidates among which the model is still undecided. A model that knows nothing has a loss of $\log V \approx 9.7$ with our vocabulary of 16,384 symbols. Our small model ends near 3.2, as if each next token were one of about 25 equally likely candidates.
+
+The parameters are trained by mini-batch gradient descent, like those of other neural networks \cite{goodfellow2016deep}. At every training \emph{step}, the loss of \cref{eq:background-lm-loss} is computed on a \emph{batch} of sequences. Backpropagation~\cite{rumelhart1986learning} then gives its gradient with respect to every parameter, and every parameter is moved against its gradient. In its simplest form, the step is $\boldsymbol{\theta} \leftarrow \boldsymbol{\theta} - \eta \nabla \mathcal{L}$, where the \emph{learning rate} $\eta$ sets the size of the step. The learning rate changes over training according to a \emph{schedule}, which usually raises it from zero over a first period called the \emph{warmup} and then lowers it toward the end. The rule that turns the gradients into an update of the parameters is called the \emph{optimizer} (\cref{sec:background-optimizers}). The \emph{validation loss}, the loss on text kept out of training, measures how well the model predicts new text.
+
+\begin{figure}[The decoder-only Transformer]{fig:background-model}{The decoder-only Transformer of this thesis for one position of the sequence. Every sublayer reads the residual stream through a normalization layer and adds its output to it at the circle. Block 0 has a dense FFN, and every later block has the MoE layer of \cref{fig:moe-layer} in its place. The boxes in gray and the gains of every normalization layer are trained with AdamW in every run.}
+  \input{figures/model-overview}
+\end{figure}
+
+Our models are decoder-only Transformers \cite{vaswani2017attention, radford2019language}, drawn in \cref{fig:background-model}. An \emph{embedding table} gives every symbol of the vocabulary a vector of $d$ numbers, where $d$ is the \emph{width} of the model. Each position of the sequence thus starts as the vector of its token. A stack of \emph{blocks} then transforms these vectors. Each block adds its output to the vector of a position instead of replacing it, which is called a residual connection \cite{he2016resnet}. The vector of a position is therefore a running sum, called the \emph{residual stream}, to which every block writes. We call its value at a given point of the model the \emph{hidden state} of the token. After the last block, the \emph{output head}, a matrix with one row per symbol, gives every symbol a number. A softmax then turns these numbers into the probabilities of \cref{eq:background-lm-loss}.
+
+Every block has two \emph{sublayers}, and a normalization layer rescales the hidden state before each of them reads it. Our models use RMSNorm \cite{zhang2019rmsnorm}, which divides the vector by the root mean square of its entries and multiplies it by learned \emph{gains}. The first sublayer, \emph{self-attention}, lets a position use the information of the positions before it. It multiplies the hidden state of every position by three weight matrices, which give a query, a key, and a value. A position weights itself and each earlier position by a softmax of the dot products of its query with their keys. It then takes the weighted mean of their values and maps it back to $d$ numbers with a fourth matrix, the output projection. The model does this in several \emph{heads} in parallel, on shorter vectors. The second sublayer, the \emph{feed-forward network} (FFN), is a small neural network with one hidden layer, applied to every position on its own and written out in \cref{eq:moe-expert}. Only the first block of our models, block 0, keeps this FFN, which we call \emph{dense}. Every later block replaces it with the mixture-of-experts layer of \cref{sec:background-moe}. Most of the parameters of a Transformer are in the weight matrices of these two sublayers, which Muon trains (\cref{sec:background-muon}).
+
+\section{Mixture-of-Experts Layers}
+\label{sec:background-moe}
+A wider FFN usually gives a better model, but it also costs more computation for every token. A \emph{mixture-of-experts} (MoE) layer separates the number of parameters from the computation per token. It replaces the FFN with $E$ FFNs, called \emph{experts}, and a \emph{router} that sends each token to only $k$ of them. The number of parameters therefore grows with $E$, while the computation per token grows only with $k$. The router goes back to the gating network of Jacobs et~al.~\cite{jacobs1991adaptive}. Shazeer et~al.~\cite{shazeer2017outrageously} made the choice of the router \emph{sparse}, so that each token is processed by only a few experts. GShard and the Switch Transformer then put such a layer in place of the FFN of a Transformer \cite{lepikhin2021gshard, fedus2022switch}.
+
+Our MoE layer, drawn in \cref{fig:moe-layer}, uses the DeepSeekMoE architecture \cite{dai2024deepseekmoe} with the routing function of DeepSeek-V3 \cite{deepseek2024v3}. DeepSeekMoE splits each expert into several narrower ones, so that a token can be routed to many more combinations of experts at the same cost. It also adds \emph{shared} experts, which every token uses, to capture knowledge that all tokens need. Let $\mathbf{x} \in \mathbb{R}^{d}$ denote the input of the layer for one token, which is its normalized hidden state. Our layer consists of $E$ routed experts $\operatorname{FFN}_1, \dots, \operatorname{FFN}_E$ and one shared expert $\operatorname{FFN}_{\mathrm{s}}$, and it computes
+\begin{equation}[eq:moe-output]{}
+  \mathbf{y} = \operatorname{FFN}_{\mathrm{s}}(\mathbf{x}) + \sum_{i \in \mathcal{T}(\mathbf{x})} g_i(\mathbf{x}) \operatorname{FFN}_i(\mathbf{x}),
+\end{equation}
+where $\mathcal{T}(\mathbf{x}) \subset \{1, \dots, E\}$ is the set of the $k$ routed experts selected for the token and the $g_i(\mathbf{x})$ are their mixing weights. Both come from the router.
+
+\begin{figure}[The MoE layer for one token]{fig:moe-layer}{The MoE layer for one token. The router scores every expert with \cref{eq:moe-score}, selects $k$ of them by score plus bias with \cref{eq:moe-selection}, and weights their outputs with \cref{eq:moe-weights}. Only the shared expert and the highlighted routed experts, two in this drawing, are evaluated. No gradient flows through the dashed arrows, which carry the bias and the indices of the selected experts.}
+  \input{figures/moe-layer}
+\end{figure}
+
+The router is a matrix $\mathbf{W}_{\mathrm{r}} \in \mathbb{R}^{E \times d}$ whose row $\mathbf{w}_i$ gives the token a \emph{score} for expert $i$,
+\begin{equation}[eq:moe-score]{}
+  s_i = \sigma\bigl(\mathbf{w}_i^{\top} \mathbf{x}\bigr), \qquad i = 1, \dots, E,
+\end{equation}
+where $\sigma(z) = 1 / (1 + e^{-z})$ is the logistic sigmoid. Each score therefore lies in $(0, 1)$, as in logistic regression, and depends only on its own row of $\mathbf{W}_{\mathrm{r}}$. We call $\mathbf{w}_i^{\top} \mathbf{x}$ the \emph{logit} of expert $i$. The router then selects the $k$ experts with the largest values of $s_i + b_i$,
+\begin{equation}[eq:moe-selection]{}
+  \mathcal{T}(\mathbf{x}) = \operatorname{Top}_k \bigl( \{ s_i + b_i \}_{i=1}^{E} \bigr),
+\end{equation}
+where $\operatorname{Top}_k$ returns the indices of the $k$ largest elements and $\mathbf{b} \in \mathbb{R}^{E}$ holds the \emph{biases} of the experts, which keep the experts equally busy (\cref{sec:background-loss-free}). The mixing weights are the scores of the selected experts, normalized so that they sum to one,
+\begin{equation}[eq:moe-weights]{}
+  g_i = \frac{s_i}{\sum_{j \in \mathcal{T}(\mathbf{x})} s_j}, \qquad i \in \mathcal{T}(\mathbf{x}).
+\end{equation}
+The bias appears in \cref{eq:moe-selection} but not in \cref{eq:moe-weights}, so it changes which experts a token is sent to without changing how their outputs are weighted. Since the top-$k$ selection is not differentiable, the router receives gradient only through the mixing weights. Each token therefore contributes gradient only to the $k$ rows of $\mathbf{W}_{\mathrm{r}}$ that belong to its selected experts.
+
+Each expert, routed or shared, is an FFN with the SwiGLU activation \cite{shazeer2020glu},
+\begin{equation}[eq:moe-expert]{}
+  \operatorname{FFN}_i(\mathbf{x}) = \mathbf{W}_i^{\mathrm{down}} \bigl( \operatorname{SiLU}(\mathbf{W}_i^{\mathrm{gate}} \mathbf{x}) \odot \mathbf{W}_i^{\mathrm{up}} \mathbf{x} \bigr),
+\end{equation}
+where $\mathbf{W}_i^{\mathrm{gate}}, \mathbf{W}_i^{\mathrm{up}} \in \mathbb{R}^{d_{\mathrm{e}} \times d}$ and $\mathbf{W}_i^{\mathrm{down}} \in \mathbb{R}^{d \times d_{\mathrm{e}}}$, with $d_{\mathrm{e}}$ the hidden width of a routed expert. The function $\operatorname{SiLU}(z) = z \, \sigma(z)$, where $\sigma$ is again the logistic sigmoid, is applied to every entry, and $\odot$ is the elementwise product. The shared expert has the same form with hidden width $d_{\mathrm{s}}$. Every parameter of the layer except the bias is a matrix, and Muon treats each matrix as a unit (\cref{sec:background-optimizers}).
+
+The layers of GShard and the Switch Transformer \cite{lepikhin2021gshard, fedus2022switch} give each expert a \emph{capacity}, a limit on the number of tokens that it processes in a batch, and they drop the tokens beyond it. Like the layer of DeepSeek-V3, ours has no capacity. Every token is therefore processed by exactly the $k$ experts of \cref{eq:moe-selection}, and nothing in the layer limits how unevenly the tokens are distributed over the experts. A batch of $N$ tokens $\mathbf{x}_1, \dots, \mathbf{x}_N$ occupies $Nk$ routing slots, one for each token and each of its selected experts. The \emph{load} of expert $i$ is the fraction of these slots that it receives,
+\begin{equation}[eq:moe-load]{}
+  \ell_i = \frac{1}{Nk} \sum_{t=1}^{N} \mathbf{1}\bigl[ i \in \mathcal{T}(\mathbf{x}_t) \bigr],
+\end{equation}
+where $\mathbf{1}[\cdot]$ equals one if its argument is true and zero otherwise. The loads sum to one. When the routing is perfectly balanced, they all equal $1/E$, which we call the \emph{fair share} of an expert.
+
+\section{Load Balancing}
+\label{sec:background-balancing}
+\label{sec:background-feedback}
+Without a mechanism that keeps the loads even, which we call a \emph{balancer}, the routing of an MoE layer tends to become unbalanced during training. Shazeer et~al.~\cite{shazeer2017outrageously} observed that their gating network converged to always giving large weights to the same few experts, and that this imbalance reinforced itself. In our layer, an expert and its row of the router receive gradient only from the tokens routed to the expert. An expert with a high load is therefore trained on more tokens and, as it improves, tends to receive higher scores, while an expert with a low load stays behind (\cref{fig:background-feedback}). In the extreme case, known as \emph{routing collapse}, a few experts receive almost all the tokens and the others are not trained sufficiently \cite{dai2024deepseekmoe, wang2024lossfree}. How strong this feedback is depends on how the optimizer turns the gradient of an expert into an update, and this is where AdamW and Muon differ (\cref{sec:background-orthogonalization}).
+
+\begin{figure}[The feedback that unbalances the loads]{fig:background-feedback}{The feedback that unbalances the loads, read clockwise from the top left. The bias and the optimizer act on it at the middle box of each side.}
+  \input{figures/feedback-loop}
+\end{figure}
+
+\subsection{Auxiliary-Loss and Auxiliary-Loss-Free Balancing}
+\label{sec:background-loss-free}
+The usual balancer has been an \emph{auxiliary loss} that penalizes uneven loads and is added to the training loss \cite{shazeer2017outrageously, lepikhin2021gshard, fedus2022switch}. In the form of the Switch Transformer, written in our notation, it is
+\begin{equation}[eq:aux-loss]{}
+  \mathcal{L}_{\mathrm{bal}} = \alpha E \sum_{i=1}^{E} \ell_i \bar{s}_i, \qquad \bar{s}_i = \frac{1}{N} \sum_{t=1}^{N} s_i(\mathbf{x}_t),
+\end{equation}
+where $\alpha$ is a coefficient and $\bar{s}_i$ is the mean score of expert $i$ over the batch. The loads are not differentiable, so the gradient flows only through the mean scores. The derivative of the loss with respect to $\bar{s}_i$ is $\alpha E \ell_i$, so gradient descent pushes down the score of each expert in proportion to its load. In this loss, the scores of a token are normalized to sum to one. The Switch Transformer computes them with a softmax, and DeepSeek-V3, whose router uses the sigmoid like ours, divides them by their sum. The scores therefore cannot all fall: what the busiest experts lose, the experts with lower loads gain, and these are then selected more often. The gradient reaches the router and, through the input of the router, the layers below it. In the experiments of Wang et~al.~\cite{wang2024lossfree}, a small $\alpha$ let the routing collapse, while an $\alpha$ large enough to balance the loads made the perplexity worse. They therefore call this gradient an interference gradient.
+
+\emph{Loss-free balancing} \cite{wang2024lossfree} removes the auxiliary loss and balances the loads with the bias of \cref{eq:moe-selection}. The bias starts at zero. After every training step, the bias of each expert moves by a fixed amount $u$, called the \emph{update rate}, in the direction that corrects its load on the batch of that step,
+\begin{equation}[eq:bias-update]{}
+  b_i \leftarrow b_i + u \operatorname{sign}\Bigl( \frac{1}{E} - \ell_i \Bigr), \qquad i = 1, \dots, E.
+\end{equation}
+The bias of an expert that received more than its fair share decreases, so the expert is selected for fewer tokens in the following steps. The bias of an expert that received less increases. Each step changes a bias by the same amount, no matter how far the load of its expert is from the fair share. Unlike the auxiliary loss, the bias adds no term to the loss and receives no gradient.
+
+Kimi K3, GLM-5.3, and DeepSeek-V4 select their experts with such a bias \cite{kimi2026k3, zai2026glm53, deepseek2026v4}. DeepSeek-V4 applies \cref{eq:bias-update} with $u = 0.001$. Like DeepSeek-V3, it also adds a loss of the form of \cref{eq:aux-loss}, with $\alpha = 10^{-4}$, to prevent extreme imbalance within each sequence \cite{deepseek2024v3, deepseek2026v4}. We call such a loss, added to the bias, the \emph{balance loss}.
+
+\subsection{The Span of the Bias}
+\label{sec:background-span}
+When the bias is active, the loads say little about the router, because the bias keeps them close to the fair share, whichever experts the router prefers. In the experiments of Wang et~al.~\cite{wang2024lossfree}, for example, the busiest expert of a layer exceeds the fair share by only 4\% on average. What differs between two models is how much bias was needed. If the scores alone distribute the tokens evenly, the load of each expert falls above and below the fair share in turn, and every bias stays close to zero. If instead the scores consistently favor some experts, the biases of these experts decrease step after step, and those of the neglected experts increase. We summarize the bias of a layer by its \emph{span},
+\begin{equation}[eq:bias-span]{}
+  \operatorname{span}(\mathbf{b}) = \max_{i} b_i - \min_{i} b_i,
+\end{equation}
+and read it as the \emph{work} of the bias, that is, how far the bias has to shift the preferences of the router to keep the loads even. For example, suppose that the router gives one expert a score 0.1 higher than another for every token. The two then share the tokens only when the bias of the first is about 0.1 below that of the second, so the span is at least 0.1. Adding the same constant to every bias does not change the selection, so only the differences between the biases matter, and the span is the largest of them.
+
+Since the scores lie in $(0, 1)$, the span has a ceiling. If $b_i - b_j \geq 1$ for two experts $i$ and $j$, then $s_i + b_i > s_j + b_j$ for every token, since $s_j - s_i < 1$. Expert $i$ then ranks above expert $j$ for every token. A token goes to its $k$ highest-ranked experts, so every token sent to $j$ is also sent to $i$, and $\ell_i \geq \ell_j$. \Cref{eq:bias-update} therefore cannot raise $b_i$ relative to $b_j$. A difference can thus grow only while it is below one, and by at most $2u$ in one step, so the span never exceeds $1 + 2u$. A span close to one means that, for nearly every token, the bias alone decides which of the experts with the highest and the lowest bias ranks higher.
+
+\subsection{A Shared Direction in the Inputs of the Router}
+\label{sec:background-offset}
+An analysis of the inputs of the router by Wang et~al.~\cite{wang2026myth} bears directly on the bias. Let $\mathbf{x}_1, \dots, \mathbf{x}_N$ denote the inputs of the router for the $N$ tokens of a batch, and let $\mathbf{c}$ be their mean. The logit of expert $i$ for token $t$ splits as
+\begin{equation}[eq:background-offset]{}
+  \mathbf{w}_i^{\top} \mathbf{x}_t = \mathbf{w}_i^{\top} \mathbf{c} + \mathbf{w}_i^{\top} (\mathbf{x}_t - \mathbf{c}), \qquad \mathbf{c} = \frac{1}{N} \sum_{t=1}^{N} \mathbf{x}_t,
+\end{equation}
+where the first term is the same for every token. When the inputs share a direction, $\mathbf{c}$ is long compared with the deviations $\mathbf{x}_t - \mathbf{c}$. The first term then gives the logit of each expert an \emph{offset} that every token shares, and the offset passes into the scores of \cref{eq:moe-score}. When the offsets differ across the experts, every token prefers the experts with the largest ones. The bias then has to cancel these differences, as in the example of \cref{sec:background-span}, and its span grows. The authors argue that an auxiliary loss teaches the router to suppress such a shared direction (their Proposition~2). They also report that the routers of two models balanced by the bias alone, both trained with Muon, do not suppress it (their Section~4.1). They do not isolate the effect of the optimizer.
+
+\section{AdamW and Muon}
+\label{sec:background-optimizers}
+Throughout this section, $\mathbf{W} \in \mathbb{R}^{p \times q}$ is one weight matrix of the model, and $\mathbf{W}_t$ is its value after training step $t$. The gradient of the loss with respect to it at step $t$ is $\mathbf{G}_t$, and the learning rate of that step is $\eta_t$. The two optimizers that we compare share two refinements of gradient descent. First, both use \emph{momentum}, a running average of past gradients that smooths the noise of the gradient. Second, both normalize the size of the update, AdamW entry by entry and Muon for each matrix as a whole.
+
+\subsection{Coordinate-Wise Updates: AdamW}
+\label{sec:background-adamw}
+Adam \cite{kingma2015adam} treats the entries of a weight matrix like any other parameters. We therefore write its update for the vector $\boldsymbol{\theta}$ of the parameters that it trains, with gradient $\mathbf{g}_t$ at step $t$. It keeps exponential moving averages $\mathbf{m}_t$ and $\mathbf{v}_t$ of the gradient and of its elementwise square. AdamW \cite{loshchilov2019decoupled} adds a weight decay that is not divided by $\sqrt{\hat{\mathbf{v}}_t}$, so that it shrinks every parameter by the same factor,
+\begin{equation}[eq:adamw-update]{}
+  \begin{aligned}
+    \mathbf{m}_t          & = \beta_1 \mathbf{m}_{t-1} + (1 - \beta_1) \, \mathbf{g}_t, \qquad \mathbf{v}_t = \beta_2 \mathbf{v}_{t-1} + (1 - \beta_2) \, \mathbf{g}_t \odot \mathbf{g}_t, \\
+    \boldsymbol{\theta}_t & = \boldsymbol{\theta}_{t-1} - \eta_t \biggl( \frac{\hat{\mathbf{m}}_t}{\sqrt{\hat{\mathbf{v}}_t} + \epsilon} + \lambda \boldsymbol{\theta}_{t-1} \biggr).
+  \end{aligned}
+\end{equation}
+Here $\mathbf{m}_0 = \mathbf{v}_0 = \mathbf{0}$, $\beta_1, \beta_2 \in [0, 1)$ are decay rates, and $\hat{\mathbf{m}}_t = \mathbf{m}_t / (1 - \beta_1^t)$ and $\hat{\mathbf{v}}_t = \mathbf{v}_t / (1 - \beta_2^t)$ correct the averages, which start at zero and are too small in the first steps. The division and the square root are taken elementwise, $\epsilon$ is a small constant that prevents division by zero, and $\lambda$ is the weight decay.
+
+Two properties of this update matter for the comparison with Muon. First, it is coordinate-wise, that is, the update of a parameter depends only on the past gradients of that same parameter. Second, when $\epsilon$ is neglected, the size of the update is set by how consistent the gradient of the parameter has been and not by its scale. Multiplying all the gradients by a positive constant multiplies $\hat{\mathbf{m}}_t$ and $\sqrt{\hat{\mathbf{v}}_t}$ by the same constant, so their ratio does not change. This ratio is close to $\pm 1$ when the recent gradients of a parameter are nearly the same, so the parameter moves by about $\eta_t$. When the gradients fluctuate around zero, the ratio is close to zero and the parameter hardly moves.
+
+\subsection{Orthogonalized Updates: Muon}
+\label{sec:background-muon}
+Muon \cite{jordan2024muon} accumulates the gradients of a weight matrix in a momentum matrix and \emph{orthogonalizes} the result before using it as the update. Every matrix $\mathbf{A} \in \mathbb{R}^{p \times q}$ of rank $r$ has a singular value decomposition $\mathbf{A} = \mathbf{U} \mathbf{S} \mathbf{V}^{\top}$. Here $\mathbf{U} \in \mathbb{R}^{p \times r}$ and $\mathbf{V} \in \mathbb{R}^{q \times r}$ have orthonormal columns, and $\mathbf{S}$ is the diagonal matrix of the $r$ positive singular values. The matrix maps the $j$-th column of $\mathbf{V}$ to the $j$-th column of $\mathbf{U}$ times the $j$-th singular value. The singular values therefore say how strongly the matrix acts along each of $r$ perpendicular directions. The orthogonalization of $\mathbf{A}$ is
+\begin{equation}[eq:ortho]{}
+  \operatorname{Ortho}(\mathbf{A}) = \mathbf{U} \mathbf{V}^{\top},
+\end{equation}
+which is $\mathbf{A}$ with every singular value replaced by one. It keeps the directions of $\mathbf{A}$ but acts equally along each of them. Our update of Muon follows Liu et~al.~\cite{liu2025moonlight}, with a momentum coefficient $\mu$:
+\begin{equation}[eq:muon-update]{}
+  \begin{aligned}
+    \mathbf{M}_t & = \mu \mathbf{M}_{t-1} + \mathbf{G}_t,                                                                                    \\
+    \mathbf{O}_t & = \operatorname{Ortho}(\mu \mathbf{M}_t + \mathbf{G}_t),                                                                  \\
+    \mathbf{W}_t & = \mathbf{W}_{t-1} - \eta_t \bigl( 0.2 \sqrt{\max(p, q)} \; \mathbf{O}_t + \lambda \mathbf{W}_{t-1} \bigr),
+  \end{aligned}
+\end{equation}
+with $\mathbf{M}_0 = \mathbf{0}$. The term $\mu \mathbf{M}_t + \mathbf{G}_t$ is the Nesterov form of the momentum, which gives the latest gradient more weight than $\mathbf{M}_t$ alone does. Liu et~al.\ added the weight decay and the factor $0.2 \sqrt{\max(p, q)}$ when they scaled Muon up to an MoE model with 16B parameters. The factor gives the entries of the update a root mean square of 0.2, in the range of a typical update of AdamW, so that the learning rate of AdamW can be reused. We nevertheless tune each optimizer separately (\cref{sec:method-tuning}).
+
+Since a singular value decomposition at every step would be too slow, Muon approximates \cref{eq:ortho} with a few steps of a Newton--Schulz iteration. Our five steps use only matrix multiplications and leave the singular values between about 0.7 and 1.2 (\cref{app:configuration-optimizer}). As Jordan et~al.\ recommend, and like Liu et~al.\ and DeepSeek-V4, we train the embedding table and the output head with AdamW.
+
+\subsection{What Orthogonalization Does to a Matrix Update}
+\label{sec:background-orthogonalization}
+Two norms measure the size of a matrix. The spectral norm $\lVert \mathbf{A} \rVert_2$ is its largest singular value, which is the most that the matrix can stretch a vector. The Frobenius norm $\lVert \mathbf{A} \rVert_{\mathrm{F}}$ is the square root of the sum of its squared entries, which equals the square root of the sum of its squared singular values. All the singular values of $\mathbf{O}_t$ equal one, so $\lVert \mathbf{O}_t \rVert_2 = 1$ and $\lVert \mathbf{O}_t \rVert_{\mathrm{F}} = \sqrt{r}$. By \cref{eq:muon-update}, the spectral norm of a step of Muon, apart from the weight decay, is therefore $0.2 \, \eta_t \sqrt{\max(p, q)}$. It is set by the learning rate and the shape of the matrix, and it does not depend on the gradients.
+
+The first consequence concerns the routed experts. The gradient of a matrix of an expert is a sum with one term for each token routed to the expert, so it tends to be larger for an expert with a high load \cite{wang2026depth}. AdamW removes the scale of the gradient but not its noise. The gradient of an expert with a low load is a sum over few tokens, so it varies more from one step to the next. By the second property of \cref{sec:background-adamw}, such an expert can therefore be expected to move less. Under Muon, the update of every expert matrix has the same spectral norm for any load of the expert. It also has nearly the same Frobenius norm, $\sqrt{r}$ times the spectral norm. In our runs, the gradient of an expert with the fair share is a sum of 8,192 terms of rank one, one per token, which gives it the full rank $r = \min(p, q)$. We therefore expected the updates of Muon to weaken the feedback of \cref{fig:background-feedback} (\cref{sec:results-rq1}).
+
+The second consequence concerns the router $\mathbf{W}_{\mathrm{r}} \in \mathbb{R}^{E \times d}$, which has fewer rows than columns, with $E = 32$ and $d \geq 512$ in our models. If the matrix that is orthogonalized has rank $E$, then $\mathbf{U}$ is a square orthogonal matrix, so $\mathbf{O}_t \mathbf{O}_t^{\top} = \mathbf{U} \mathbf{V}^{\top} \mathbf{V} \mathbf{U}^{\top} = \mathbf{U} \mathbf{U}^{\top} = \mathbf{I}$. That is, the rows of the update are orthonormal. Wang et~al.~\cite{wang2026depth} show this property for the router of an MoE layer, in which row $i$ determines only the score of expert $i$. The update therefore moves the row of every expert by the same distance, $0.2 \, \eta_t \sqrt{d}$, no matter how much the gradients of the rows differ in size. Under AdamW, by contrast, the update of a row depends only on its own gradient, which comes only from the tokens that select its expert. Wang et~al.\ stress that this balances the updates of the rows, not directly the loads.
+
+\section{Training Instability}
+\label{sec:background-instability}
+Two kinds of instability are reported in training large language models: divergences and loss spikes. In a \emph{divergence}, the loss grows until it is no longer finite or until the model is no better than at initialization. A \emph{loss spike} is a sharp increase of the training loss within a few steps, after which the loss usually returns to its previous level. Spikes appear in large models even when the gradient is clipped, that is, rescaled whenever its norm exceeds a threshold \cite{chowdhery2023palm, pascanu2013difficulty}. The router z-loss of Zoph et~al.~\cite{zoph2022stmoe} stabilizes MoE models by penalizing large router logits, which cause rounding errors in a router that normalizes them with a softmax. The DeepSeek-V4 report links the loss spikes of its training to \emph{outliers} in the MoE layers, that is, to very large activations. It adds that the routing appears to make these outliers larger \cite{deepseek2026v4}.

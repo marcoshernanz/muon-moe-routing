@@ -1,0 +1,76 @@
+% RQ3: the first 4,000 steps of the first MoE layer under AdamW, Muon, and Muon with the router on AdamW, seeds 3 to 5, in bins of 30 steps: the input cosine, the score offset, the overload and the span. Lines are the means over the seeds and the bands their range; the dotted line marks the end of the warmup. The data are figures/data/rq3-early-*.csv.
+\begin{tikzpicture}
+  \begin{groupplot}[
+      thesis,
+      group style={group size=2 by 2, horizontal sep=1.7cm, vertical sep=1.25cm},
+      width=6.3cm, height=2.9cm,
+      xmin=0, xmax=4, xtick={0,1,2,3,4},
+      every axis plot/.append style={no marks},
+    ]
+    \nextgroupplot[ylabel={Input cosine}, ymin=0, ymax=0.6, ytick={0,0.2,0.4,0.6},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=1}, legend columns=3, legend style={at={(1.135,1.06)}, anchor=south}]
+    \addplot[name path=loa, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=router_input_similarity_low] {figures/data/rq3-early-adamw.csv};
+    \addplot[name path=hia, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=router_input_similarity_high] {figures/data/rq3-early-adamw.csv};
+    \addplot[band, fill=moeamber, forget plot] fill between[of=loa and hia];
+    \addplot[name path=lob, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=router_input_similarity_low] {figures/data/rq3-early-muon.csv};
+    \addplot[name path=hib, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=router_input_similarity_high] {figures/data/rq3-early-muon.csv};
+    \addplot[band, fill=moeblue, forget plot] fill between[of=lob and hib];
+    \addplot[name path=loc, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=router_input_similarity_low] {figures/data/rq3-early-muon_except_router.csv};
+    \addplot[name path=hic, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=router_input_similarity_high] {figures/data/rq3-early-muon_except_router.csv};
+    \addplot[band, fill=moegreen, forget plot] fill between[of=loc and hic];
+    \addplot[moeamber] table[x expr=\thisrow{step}/1000, y=router_input_similarity] {figures/data/rq3-early-adamw.csv};
+    \addlegendentry{AdamW}
+    \addplot[moeblue] table[x expr=\thisrow{step}/1000, y=router_input_similarity] {figures/data/rq3-early-muon.csv};
+    \addlegendentry{Muon}
+    \addplot[moegreen, densely dashed] table[x expr=\thisrow{step}/1000, y=router_input_similarity] {figures/data/rq3-early-muon_except_router.csv};
+    \addlegendentry{Muon, router on AdamW}
+    \draw[black!50, densely dotted, line width=0.5pt] (axis cs:0.5, 0) -- (axis cs:0.5, 0.6);
+
+    \nextgroupplot[ylabel={Score offset}, ymin=0, ymax=1.1, ytick={0,0.25,0.5,0.75,1},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=2}]
+    \addplot[name path=loa, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=mean_score_span_low] {figures/data/rq3-early-adamw.csv};
+    \addplot[name path=hia, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=mean_score_span_high] {figures/data/rq3-early-adamw.csv};
+    \addplot[band, fill=moeamber, forget plot] fill between[of=loa and hia];
+    \addplot[name path=lob, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=mean_score_span_low] {figures/data/rq3-early-muon.csv};
+    \addplot[name path=hib, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=mean_score_span_high] {figures/data/rq3-early-muon.csv};
+    \addplot[band, fill=moeblue, forget plot] fill between[of=lob and hib];
+    \addplot[name path=loc, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=mean_score_span_low] {figures/data/rq3-early-muon_except_router.csv};
+    \addplot[name path=hic, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=mean_score_span_high] {figures/data/rq3-early-muon_except_router.csv};
+    \addplot[band, fill=moegreen, forget plot] fill between[of=loc and hic];
+    \addplot[moeamber] table[x expr=\thisrow{step}/1000, y=mean_score_span] {figures/data/rq3-early-adamw.csv};
+    \addplot[moeblue] table[x expr=\thisrow{step}/1000, y=mean_score_span] {figures/data/rq3-early-muon.csv};
+    \addplot[moegreen, densely dashed] table[x expr=\thisrow{step}/1000, y=mean_score_span] {figures/data/rq3-early-muon_except_router.csv};
+    \draw[black!50, densely dotted, line width=0.5pt] (axis cs:0.5, 0) -- (axis cs:0.5, 1.1);
+
+    \nextgroupplot[xlabel={Step (thousands)}, ylabel={Overload}, ymin=0, ymax=8, ytick={0,2,4,6,8}]
+    \addplot[name path=loa, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=max_load_ratio_low] {figures/data/rq3-early-adamw.csv};
+    \addplot[name path=hia, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=max_load_ratio_high] {figures/data/rq3-early-adamw.csv};
+    \addplot[band, fill=moeamber, forget plot] fill between[of=loa and hia];
+    \addplot[name path=lob, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=max_load_ratio_low] {figures/data/rq3-early-muon.csv};
+    \addplot[name path=hib, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=max_load_ratio_high] {figures/data/rq3-early-muon.csv};
+    \addplot[band, fill=moeblue, forget plot] fill between[of=lob and hib];
+    \addplot[name path=loc, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=max_load_ratio_low] {figures/data/rq3-early-muon_except_router.csv};
+    \addplot[name path=hic, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=max_load_ratio_high] {figures/data/rq3-early-muon_except_router.csv};
+    \addplot[band, fill=moegreen, forget plot] fill between[of=loc and hic];
+    \addplot[moeamber] table[x expr=\thisrow{step}/1000, y=max_load_ratio] {figures/data/rq3-early-adamw.csv};
+    \addplot[moeblue] table[x expr=\thisrow{step}/1000, y=max_load_ratio] {figures/data/rq3-early-muon.csv};
+    \addplot[moegreen, densely dashed] table[x expr=\thisrow{step}/1000, y=max_load_ratio] {figures/data/rq3-early-muon_except_router.csv};
+    \draw[black!50, densely dotted, line width=0.5pt] (axis cs:0.5, 0) -- (axis cs:0.5, 8);
+
+    \nextgroupplot[xlabel={Step (thousands)}, ylabel={Span}, ymin=0, ymax=1.1, ytick={0,0.25,0.5,0.75,1},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=2}]
+    \addplot[name path=loa, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=bias_span_low] {figures/data/rq3-early-adamw.csv};
+    \addplot[name path=hia, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=bias_span_high] {figures/data/rq3-early-adamw.csv};
+    \addplot[band, fill=moeamber, forget plot] fill between[of=loa and hia];
+    \addplot[name path=lob, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=bias_span_low] {figures/data/rq3-early-muon.csv};
+    \addplot[name path=hib, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=bias_span_high] {figures/data/rq3-early-muon.csv};
+    \addplot[band, fill=moeblue, forget plot] fill between[of=lob and hib];
+    \addplot[name path=loc, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=bias_span_low] {figures/data/rq3-early-muon_except_router.csv};
+    \addplot[name path=hic, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=bias_span_high] {figures/data/rq3-early-muon_except_router.csv};
+    \addplot[band, fill=moegreen, forget plot] fill between[of=loc and hic];
+    \addplot[moeamber] table[x expr=\thisrow{step}/1000, y=bias_span] {figures/data/rq3-early-adamw.csv};
+    \addplot[moeblue] table[x expr=\thisrow{step}/1000, y=bias_span] {figures/data/rq3-early-muon.csv};
+    \addplot[moegreen, densely dashed] table[x expr=\thisrow{step}/1000, y=bias_span] {figures/data/rq3-early-muon_except_router.csv};
+    \draw[black!50, densely dotted, line width=0.5pt] (axis cs:0.5, 0) -- (axis cs:0.5, 1.1);
+  \end{groupplot}
+\end{tikzpicture}

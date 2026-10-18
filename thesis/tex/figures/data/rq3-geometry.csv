@@ -1,0 +1,28 @@
+arm,label,seed,bias_span_first,router_input_similarity_first,mean_score_span_first
+adamw,(a),3,0.10212,0.06738,0.08991
+adamw,(a),4,0.09099,0.06995,0.10960
+adamw,(a),5,0.09213,0.07453,0.08546
+muon-muonlr0.5x,(b) at half rate,3,0.11188,0.38881,0.09150
+muon-muonlr0.5x,(b) at half rate,4,0.11605,0.41233,0.10394
+muon-muonlr0.5x,(b) at half rate,5,0.12925,0.40204,0.10322
+muon,(b),3,0.19068,0.41285,0.12762
+muon,(b),4,0.26538,0.41306,0.16751
+muon,(b),5,0.13729,0.39869,0.12390
+muon_attention,(e),3,0.17786,0.06044,0.15493
+muon_attention,(e),4,0.12670,0.05571,0.10481
+muon_attention,(e),5,0.08417,0.04418,0.06783
+muon_attention_dense,(i),3,0.20221,0.05230,0.18267
+muon_attention_dense,(i),4,0.31121,0.06170,0.23271
+muon_attention_dense,(i),5,0.17292,0.04754,0.13301
+muon_dense,(h),3,0.08946,0.03011,0.09695
+muon_dense,(h),4,0.09968,0.03660,0.08376
+muon_dense,(h),5,0.09243,0.03276,0.08912
+muon_except_router,(c),3,0.19278,0.40288,0.14770
+muon_except_router,(c),4,0.17372,0.38403,0.14164
+muon_except_router,(c),5,0.15732,0.38727,0.12210
+muon_experts,(d),3,0.55348,0.15962,0.38103
+muon_experts,(d),4,0.34482,0.13103,0.25883
+muon_experts,(d),5,0.32837,0.14614,0.25480
+muon_router,(g),3,0.09345,0.08755,0.08721
+muon_router,(g),4,0.09390,0.04957,0.09333
+muon_router,(g),5,0.10893,0.08420,0.11918

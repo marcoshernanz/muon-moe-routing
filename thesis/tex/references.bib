@@ -1,0 +1,844 @@
+% Titles, authors and years were checked on 2026-09-19: arXiv records through the arXiv API, DOIs through Crossref, and the web essays on their own pages. The OpenReview page of wang2026depth sits behind a human-verification check; its title, authors and venue were confirmed on the page itself on 2026-09-21 in a signed-in browser session. Conference venues of the published versions were not re-checked one by one, except that of chen2022towards, whose title, authors and volume were read on the NeurIPS proceedings page on 2026-09-21 (the arXiv version is titled "Towards Understanding Mixture of Experts in Deep Learning"). chowdhery2023palm and pascanu2013difficulty were added on 2026-09-21: titles and authors through the arXiv API, the volume, number and pages of the first on its JMLR page and the venue of the second on its PMLR page (volume 28, pages 1310 to 1318). Keys are first author, year, and a word of the title. The style of the class, ieeetr, prints neither the doi nor the url field, so an entry without an arXiv record repeats its DOI or its URL in note. bjorck2025horizons was added on 2026-09-29: title and authors through the arXiv API, the venue from the comment of its arXiv record. agarwal2021precipice was added on 2026-09-29: title and authors from its arXiv record (version 4), the venue from its NeurIPS 2021 award note there. xiaomi2026mimov26 was added on 2026-10-02: title and author from the PDF of the report (sections 3.1, 3.2 and 5.4 read for the optimizer and the router), the month from the release note on mimo.mi.com (22 September 2026). On 2026-10-10 every cited entry was checked again against its source, with the claims that the text attributes to it: lion2026muown was added (arXiv record), su2024roformer takes the author order of its journal version from Crossref, and the pages and ACL booktitles come from the PMLR and ACL Anthology pages. The DOI of efron1993introduction resolves to the 1994 Chapman and Hall/CRC printing of the same book.
+
+% The reading list of context/PAPERS.md
+
+@inproceedings{wang2026depth,
+  author = {Xi Wang and Soufiane Hayou and Eric Nalisnick},
+  title = {{Depth scaling and Muon enable balanced expert usage in MoE training}},
+  booktitle = {4th Workshop on High-dimensional Learning Dynamics (HiLD) at ICML 2026},
+  year = {2026},
+  url = {https://openreview.net/forum?id=2PAe0L8PME},
+  note = {\url{https://openreview.net/forum?id=2PAe0L8PME}},
+}
+
+@article{wang2026myth,
+  author = {Xi Wang and Soufiane Hayou and Eric Nalisnick},
+  title = {{The Myth of Expert Specialization in MoEs: Why Routing Reflects Geometry, Not Necessarily Domain Expertise}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2604.09780}{arXiv:2604.09780}},
+  year = {2026},
+}
+
+@article{wang2024lossfree,
+  author = {Lean Wang and Huazuo Gao and Chenggang Zhao and Xu Sun and Damai Dai},
+  title = {{Auxiliary-Loss-Free Load Balancing Strategy for Mixture-of-Experts}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2408.15664}{arXiv:2408.15664}},
+  year = {2024},
+}
+
+@article{deepseek2026v4,
+  author = {{DeepSeek-AI}},
+  title = {{DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2606.19348}{arXiv:2606.19348}},
+  year = {2026},
+}
+
+@article{liu2025moonlight,
+  author = {Jingyuan Liu and others},
+  title = {{Muon is Scalable for LLM Training}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2502.16982}{arXiv:2502.16982}},
+  year = {2025},
+}
+
+@article{qiu2026qwennext,
+  author = {Zihan Qiu and others},
+  title = {{On the Design of Qwen3.8-Next Architecture: Evaluation, Efficiency, and Training Stability}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2608.30320}{arXiv:2608.30320}},
+  year = {2026},
+}
+
+@inproceedings{wortsman2024proxies,
+  author = {Mitchell Wortsman and others},
+  title = {{Small-scale proxies for large-scale Transformer training instabilities}},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year = {2024},
+  note = {\href{https://arxiv.org/abs/2309.14322}{arXiv:2309.14322}},
+}
+
+@inproceedings{muennighoff2025olmoe,
+  author = {Niklas Muennighoff and others},
+  title = {{OLMoE: Open Mixture-of-Experts Language Models}},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year = {2025},
+  note = {\href{https://arxiv.org/abs/2409.02060}{arXiv:2409.02060}},
+}
+
+@article{chen2025spectral,
+  author = {Lizhang Chen and Jonathan Li and Qiang Liu},
+  title = {{Muon Optimizes Under Spectral Norm Constraints}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2506.15054}{arXiv:2506.15054}},
+  year = {2025},
+}
+
+@article{wen2025fantastic,
+  author = {Kaiyue Wen and David Hall and Tengyu Ma and Percy Liang},
+  title = {{Fantastic Pretraining Optimizers and Where to Find Them}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2509.02046}{arXiv:2509.02046}},
+  year = {2025},
+}
+
+@article{semenov2025benchmarking,
+  author = {Andrei Semenov and Matteo Pagliardini and Martin Jaggi},
+  title = {{Benchmarking Optimizers for Large Language Model Pretraining}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2509.01440}{arXiv:2509.01440}},
+  year = {2025},
+}
+
+@article{ahrac2026routers,
+  author = {Sagi Ahrac and Noya Hochwald and Mor Geva},
+  title = {{Routers Learn the Geometry of Their Experts: Geometric Coupling in Sparse Mixture-of-Experts}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2605.12476}{arXiv:2605.12476}},
+  year = {2026},
+}
+
+@article{lion2026muown,
+  author = {Kai Lion and Florian H{\"u}bler and Bingcong Li and Antonio Orvieto and Niao He},
+  title = {{Muown: Row-Norm Control for Muon Optimization}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2605.10797}{arXiv:2605.10797}},
+  year = {2026},
+}
+@article{hubler2026muown,
+  author = {Florian H{\"u}bler and Kai Lion and Antonio Orvieto and Niao He},
+  title = {{Muown Implicitly Performs Angular Step-size Decay}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2606.23637}{arXiv:2606.23637}},
+  year = {2026},
+}
+
+@article{kimi2026k3,
+  author = {{Kimi Team}},
+  title = {{Kimi K3: Open Frontier Intelligence}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2607.24653}{arXiv:2607.24653}},
+  year = {2026},
+}
+
+% Related work named in the plan
+
+@article{lau2026symmetry,
+  author = {Tim Tsz-Kit Lau and Weijie Su},
+  title = {{Symmetry-Compatible Principle for Optimizer Design: Embeddings, LM Heads, SwiGLU MLPs, and MoE Routers}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2605.18106}{arXiv:2605.18106}},
+  year = {2026},
+}
+
+@misc{srivastava2026lossfree,
+  author = {Varun Srivastava},
+  title = {{Loss-Free MoE Routing}},
+  howpublished = {Essay},
+  month = jul,
+  year = {2026},
+  url = {https://varunneal.github.io/essays/loss-free-moe},
+  note = {\url{https://varunneal.github.io/essays/loss-free-moe}},
+}
+
+@article{jaggi2026tying,
+  author = {Martin Jaggi},
+  title = {{Tying the Loop: Tied Expert Layers in Mixture-of-Experts Language Models}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2606.16825}{arXiv:2606.16825}},
+  year = {2026},
+}
+
+@article{huang2026monitors,
+  author = {Ruixuan Huang and Hantao Huang and Yifan Huang and Ansheng You and Zhenxing Zhang and Shuai Wang},
+  title = {{Mechanism-Driven Monitors for Preemptive Detection of LLM Training Instability}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2606.28116}{arXiv:2606.28116}},
+  year = {2026},
+}
+
+@article{wu2026manifold,
+  author = {Songhao Wu and Ang Lv and Ruobing Xie and Yankai Lin},
+  title = {{Redesign Mixture-of-Experts Routers with Manifold Power Iteration}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2606.12397}{arXiv:2606.12397}},
+  year = {2026},
+}
+
+@article{malik2026tiered,
+  author = {Nuemaan Malik},
+  title = {{Where Should Optimizer State Live? Tiered State Allocation for Memory-Efficient Mixture-of-Experts Training}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2607.19058}{arXiv:2607.19058}},
+  year = {2026},
+}
+
+@article{chen2026phibalancing,
+  author = {Lizhang Chen and Jonathan Li and Qi Wang and Runlong Liao and Shuozhe Li and Chen Liang and Ni Lao and Qiang Liu},
+  title = {{$\phi$-Balancing for Mixture-of-Experts Training}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2605.15403}{arXiv:2605.15403}},
+  year = {2026},
+}
+
+@article{singh2026trinity,
+  author = {Varun Singh and others},
+  title = {{Arcee Trinity Large Technical Report}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2602.17004}{arXiv:2602.17004}},
+  year = {2026},
+}
+
+@article{falke2026testbed,
+  author = {Tobias Falke and Nicolas Anastassacos and Samson Tan and Chankrisna Richy Meas and Chandana Satya Prakash and Nitesh Sekhar and M Saiful Bari and Krishna Kompella and Gamaleldin F. Elsayed},
+  title = {{MoE Routing Testbed: Studying Expert Specialization and Routing Behavior at Small Scale}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2604.07030}{arXiv:2604.07030}},
+  year = {2026},
+}
+
+@inproceedings{dai2022stablemoe,
+  author = {Damai Dai and Li Dong and Shuming Ma and Bo Zheng and Zhifang Sui and Baobao Chang and Furu Wei},
+  title = {{StableMoE: Stable Routing Strategy for Mixture of Experts}},
+  booktitle = {Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages = {7085--7095},
+  year = {2022},
+  note = {\href{https://arxiv.org/abs/2204.08396}{arXiv:2204.08396}},
+}
+
+@article{mouzouni2026phases,
+  author = {Charafeddine Mouzouni},
+  title = {{Three Phases of Expert Routing: How Load Balance Evolves During Mixture-of-Experts Training}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2604.04230}{arXiv:2604.04230}},
+  year = {2026},
+}
+
+@article{k2team2025k2v2,
+  author = {{K2 Team}},
+  title = {{K2-V2: A 360-Open, Reasoning-Enhanced LLM}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2512.06201}{arXiv:2512.06201}},
+  year = {2025},
+}
+
+@inproceedings{chen2022towards,
+  author = {Zixiang Chen and Yihe Deng and Yue Wu and Quanquan Gu and Yuanzhi Li},
+  title = {{Towards Understanding the Mixture-of-Experts Layer in Deep Learning}},
+  booktitle = {Advances in Neural Information Processing Systems 35 (NeurIPS)},
+  year = {2022},
+  note = {\href{https://arxiv.org/abs/2208.02813}{arXiv:2208.02813}},
+}
+
+@inproceedings{kosson2024rotational,
+  author = {Atli Kosson and Bettina Messmer and Martin Jaggi},
+  title = {{Rotational Equilibrium: How Weight Decay Balances Learning Across Neural Networks}},
+  booktitle = {Proceedings of the 41st International Conference on Machine Learning (ICML)},
+  year = {2024},
+  note = {\href{https://arxiv.org/abs/2305.17212}{arXiv:2305.17212}},
+}
+
+@article{shumaylov2026special,
+  author = {Zakhar Shumaylov and Da Costa, Natha{\"e}l and Peter Zaika and B{\'a}lint Mucs{\'a}nyi and Alex Massucco and Yoav Gelberg and Carola-Bibiane Sch{\"o}nlieb and Yarin Gal and Philipp Hennig},
+  title = {{Muon is Not That Special: Random or Inverted Spectra Work Just as Well}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2605.11181}{arXiv:2605.11181}},
+  year = {2026},
+}
+
+@inproceedings{bjorck2025horizons,
+  author = {Johan Bjorck and Alon Benhaim and Vishrav Chaudhary and Furu Wei and Xia Song},
+  title = {{Scaling Optimal LR Across Token Horizons}},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year = {2025},
+  note = {\href{https://arxiv.org/abs/2409.19913}{arXiv:2409.19913}},
+}
+
+% Model reports
+
+@article{deepseek2024v3,
+  author = {{DeepSeek-AI}},
+  title = {{DeepSeek-V3 Technical Report}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2412.19437}{arXiv:2412.19437}},
+  year = {2024},
+}
+
+@article{kimi2025k2,
+  author = {{Kimi Team}},
+  title = {{Kimi K2: Open Agentic Intelligence}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2507.20534}{arXiv:2507.20534}},
+  year = {2025},
+}
+
+@article{glm2025glm45,
+  author = {{GLM-4.5 Team}},
+  title = {{GLM-4.5: Agentic, Reasoning, and Coding (ARC) Foundation Models}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2508.06471}{arXiv:2508.06471}},
+  year = {2025},
+}
+
+@article{glm2026glm5,
+  author = {{GLM-5 Team}},
+  title = {{GLM-5: from Vibe Coding to Agentic Engineering}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2602.15763}{arXiv:2602.15763}},
+  year = {2026},
+}
+
+@article{nvidia2025nemotron3,
+  author = {{NVIDIA}},
+  title = {{NVIDIA Nemotron 3: Efficient and Open Intelligence}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2512.20856}{arXiv:2512.20856}},
+  year = {2025},
+}
+
+@article{nvidia2025nemotron3nano,
+  author = {{NVIDIA}},
+  title = {{Nemotron 3 Nano: Open, Efficient Mixture-of-Experts Hybrid Mamba-Transformer Model for Agentic Reasoning}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2512.20848}{arXiv:2512.20848}},
+  year = {2025},
+}
+
+@article{ling2025ling2,
+  author = {{Ling Team}},
+  title = {{Every Activation Boosted: Scaling General Reasoner to 1 Trillion Open Language Foundation}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2510.22115}{arXiv:2510.22115}},
+  year = {2025},
+}
+
+@article{yang2025qwen3,
+  author = {An Yang and others},
+  title = {{Qwen3 Technical Report}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2505.09388}{arXiv:2505.09388}},
+  year = {2025},
+}
+
+@article{openai2025gptoss,
+  author = {{OpenAI}},
+  title = {{gpt-oss-120b \& gpt-oss-20b Model Card}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2508.10925}{arXiv:2508.10925}},
+  year = {2025},
+}
+
+@article{olmo2025olmo2,
+  author = {{Team OLMo}},
+  title = {{2 OLMo 2 Furious}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2501.00656}{arXiv:2501.00656}},
+  year = {2024},
+}
+
+@article{deepseek2026v41flash,
+  author = {{DeepSeek-AI}},
+  title = {{DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2609.19969}{arXiv:2609.19969}},
+  year = {2026},
+}
+
+@misc{xiaomi2026mimov26,
+  author = {{LLM-Core Xiaomi}},
+  title = {{MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement}},
+  howpublished = {Technical report},
+  month = sep,
+  year = {2026},
+  url = {https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/blob/main/MiMo_V2_6_technical_report.pdf},
+  note = {\url{https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/blob/main/MiMo_V2_6_technical_report.pdf}},
+}
+
+@misc{zai2026glm53,
+  author = {{Z.ai}},
+  title = {{GLM-5.3}},
+  howpublished = {Hugging Face model card and configuration file},
+  month = aug,
+  year = {2026},
+  url = {https://huggingface.co/zai-org/GLM-5.3},
+  note = {\url{https://huggingface.co/zai-org/GLM-5.3}},
+}
+
+@article{ling2026ling26,
+  author = {{Ling Team}},
+  title = {{Ling and Ring 2.6 Technical Report: Efficient and Instant Agentic Intelligence at Trillion-Parameter Scale}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2606.15079}{arXiv:2606.15079}},
+  year = {2026},
+}
+
+@article{nvidia2026nemotron3super,
+  author = {{NVIDIA}},
+  title = {{Nemotron 3 Super: Open, Efficient Mixture-of-Experts Hybrid Mamba-Transformer Model for Agentic Reasoning}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2604.12374}{arXiv:2604.12374}},
+  year = {2026},
+}
+
+@article{xiaomi2026mimov2,
+  author = {{Xiaomi LLM-Core Team}},
+  title = {{MiMo-V2-Flash Technical Report}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2601.02780}{arXiv:2601.02780}},
+  year = {2026},
+}
+
+% Architecture and optimizer foundations
+
+@inproceedings{vaswani2017attention,
+  author = {Ashish Vaswani and Noam Shazeer and Niki Parmar and Jakob Uszkoreit and Llion Jones and Aidan N. Gomez and Lukasz Kaiser and Illia Polosukhin},
+  title = {{Attention Is All You Need}},
+  booktitle = {Advances in Neural Information Processing Systems 30 (NeurIPS)},
+  year = {2017},
+  note = {\href{https://arxiv.org/abs/1706.03762}{arXiv:1706.03762}},
+}
+
+@article{jacobs1991adaptive,
+  author = {Robert A. Jacobs and Michael I. Jordan and Steven J. Nowlan and Geoffrey E. Hinton},
+  title = {{Adaptive Mixtures of Local Experts}},
+  journal = {Neural Computation},
+  volume = {3},
+  number = {1},
+  pages = {79--87},
+  year = {1991},
+  doi = {10.1162/neco.1991.3.1.79},
+  note = {\href{https://doi.org/10.1162/neco.1991.3.1.79}{doi:10.1162/neco.1991.3.1.79}},
+}
+
+@inproceedings{shazeer2017outrageously,
+  author = {Noam Shazeer and Azalia Mirhoseini and Krzysztof Maziarz and Andy Davis and Quoc Le and Geoffrey Hinton and Jeff Dean},
+  title = {{Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer}},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year = {2017},
+  note = {\href{https://arxiv.org/abs/1701.06538}{arXiv:1701.06538}},
+}
+
+@inproceedings{lepikhin2021gshard,
+  author = {Dmitry Lepikhin and HyoukJoong Lee and Yuanzhong Xu and Dehao Chen and Orhan Firat and Yanping Huang and Maxim Krikun and Noam Shazeer and Zhifeng Chen},
+  title = {{GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding}},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year = {2021},
+  note = {\href{https://arxiv.org/abs/2006.16668}{arXiv:2006.16668}},
+}
+
+@article{fedus2022switch,
+  author = {William Fedus and Barret Zoph and Noam Shazeer},
+  title = {{Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity}},
+  journal = {Journal of Machine Learning Research},
+  volume = {23},
+  number = {120},
+  pages = {1--39},
+  year = {2022},
+  note = {\href{https://arxiv.org/abs/2101.03961}{arXiv:2101.03961}},
+}
+
+@article{chowdhery2023palm,
+  author = {Aakanksha Chowdhery and others},
+  title = {{PaLM: Scaling Language Modeling with Pathways}},
+  journal = {Journal of Machine Learning Research},
+  volume = {24},
+  number = {240},
+  pages = {1--113},
+  year = {2023},
+  note = {\href{https://arxiv.org/abs/2204.02311}{arXiv:2204.02311}},
+}
+
+@inproceedings{pascanu2013difficulty,
+  author = {Razvan Pascanu and Tomas Mikolov and Yoshua Bengio},
+  title = {{On the difficulty of training recurrent neural networks}},
+  booktitle = {Proceedings of the 30th International Conference on Machine Learning (ICML)},
+  pages = {1310--1318},
+  year = {2013},
+  note = {\href{https://arxiv.org/abs/1211.5063}{arXiv:1211.5063}},
+}
+
+@article{zoph2022stmoe,
+  author = {Barret Zoph and Irwan Bello and Sameer Kumar and Nan Du and Yanping Huang and Jeff Dean and Noam Shazeer and William Fedus},
+  title = {{ST-MoE: Designing Stable and Transferable Sparse Expert Models}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2202.08906}{arXiv:2202.08906}},
+  year = {2022},
+}
+
+@inproceedings{gale2023megablocks,
+  author = {Trevor Gale and Deepak Narayanan and Cliff Young and Matei Zaharia},
+  title = {{MegaBlocks: Efficient Sparse Training with Mixture-of-Experts}},
+  booktitle = {Proceedings of Machine Learning and Systems (MLSys)},
+  volume = {5},
+  pages = {288--304},
+  year = {2023},
+  note = {\href{https://arxiv.org/abs/2211.15841}{arXiv:2211.15841}},
+}
+
+@inproceedings{dai2024deepseekmoe,
+  author = {Damai Dai and others},
+  title = {{DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models}},
+  booktitle = {Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages = {1280--1297},
+  year = {2024},
+  note = {\href{https://arxiv.org/abs/2401.06066}{arXiv:2401.06066}},
+}
+
+@inproceedings{kingma2015adam,
+  author = {Diederik P. Kingma and Jimmy Ba},
+  title = {{Adam: A Method for Stochastic Optimization}},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year = {2015},
+  note = {\href{https://arxiv.org/abs/1412.6980}{arXiv:1412.6980}},
+}
+
+@inproceedings{loshchilov2019decoupled,
+  author = {Ilya Loshchilov and Frank Hutter},
+  title = {{Decoupled Weight Decay Regularization}},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year = {2019},
+  note = {\href{https://arxiv.org/abs/1711.05101}{arXiv:1711.05101}},
+}
+
+@misc{jordan2024muon,
+  author = {Keller Jordan and Yuchen Jin and Vlado Boza and Jiacheng You and Franz Cesista and Laker Newhouse and Jeremy Bernstein},
+  title = {{Muon: An optimizer for hidden layers in neural networks}},
+  howpublished = {Blog post},
+  month = dec,
+  year = {2024},
+  url = {https://kellerjordan.github.io/posts/muon/},
+  note = {\url{https://kellerjordan.github.io/posts/muon/}},
+}
+
+@article{bernstein2024old,
+  author = {Jeremy Bernstein and Laker Newhouse},
+  title = {{Old Optimizer, New Norm: An Anthology}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2409.20325}{arXiv:2409.20325}},
+  year = {2024},
+}
+
+@article{amsel2025polar,
+  author = {Noah Amsel and David Persson and Christopher Musco and Robert M. Gower},
+  title = {{The Polar Express: Optimal Matrix Sign Methods and Their Application to the Muon Algorithm}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2505.16932}{arXiv:2505.16932}},
+  year = {2025},
+}
+
+@article{su2024roformer,
+  author = {Jianlin Su and Murtadha Ahmed and Yu Lu and Shengfeng Pan and Wen Bo and Yunfeng Liu},
+  title = {{RoFormer: Enhanced Transformer with Rotary Position Embedding}},
+  journal = {Neurocomputing},
+  volume = {568},
+  pages = {127063},
+  year = {2024},
+  doi = {10.1016/j.neucom.2023.127063},
+  note = {\href{https://arxiv.org/abs/2104.09864}{arXiv:2104.09864}},
+}
+
+@inproceedings{zhang2019rmsnorm,
+  author = {Biao Zhang and Rico Sennrich},
+  title = {{Root Mean Square Layer Normalization}},
+  booktitle = {Advances in Neural Information Processing Systems 32 (NeurIPS)},
+  year = {2019},
+  note = {\href{https://arxiv.org/abs/1910.07467}{arXiv:1910.07467}},
+}
+
+@article{shazeer2020glu,
+  author = {Noam Shazeer},
+  title = {{GLU Variants Improve Transformer}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2002.05202}{arXiv:2002.05202}},
+  year = {2020},
+}
+
+@inproceedings{henry2020qknorm,
+  author = {Alex Henry and Prudhvi Raj Dachapally and Shubham Pawar and Yuxuan Chen},
+  title = {{Query-Key Normalization for Transformers}},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2020},
+  pages = {4246--4253},
+  year = {2020},
+  note = {\href{https://arxiv.org/abs/2010.04245}{arXiv:2010.04245}},
+}
+
+@inproceedings{dehghani2023vit22b,
+  author = {Mostafa Dehghani and others},
+  title = {{Scaling Vision Transformers to 22 Billion Parameters}},
+  booktitle = {Proceedings of the 40th International Conference on Machine Learning (ICML)},
+  pages = {7480--7512},
+  year = {2023},
+  note = {\href{https://arxiv.org/abs/2302.05442}{arXiv:2302.05442}},
+}
+
+@inproceedings{qiu2025gated,
+  author = {Zihan Qiu and others},
+  title = {{Gated Attention for Large Language Models: Non-linearity, Sparsity, and Attention-Sink-Free}},
+  booktitle = {Advances in Neural Information Processing Systems 38 (NeurIPS)},
+  year = {2025},
+  note = {\href{https://arxiv.org/abs/2505.06708}{arXiv:2505.06708}},
+}
+
+% Data, software and statistics
+
+@inproceedings{penedo2024fineweb,
+  author = {Guilherme Penedo and Hynek Kydl{\'\i}{\v{c}}ek and Ben Allal, Loubna and Anton Lozhkov and Margaret Mitchell and Colin Raffel and Leandro von Werra and Thomas Wolf},
+  title = {{The FineWeb Datasets: Decanting the Web for the Finest Text Data at Scale}},
+  booktitle = {Advances in Neural Information Processing Systems 37 (NeurIPS), Datasets and Benchmarks Track},
+  year = {2024},
+  note = {\href{https://arxiv.org/abs/2406.17557}{arXiv:2406.17557}},
+}
+
+@inproceedings{paster2024openwebmath,
+  author = {Keiran Paster and Dos Santos, Marco and Zhangir Azerbayev and Jimmy Ba},
+  title = {{OpenWebMath: An Open Dataset of High-Quality Mathematical Web Text}},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year = {2024},
+  note = {\href{https://arxiv.org/abs/2310.06786}{arXiv:2310.06786}},
+}
+
+@misc{codeparrot2022clean,
+  author = {{CodeParrot}},
+  title = {{codeparrot-clean-valid}},
+  howpublished = {Hugging Face dataset},
+  year = {2022},
+  url = {https://huggingface.co/datasets/codeparrot/codeparrot-clean-valid},
+  note = {\url{https://huggingface.co/datasets/codeparrot/codeparrot-clean-valid}},
+}
+
+@misc{wikimedia2023wikipedia,
+  author = {{Wikimedia Foundation}},
+  title = {{Wikimedia Wikipedia, dump of 2023-11-01}},
+  howpublished = {Hugging Face dataset},
+  year = {2023},
+  url = {https://huggingface.co/datasets/wikimedia/wikipedia},
+  note = {\url{https://huggingface.co/datasets/wikimedia/wikipedia}},
+}
+
+@inproceedings{paszke2019pytorch,
+  author = {Adam Paszke and others},
+  title = {{PyTorch: An Imperative Style, High-Performance Deep Learning Library}},
+  booktitle = {Advances in Neural Information Processing Systems 32 (NeurIPS)},
+  year = {2019},
+  note = {\href{https://arxiv.org/abs/1912.01703}{arXiv:1912.01703}},
+}
+
+@inproceedings{ansel2024pytorch2,
+  author = {Jason Ansel and others},
+  title = {{PyTorch 2: Faster Machine Learning Through Dynamic Python Bytecode Transformation and Graph Compilation}},
+  booktitle = {Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS), Volume 2},
+  pages = {929--947},
+  year = {2024},
+  doi = {10.1145/3620665.3640366},
+  note = {\href{https://doi.org/10.1145/3620665.3640366}{doi:10.1145/3620665.3640366}},
+}
+
+@article{efron1979bootstrap,
+  author = {Bradley Efron},
+  title = {{Bootstrap Methods: Another Look at the Jackknife}},
+  journal = {The Annals of Statistics},
+  volume = {7},
+  number = {1},
+  pages = {1--26},
+  year = {1979},
+  doi = {10.1214/aos/1176344552},
+  note = {\href{https://doi.org/10.1214/aos/1176344552}{doi:10.1214/aos/1176344552}},
+}
+
+@inproceedings{agarwal2021precipice,
+  author = {Rishabh Agarwal and Max Schwarzer and Pablo Samuel Castro and Aaron Courville and Marc G. Bellemare},
+  title = {{Deep Reinforcement Learning at the Edge of the Statistical Precipice}},
+  booktitle = {Advances in Neural Information Processing Systems 34 (NeurIPS)},
+  year = {2021},
+  note = {\href{https://arxiv.org/abs/2108.13264}{arXiv:2108.13264}},
+}
+
+@book{efron1993introduction,
+  author = {Bradley Efron and Robert J. Tibshirani},
+  title = {{An Introduction to the Bootstrap}},
+  publisher = {Chapman \& Hall},
+  year = {1993},
+  doi = {10.1201/9780429246593},
+  note = {\href{https://doi.org/10.1201/9780429246593}{doi:10.1201/9780429246593}},
+}
+
+% Adjacent work from context/decision/LITERATURE-MAP.md
+
+@article{li2026spectralcap,
+  author = {Jiachun Li},
+  title = {{An Isotropy-Preserving Spectral Cap for Muon: Theory and Three Case Studies}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2607.19771}{arXiv:2607.19771}},
+  year = {2026},
+}
+
+@article{xie2026spectralsphere,
+  author = {Tian Xie and others},
+  title = {{Controlled LLM Training on Spectral Sphere}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2601.08393}{arXiv:2601.08393}},
+  year = {2026},
+}
+
+@article{chen2026zeta,
+  author = {Kaiwen Chen and Shuhai Zhang and Zimo Liu and Linxiao Li and Ying Sun and Yuchen Li and Yifan Zhang and Bo Han and Mingkui Tan and Qiuwu Chen},
+  title = {{Zeta: Dual Whitening for Matrix Optimization via Coordinate-Adaptive Preconditioning}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2606.14187}{arXiv:2606.14187}},
+  year = {2026},
+}
+
+@article{ren2026hypersphere,
+  author = {Liliang Ren and Yang Liu and Yelong Shen and Weizhu Chen},
+  title = {{Rethinking Language Model Scaling under Transferable Hypersphere Optimization}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2603.28743}{arXiv:2603.28743}},
+  year = {2026},
+}
+
+@article{mehta2025muon,
+  author = {Sushant Mehta and Raj Dandekar and Rajat Dandekar and Sreedath Panat},
+  title = {{Muon: Training and Trade-offs with Latent Attention and MoE}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2509.24406}{arXiv:2509.24406}},
+  year = {2025},
+}
+
+@article{kim2026scale,
+  author = {Nayeon Kim and Hojin Lee and Yunju Bak and Jaesun Park and Boseop Kim},
+  title = {{Let's Scale Step by Step: Compute-Efficient Hyperparameter Transfer for Large-Scale Mixture-of-Experts}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2608.20061}{arXiv:2608.20061}},
+  year = {2026},
+}
+
+@article{he2026statistical,
+  author = {Siyuan He and Bokai Yang and Jie Hu and Ziwen Gao and Yuhong Yang},
+  title = {{Towards a Statistical Understanding of Mixture-of-Experts}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2609.03501}{arXiv:2609.03501}},
+  year = {2026},
+}
+
+@article{dong2026pr2,
+  author = {Daize Dong and others},
+  title = {{PR2: Predictive Routing Replay for MoE-Based LLM Reinforcement Learning}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2606.00395}{arXiv:2606.00395}},
+  year = {2026},
+}
+
+@article{qiu2026sinks,
+  author = {Zihan Qiu and others},
+  title = {{A Unified View of Attention and Residual Sinks: Outlier-Driven Rescaling is Essential for Transformer Training}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2601.22966}{arXiv:2601.22966}},
+  year = {2026},
+}
+
+@article{li2026criticality,
+  author = {Xiaolong Li and Zhangchen Zhou and Zhi-Qin John Xu},
+  title = {{Weight-norm Criticality: A Mechanism for Loss Spikes Induced by the Normalization and Weight Decay}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2607.21005}{arXiv:2607.21005}},
+  year = {2026},
+}
+
+@article{wang2026adagc,
+  author = {Guoxia Wang and Shuai Li and Congliang Chen and Jinle Zeng and Jiabin Yang and Dianhai Yu and Yanjun Ma and Li Shen},
+  title = {{AdaGC: Enhancing LLM Pretraining Stability via Adaptive Gradient Clipping}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2502.11034}{arXiv:2502.11034}},
+  year = {2025},
+}
+
+@article{kumar2025zclip,
+  author = {Abhay Kumar and Louis Owen and Roy Chowdhury, Nilabhra and Fabian G{\"u}ra},
+  title = {{ZClip: Adaptive Spike Mitigation for LLM Pre-Training}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2504.02507}{arXiv:2504.02507}},
+  year = {2025},
+}
+
+@article{huang2026gradientstabilizer,
+  author = {Tianjin Huang and others},
+  title = {{GradientStabilizer: Fix the Norm, Not the Gradient}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2502.17055}{arXiv:2502.17055}},
+  year = {2025},
+}
+
+@article{hu2025sigmamoe,
+  author = {Qingguo Hu and others},
+  title = {{Sigma-MoE-Tiny Technical Report}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2512.16248}{arXiv:2512.16248}},
+  year = {2025},
+}
+
+@article{li2026evolution,
+  author = {Jiguo Li},
+  title = {{The Evolution of Mixture-of-Experts Architectures in Large Language Models: Routing, Topology, Load Balancing, and Expert Parallelism}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2608.08650}{arXiv:2608.08650}},
+  year = {2026},
+}
+
+@article{li2026denoise,
+  author = {Xianliang Li and Zihan Zhang and Weiyang Liu and Han Bao},
+  title = {{Denoise First, Orthogonalize Later: Understanding Momentum in Muon via Spectral Filtering}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2606.03899}{arXiv:2606.03899}},
+  year = {2026},
+}
+
+@article{huang2026orthogonalization,
+  author = {Hua Huang},
+  title = {{How Much Orthogonalization Does Muon Need?}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2606.00371}{arXiv:2606.00371}},
+  year = {2026},
+}
+
+@article{zhang2026grouping,
+  author = {Hongtao Zhang and Wenjie Zhou and Wei Chen and Xueqi Cheng},
+  title = {{When and Why Grouping Attention Heads Accelerates Muon Optimization}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2605.08933}{arXiv:2605.08933}},
+  year = {2026},
+}
+
+@article{park2025outliersafe,
+  author = {Jungwoo Park and Taewhoo Lee and Chanwoong Yoon and Hyeon Hwang and Jaewoo Kang},
+  title = {{Outlier-Safe Pre-Training for Robust 4-Bit Quantization of Large Language Models}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2506.19697}{arXiv:2506.19697}},
+  year = {2025},
+}
+
+@article{qiu2025transfer,
+  author = {Shikai Qiu and Zixi Chen and Hoang Phan and Qi Lei and Andrew Gordon Wilson},
+  title = {{Hyperparameter Transfer Enables Consistent Gains of Matrix-Preconditioned Optimizers Across Scales}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2512.05620}{arXiv:2512.05620}},
+  year = {2025},
+}
+
+@article{apte2026scale,
+  author = {Anuj Apte},
+  title = {{Scale Weight Decay and Train Better}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2607.23777}{arXiv:2607.23777}},
+  year = {2026},
+}
+
+@book{goodfellow2016deep,
+  author = {Ian Goodfellow and Yoshua Bengio and Aaron Courville},
+  title = {{Deep Learning}},
+  publisher = {MIT Press},
+  year = {2016},
+  note = {\url{https://www.deeplearningbook.org}},
+}
+@article{bengio2003neural,
+  author = {Yoshua Bengio and R{\'e}jean Ducharme and Pascal Vincent and Christian Jauvin},
+  title = {{A Neural Probabilistic Language Model}},
+  journal = {Journal of Machine Learning Research},
+  volume = {3},
+  pages = {1137--1155},
+  year = {2003},
+}
+@techreport{radford2019language,
+  author = {Alec Radford and Jeffrey Wu and Rewon Child and David Luan and Dario Amodei and Ilya Sutskever},
+  title = {{Language Models are Unsupervised Multitask Learners}},
+  institution = {OpenAI},
+  year = {2019},
+  note = {\url{https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf}},
+}
+@article{kaplan2020scaling,
+  author = {Jared Kaplan and Sam McCandlish and Tom Henighan and Tom B. Brown and Benjamin Chess and Rewon Child and Scott Gray and Alec Radford and Jeffrey Wu and Dario Amodei},
+  title = {{Scaling Laws for Neural Language Models}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2001.08361}{arXiv:2001.08361}},
+  year = {2020},
+}
+@inproceedings{he2016resnet,
+  author = {Kaiming He and Xiangyu Zhang and Shaoqing Ren and Jian Sun},
+  title = {{Deep Residual Learning for Image Recognition}},
+  booktitle = {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages = {770--778},
+  year = {2016},
+  note = {\href{https://arxiv.org/abs/1512.03385}{arXiv:1512.03385}},
+}
+@inproceedings{sennrich2016bpe,
+  author = {Rico Sennrich and Barry Haddow and Alexandra Birch},
+  title = {{Neural Machine Translation of Rare Words with Subword Units}},
+  booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages = {1715--1725},
+  year = {2016},
+  note = {\href{https://arxiv.org/abs/1508.07909}{arXiv:1508.07909}},
+}
+@article{rumelhart1986learning,
+  author = {David E. Rumelhart and Geoffrey E. Hinton and Ronald J. Williams},
+  title = {{Learning representations by back-propagating errors}},
+  journal = {Nature},
+  volume = {323},
+  number = {6088},
+  pages = {533--536},
+  year = {1986},
+}
+@article{motif2026motif3,
+  author = {Junghwan Lim and others},
+  title = {{Motif 3: Technical Report}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2608.09119}{arXiv:2608.09119}},
+  year = {2026},
+}
+@article{ruan2026muon,
+  author = {Tianyu Ruan and Fengzhuo Zhang and Shuche Wang and Shihua Zhang},
+  title = {{Muon Learns More Robust and Transferable Features than Adam}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2606.09658}{arXiv:2606.09658}},
+  year = {2026},
+}
+@article{han2025lossfree,
+  author = {X. Y. Han and Yuan Zhong},
+  title = {{A Theoretical Framework for Auxiliary-Loss-Free Load Balancing of Sparse Mixture-of-Experts in Large-Scale AI Models}},
+  journal = {arXiv preprint \href{https://arxiv.org/abs/2512.03915}{arXiv:2512.03915}},
+  year = {2025},
+}

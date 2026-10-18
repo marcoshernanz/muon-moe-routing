@@ -1,0 +1,156 @@
+% The memoria in the EPS class tfgtfmthesisuam, version 3.2 as the TFG platform distributes it, which is read from tfgtfmthesisuam/ and used unchanged. The class marks the cover, the first and the last page of the body and the blank pages with invisible text, from which TFGTool counts the 40 pages. This file holds the options of the class, the data of the cover and the order of the chapters; sections/ holds the text, one file per chapter.
+\documentclass[epsbased, tfg, english, covers, final, overleaf, nonelo]{tfgtfmthesisuam}
+
+% What the text uses and the class does not load.
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+% The range over the seeds that follows a mean difference in a table, set one size smaller so that the mean is read first.
+\newcommand{\seedrange}[2]{{\footnotesize[$#1$, $#2$]}}
+% A page of floats alone only when they fill most of it, so that a figure and a table that together fill half a page go on a page with text instead of leaving the rest of their page empty.
+\renewcommand{\floatpagefraction}{0.7}
+% A page that is not full ends where its text ends. Otherwise every page is filled to the bottom, which stretches the space around the figures, the equations and the paragraphs of a page whose next heading or figure moved to the following page.
+\raggedbottom
+\usetikzlibrary{arrows.meta, decorations.pathreplacing}
+
+% The data figures of the Results are drawn by pgfplots from the CSV files in figures/data, so that their text is set in the face of the thesis. The CSV files are written by code/ai-experiments/thesis_figures_2026_09/extract.py from the run directories. The three colors are those of the diagrams, and each partition keeps its color and its mark in every figure, so that the figures still read in black and white.
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots, fillbetween}
+\pgfplotsset{compat=1.18}
+\definecolor{moeblue}{RGB}{49,101,156}
+\definecolor{moegreen}{RGB}{84,130,53}
+\definecolor{moeamber}{RGB}{176,124,0}
+\pgfplotsset{
+  table/col sep=comma,
+  thesis/.style={
+      scale only axis, font=\footnotesize, line width=0.5pt,
+      tick label style={font=\footnotesize, /pgf/number format/assume math mode=true},
+      every axis plot/.append style={line width=0.8pt},
+      legend style={font=\footnotesize, draw=none, fill=none, inner sep=1pt, row sep=-1pt},
+      legend cell align=left,
+      /pgf/number format/1000 sep={,},
+    },
+  arm a/.style={moeamber, mark=*, mark size=1.2pt},
+  arm b/.style={moeblue, mark=square*, mark size=1.1pt},
+  arm c/.style={moegreen, mark=triangle*, mark size=1.5pt},
+  arm f/.style={black!55, mark=diamond*, mark size=1.5pt},
+  band/.style={opacity=0.18, draw=none},
+}
+
+% The class sets the caption of a table below it. This copy of its table environment, with the same three arguments, sets it above, where tables usually carry it.
+\makeatletter
+\renewenvironment{table}[3][]
+{%
+  \abovecaptionskip=0.5\myem
+  \belowcaptionskip=0pt
+  \@float{table}[htbp]%
+    \captionsetup{position=top}%
+    \ifx&#1&\caption{#3}\else\caption[#1]{#3}\fi
+    \ifx&#2&\else\label{#2}\fi
+    \centering
+}
+{%
+  \end@float
+}
+\makeatother
+
+% The addresses in the bibliography are set in the face of the text, as the arXiv identifiers are.
+\urlstyle{same}
+% Paths and commands in typewriter that may break at a slash or a dot, for the reproduction appendix.
+\DeclareUrlCommand\code{\urlstyle{tt}}
+
+% The class's equation typesets the spaces of its own definition. The one at its start can take a line of its own when the text before the display fills its line, which leaves an empty line above the display; the ones at its end indent the line after the display. The first hook keeps the space on the line of the text, and the second removes the spaces at the end, so that a line such as ``where ...'' starts at the margin.
+\makeatletter
+\AddToHook{env/equation/begin}{\ifhmode\unskip\nobreak\fi}
+\AddToHook{env/equation/after}{\loop\ifdim\lastskip>\z@\unskip\repeat}
+\makeatother
+
+% The names \cref writes. With the option english the class still gives cleveref its Spanish names, so the English ones are set here.
+\crefname{chapter}{Chapter}{Chapters}
+\Crefname{chapter}{Chapter}{Chapters}
+\crefname{section}{Section}{Sections}
+\Crefname{section}{Section}{Sections}
+\crefname{subsection}{Section}{Sections}
+\Crefname{subsection}{Section}{Sections}
+\crefname{appendix}{Appendix}{Appendices}
+\Crefname{appendix}{Appendix}{Appendices}
+\crefname{figure}{Figure}{Figures}
+\Crefname{figure}{Figure}{Figures}
+\crefname{table}{Table}{Tables}
+\Crefname{table}{Table}{Tables}
+\crefname{equation}{Equation}{Equations}
+\Crefname{equation}{Equation}{Equations}
+% The class leaves the conjunctions between references in Spanish as well. cleveref sets them when the document begins, so they are replaced after that, in American English, with a comma before the last of three or more references and "to" in a range.
+\AtBeginDocument{%
+  \renewcommand{\crefpairconjunction}{ and\nobreakspace}%
+  \renewcommand{\crefpairgroupconjunction}{ and\nobreakspace}%
+  \renewcommand{\creflastconjunction}{, and\nobreakspace}%
+  \renewcommand{\creflastgroupconjunction}{, and\nobreakspace}%
+  \renewcommand{\crefrangeconjunction}{ to\nobreakspace}%
+}
+
+% The cover sets the title justified in a box that starts under "Bachelor thesis" and ends at the brown band, so a title longer than one line reaches the band, and the class leaves spaces before the first word. \ifcovertitle tells that box apart by its width, which the class keeps in \@poswttt and which no other place that prints the title has. There, \coverstart removes the spaces and sets the lines at the font's own spacing rather than the 1.3 of the text, so that three lines fit above the grey band, and \coverbreak ends a line. Everywhere else, on the title page, the copyright page and in the PDF's metadata, \coverstart does nothing and \coverbreak is a space.
+\makeatletter
+\newcommand{\ifcovertitle}{\ifdim\linewidth=\@poswttt\relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi}
+\newcommand{\coverstart}{\ifcovertitle{\loop\ifdim\lastskip>\z@\unskip\repeat\linespread{1}\selectfont}{}}
+\newcommand{\coverbreak}{\ifcovertitle{\newline}{\space}}
+\makeatother
+% The title registered on the platform, which the cover, the title page and the copyright page print whole; the footers carry the short form in brackets.
+\title[How the Optimizer Shapes Routing]{\coverstart How the Optimizer Shapes Routing:\coverbreak Load Balancing, Specialization, and Stability\coverbreak in Mixture-of-Experts Language Models Trained with Muon}
+\author{Marcos Hernanz Antón}
+\advisor{Daniel Hernández-Lobato}
+\levelin{Ingeniería Informática}
+\copyrightdate{\the\year}
+
+\resumenfile{front/resumen}
+\abstractfile{front/abstract}
+% The class prints the keywords at the foot of the Abstract and the Resumen.
+\keywords{Mixture of experts, load balancing, Muon, AdamW, optimization, routing, language models, deep learning}
+\palabrasclave{Mezcla de expertos, equilibrado de carga, Muon, AdamW, optimización, enrutamiento, modelos de lenguaje, aprendizaje profundo}
+
+% The metadata of the PDF, with the values the class gives them. The class sets them from the title page, which the option covers places after the cover, and by then hyperref has written them, so they are set here, before the first page.
+\makeatletter
+\pdfmetavalues{\@author}{\@titleaux}{Bachelor thesis}{\@auxkeywords, \@auxpalabrasclave}
+\makeatother
+
+\coverdata
+{
+  Escuela Politécnica Superior \\
+  Universidad Autónoma de Madrid \\
+  C/ Francisco Tomás y Valiente, 11
+}
+
+\bibliographyconfig[ieeetr]{references}
+
+% The class adds the contents entry of the bibliography after printing it, so the entry shows its last page. This copy of \thesisbibliography adds it on the first page instead.
+\makeatletter
+\renewcommand{\thesisbibliography}{%
+  \if@bibliographymodebool
+    \cleardoublepage\phantomsection\addcontentsline{toc}{chapter}{\bibname}%
+    \bibliographystyle{\@bibstyleaux}%
+    \bibliography{\@bibfileaux}%
+  \fi
+}
+\makeatother
+
+\begin{document}
+
+% The body, in the usual order of an empirical paper: the setup that every experiment shares in the Method, one section per question in the Results, and the interpretation and the limits in the Discussion. The body that counts toward the 40 pages runs from the first page of the Introduction to the last of the Conclusions.
+\input{sections/introduction}
+\input{sections/background}
+\input{sections/related-work}
+\input{sections/method}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusions}
+
+% The class prints the bibliography where the appendices start. Its own \appendix does not reach cleveref, so the aliases make \cref write Appendix B and Appendix B.1 rather than Chapter B and Section B.1.
+\appendix
+\crefalias{chapter}{appendix}
+\crefalias{section}{appendix}
+\crefalias{subsection}{appendix}
+\input{sections/appendix-configuration}
+\input{sections/appendix-results}
+\input{sections/appendix-reproduction}
+
+\end{document}
