@@ -1,0 +1,7 @@
+2026-09-26 23:06:14 step exits: 0 0 0 0
+2026-09-26 23:12:34 smoke training exits: 0 0 0, 9 re-check runs, 3 confirmation runs, 4 balancer runs, re-check rates {"adamw":0.0005,"muon":0.008}
+2026-09-26 23:16:50 smoke evaluation exits: 0 0 0, confirmation 3 panels and 3 annexes, balancer 4 panels and 4 annexes
+2026-09-26 23:17:58 smoke confirmation analysis exit 0, 138 files
+2026-09-26 23:18:52 smoke balancer analysis exit 0, 136 files
+2026-09-26 23:18:53 smoke settings and claims: SETTINGS_OK
+2026-09-26 23:18:53 suite: 206 passed in 588.90s (0:09:48) exit 0 in 596 s 

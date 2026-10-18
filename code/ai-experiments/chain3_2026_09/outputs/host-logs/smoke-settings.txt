@@ -1,0 +1,10 @@
+confirmation confirmation-adamw-s0 {'tier': 'confirmation', 'partition': 'adamw', 'seed': 0, 'adamw_lr': 0.00035, 'muon_lr': 0.0056, 'balancer_multiplier': 1.0, 'recompute': 9, 'steps': 20, 'compiled': True}
+confirmation confirmation-muon-s0 {'tier': 'confirmation', 'partition': 'muon', 'seed': 0, 'adamw_lr': 0.00035, 'muon_lr': 0.0056, 'balancer_multiplier': 1.0, 'recompute': 9, 'steps': 20, 'compiled': True}
+confirmation confirmation-muon_except_router-s0 {'tier': 'confirmation', 'partition': 'muon_except_router', 'seed': 0, 'adamw_lr': 0.00035, 'muon_lr': 0.0056, 'balancer_multiplier': 1.0, 'recompute': 9, 'steps': 20, 'compiled': True}
+balancer mechanism-adamw-balancer4x-s0 {'tier': 'mechanism', 'partition': 'adamw', 'seed': 0, 'adamw_lr': 0.002, 'muon_lr': 0.004, 'balancer_multiplier': 4.0, 'recompute': 1, 'steps': 20, 'compiled': True}
+balancer mechanism-adamw-s0 {'tier': 'mechanism', 'partition': 'adamw', 'seed': 0, 'adamw_lr': 0.002, 'muon_lr': 0.004, 'balancer_multiplier': 1.0, 'recompute': 1, 'steps': 20, 'compiled': True}
+balancer mechanism-muon-balancer4x-s0 {'tier': 'mechanism', 'partition': 'muon', 'seed': 0, 'adamw_lr': 0.002, 'muon_lr': 0.004, 'balancer_multiplier': 4.0, 'recompute': 1, 'steps': 20, 'compiled': True}
+balancer mechanism-muon-s0 {'tier': 'mechanism', 'partition': 'muon', 'seed': 0, 'adamw_lr': 0.002, 'muon_lr': 0.004, 'balancer_multiplier': 1.0, 'recompute': 1, 'steps': 20, 'compiled': True}
+confirmation claims: {'C4': np.int64(1), 'C5': np.int64(1), 'C6': np.int64(4), 'C7': np.int64(4), 'G': np.int64(4), 'M': np.int64(4), 'O': np.int64(4), 'O-router': np.int64(2), 'R': np.int64(2), 'S': np.int64(4), 'U': np.int64(4)}
+balancer claims: {'C4': np.int64(1), 'C5': np.int64(1), 'C6': np.int64(2), 'C7': np.int64(2), 'G': np.int64(2), 'L': np.int64(2), 'O-fast': np.int64(2), 'R': np.int64(2), 'S': np.int64(2), 'S-fast': np.int64(2)}
+SETTINGS_OK

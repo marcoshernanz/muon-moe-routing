@@ -1,0 +1,20 @@
+index, name, driver_version, memory.total [MiB], clocks.max.sm [MHz], power.limit [W], power.max_limit [W], pcie.link.gen.max, pcie.link.width.max
+0, NVIDIA GeForce RTX 5090, 595.84, 32607 MiB, 3135 MHz, 600.00 W, 600.00 W, 4, 16
+1, NVIDIA GeForce RTX 5090, 595.84, 32607 MiB, 3135 MHz, 600.00 W, 600.00 W, 4, 16
+2, NVIDIA GeForce RTX 5090, 595.84, 32607 MiB, 3135 MHz, 600.00 W, 600.00 W, 4, 16
+3, NVIDIA GeForce RTX 5090, 595.84, 32607 MiB, 3135 MHz, 600.00 W, 600.00 W, 4, 16
+cpus 256
+Model name:                              AMD EPYC 7B12 64-Core Processor
+               total        used        free      shared  buff/cache   available
+Mem:             503          12         412           0          81         490
+Swap:              7           0           7
+overlay         250G  2.5M  250G   1% /
+ + yarl==1.24.5
+uv sync 299 s
+2.14.0+cu130 13.0 ['NVIDIA GeForce RTX 5090', 'NVIDIA GeForce RTX 5090', 'NVIDIA GeForce RTX 5090', 'NVIDIA GeForce RTX 5090']
+hf download 1898 s
+download() 3 s, 1021 files, 19G
+
+429 Too Many Requests for url: https://huggingface.co/api/datasets/codeparrot/codeparrot-clean-valid/tree/4db92d2ec0c1b4c41eeb439cfae16854511d9dcd?recursive=false&expand=false.
+maximum queue size reached
+panel rebuilt after a 429: exit 0 in 48 s, the five slices identical to the laptop's (sha256)

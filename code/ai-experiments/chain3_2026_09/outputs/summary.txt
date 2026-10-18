@@ -1,0 +1,105 @@
+The re-check at 1B tokens, final validation loss per rate
+adamw: 0.00025 3.2349, 0.0005 3.1576, 0.001 3.1262, 0.002 3.1320; best 0.001, extension None, edge False
+muon: 0.0005 3.0837, 0.001 3.0582, 0.002 3.0545, 0.004 3.0729; best 0.002, extension None, edge False
+rates.json {'adamw': 0.001, 'muon': 0.002}
+
+The confirmation block: claims
+  S         bias_span_first                    contrasts  4  tokens pass       loss pass       pass
+  G         router_input_similarity_first      contrasts  4  tokens pass       loss pass       pass
+  R         bias_span                          contrasts  2  tokens pass       loss pass       pass
+  M         load_churn_warmup                  contrasts  4  tokens pass       loss pass       pass
+  C4        specialization                     contrasts  1  tokens pass       loss            pass
+  C5        val_loss                           contrasts  1  tokens pass       loss            pass
+  C6        update_load_correlation            contrasts  4  tokens pass       loss pass       pass
+  O         max_load_ratio_first_early         contrasts  4  tokens pass       loss pass       pass
+  O-router  max_load_ratio_first_early         contrasts  2  tokens direction  loss direction  direction
+  U         router_update_common_share_first   contrasts  4  tokens pass       loss pass       pass
+  C7        router_row_dispersion_early        contrasts  4  tokens fail       loss fail       fail (exploratory)
+The confirmation block: the contrasts of O, O-router, U (lower minus higher, per view)
+  O        adamw              - muon               tokens -5.1857 [-6.0979, -4.4550] effect -8.76 signs --- pass
+  O        adamw              - muon               loss   -5.1857 [-6.0979, -4.4550] effect -8.76 signs --- pass
+  O        adamw              - muon_except_router tokens -6.0932 [-6.5664, -5.3176] effect -12.75 signs --- pass
+  O        adamw              - muon_except_router loss   -6.0932 [-6.5664, -5.3176] effect -12.75 signs --- pass
+  O-router muon               - muon_except_router tokens -0.9075 [-1.9404, +0.7803] effect -1.19 signs -+- direction
+  O-router muon               - muon_except_router loss   -0.9075 [-1.9404, +0.7803] effect -1.19 signs -+- direction
+  U        adamw              - muon_except_router tokens -0.4603 [-0.4869, -0.4408] effect -13.55 signs --- pass
+  U        adamw              - muon_except_router loss   -0.4623 [-0.4887, -0.4413] effect -13.60 signs --- pass
+  U        muon               - muon_except_router tokens -0.3769 [-0.4295, -0.3386] effect -12.06 signs --- pass
+  U        muon               - muon_except_router loss   -0.3772 [-0.4296, -0.3388] effect -12.06 signs --- pass
+The confirmation block: per run, loss, S, G, R, M, C4, C6, O, U, S early, S final, collapsed, spikes
+  adamw                0   2.9393   0.1621   0.1037   0.0997   0.1188   0.1226   0.4078   1.1384   0.1030   0.3848   0.1040   0.0000   0.0000
+  adamw                1   2.9426   0.1191   0.0937   0.0983   0.1178   0.1140   0.3989   1.1395   0.0999   0.3668   0.0640   0.0000   0.0000
+  adamw                2   2.9385   0.1251   0.0591   0.0991   0.1166   0.1214   0.4052   1.1372   0.1366   0.2834   0.0670   0.0000   0.0000
+  muon                 0   2.8914   0.2496   0.5996   0.1279   0.0828   0.1404   0.0038   5.5934   0.2052   0.7164   0.1040   0.2727   0.0000
+  muon                 1   2.8971   0.3594   0.5891   0.1437   0.0836   0.1396   0.0030   7.2374   0.1905   0.8727   0.1750   0.0909   0.0000
+  muon                 2   2.8982   0.2535   0.6418   0.1258   0.0803   0.1385   0.0075   6.1414   0.1940   0.6821   0.2080   0.1818   0.0000
+  muon_except_router   0   2.8952   0.2297   0.7132   0.1238   0.1216   0.1470   0.0097   7.5338   0.5438   0.7697   0.2290   0.2727   2.0000
+  muon_except_router   1   2.9012   0.2401   0.8072   0.1202   0.1224   0.1430   0.0098   6.4572   0.5533   0.7271   0.3391   0.0909   6.0000
+  muon_except_router   2   2.9012   0.3112   0.6631   0.1302   0.1177   0.1372   0.0046   7.7036   0.6235   0.7883   0.6393   0.2727   2.0000
+The confirmation block: step time per arm (ms, the median of each run's logged intervals after its first 500 steps) and hours a run
+  adamw                703 to 708 ms, 8.98 h a run
+  muon                 744 to 749 ms, 9.49 h a run
+  muon_except_router   745 to 748 ms, 9.50 h a run
+
+The balancer block: claims
+  S         bias_span_first                    contrasts  2  tokens pass       loss pass       pass
+  G         router_input_similarity_first      contrasts  2  tokens pass       loss pass       pass
+  R         bias_span                          contrasts  2  tokens pass       loss pass       pass
+  C4        specialization                     contrasts  1  tokens pass       loss            pass
+  C5        val_loss                           contrasts  1  tokens pass       loss            pass
+  C6        update_load_correlation            contrasts  2  tokens pass       loss pass       pass
+  S-fast    bias_span_first                    contrasts  2  tokens pass       loss pass       pass
+  L         bias_span_first                    contrasts  2  tokens pass       loss pass       pass
+  O-fast    max_load_ratio_first_early         contrasts  2  tokens pass       loss pass       pass
+  C7        router_row_dispersion_early        contrasts  2  tokens pass       loss pass       pass (exploratory)
+The balancer block: the contrasts of S-fast, L, O-fast (lower minus higher, per view)
+  S-fast   adamw-balancer4x   - muon-balancer4x    tokens -0.0398 [-0.0662, -0.0134] effect -1.96 signs --- pass
+  S-fast   adamw-balancer4x   - muon-balancer4x    loss   -0.0513 [-0.0771, -0.0243] effect -2.49 signs --- pass
+  L        muon-balancer4x    - muon               tokens -0.0424 [-0.0834, -0.0148] effect -1.92 signs --- pass
+  L        muon-balancer4x    - muon               loss   -0.0424 [-0.0834, -0.0148] effect -1.92 signs --- pass
+  O-fast   muon-balancer4x    - muon               tokens -2.3295 [-2.9088, -1.5342] effect -5.41 signs --- pass
+  O-fast   muon-balancer4x    - muon               loss   -2.3295 [-2.9088, -1.5342] effect -5.41 signs --- pass
+The balancer block: per run, loss, S, G, R, M, C4, C6, O, U, S early, S final, collapsed, spikes
+  adamw                6   3.2474   0.1119   0.0752   0.1029   0.1065   0.1064   0.3682   1.1425   0.1245   0.2240   0.0740   0.0000   0.0000
+  adamw                7   3.2641   0.0881   0.0711   0.1023   0.0998   0.1111   0.3718   1.1156   0.1245   0.1969   0.0510   0.0000   0.0000
+  adamw                8   3.2642   0.0853   0.0875   0.1031   0.1037   0.1011   0.3631   1.1101   0.1134   0.1359   0.0570   0.0000   0.0000
+  muon                 6   3.1786   0.1527   0.3991   0.1327   0.0845   0.1209   0.0176   4.4839   0.1562   0.7926   0.1030   0.0000   0.0000
+  muon                 7   3.1821   0.1770   0.4034   0.1459   0.0813   0.1227   0.0187   3.3138   0.1578   0.7080   0.0890   0.0000   0.0000
+  muon                 8   3.1701   0.1799   0.4171   0.1373   0.0853   0.1309   0.0341   4.0859   0.1661   0.6081   0.1030   0.0000   0.0000
+  adamw-balancer4x     6   3.2473   0.0981   0.0763   0.1055   0.1004   0.1024   0.1990   1.0868   0.1244   0.1609   0.0600   0.0000   0.0000
+  adamw-balancer4x     7   3.2707   0.0820   0.0717   0.0940   0.0965   0.1046   0.1845   1.0938   0.1218   0.1581   0.0600   0.0000   0.0000
+  adamw-balancer4x     8   3.2592   0.0831   0.0801   0.1042   0.0982   0.1026   0.2080   1.0854   0.1222   0.1717   0.0520   0.0000   0.0000
+  muon-balancer4x      6   3.1762   0.1379   0.3994   0.1314   0.0599   0.1303   0.0098   1.5750   0.1621   0.3154   0.0760   0.0000   0.0000
+  muon-balancer4x      7   3.1831   0.1481   0.3991   0.1316   0.0609   0.1204   0.0070   1.7796   0.1577   0.3633   0.0920   0.0000   0.0000
+  muon-balancer4x      8   3.1714   0.0965   0.4002   0.1183   0.0619   0.1256   0.0083   1.5405   0.1643   0.2876   0.0480   0.0000   0.0000
+The balancer block: step time per arm (ms, the median of each run's logged intervals after its first 500 steps) and hours a run
+  adamw                315 to 317 ms, 1.34 h a run
+  muon                 366 to 367 ms, 1.55 h a run
+  adamw-balancer4x     316 to 316 ms, 1.34 h a run
+  muon-balancer4x      366 to 369 ms, 1.56 h a run
+
+The three readings of (a), (b), (c): mean over the seeds (confirmation tier at 3B tokens, seeds 0-2; RQ3 at the mechanism tier, seeds 3-5; the balancer block's (a) and (b), seeds 6-8)
+  loss  conf adamw  2.9401  conf muon   2.8955  conf muon_e 2.8992  rq3 adamw  3.2527  rq3 muon   3.1753  rq3 muon_e 3.1774  bala adamw  3.2586  bala muon   3.1769
+  S     conf adamw  0.1355  conf muon   0.2875  conf muon_e 0.2603  rq3 adamw  0.0951  rq3 muon   0.1978  rq3 muon_e 0.1746  bala adamw  0.0951  bala muon   0.1699
+  G     conf adamw  0.0855  conf muon   0.6102  conf muon_e 0.7279  rq3 adamw  0.0706  rq3 muon   0.4082  rq3 muon_e 0.3914  bala adamw  0.0779  bala muon   0.4065
+  R     conf adamw  0.0990  conf muon   0.1325  conf muon_e 0.1247  rq3 adamw  0.1028  rq3 muon   0.1403  rq3 muon_e 0.1235  bala adamw  0.1028  bala muon   0.1386
+  M     conf adamw  0.1177  conf muon   0.0823  conf muon_e 0.1206  rq3 adamw  0.1018  rq3 muon   0.0837  rq3 muon_e 0.1219  bala adamw  0.1033  bala muon   0.0837
+  C4    conf adamw  0.1194  conf muon   0.1395  conf muon_e 0.1424  rq3 adamw  0.1082  rq3 muon   0.1246  rq3 muon_e 0.1340  bala adamw  0.1062  bala muon   0.1248
+  C6    conf adamw  0.4040  conf muon   0.0048  conf muon_e 0.0080  rq3 adamw  0.3707  rq3 muon   0.0201  rq3 muon_e 0.0362  bala adamw  0.3677  bala muon   0.0235
+  O     conf adamw  1.1384  conf muon   6.3241  conf muon_e 7.2315  rq3 adamw  1.1358  rq3 muon   4.0634  rq3 muon_e 6.6339  bala adamw  1.1227  bala muon   3.9612
+  U     conf adamw  0.1132  conf muon   0.1966  conf muon_e 0.5735  rq3 adamw  0.1292  rq3 muon   0.1600  rq3 muon_e 0.4970  bala adamw  0.1208  bala muon   0.1601
+
+(c) minus (b) on the validation loss at 3B tokens, the second pass's comparison
+  tokens +0.0037 [+0.0030, +0.0041] effect +1.03 signs +++
+  loss   +0.0004 [+0.0002, +0.0005] effect +0.10 signs +++
+
+Cards: 17052 readings, 12374 at 90 percent or more; there 541 W median, 396 W at the 5th percentile, 2872 MHz median; at most 71 C; limits ['600.00 W']
+Free disk: 225 GB at the start, 62 GB at the least
+confirmation: run directories 9, panels 9, annexes 9 at batch sizes [16]
+balancer: run directories 12, panels 12, annexes 12 at batch sizes [32]
+Re-check run directories: 8
+Phases: 2026-09-26 23:19:41 third chain, training round 1
+2026-09-28 10:42:48 training round 1 exits: 0 0 0 0, runs open: 0
+2026-09-28 10:42:48 evaluation start
+2026-09-28 10:51:10 evaluation exits: 0 0 0 0, confirmation 9 panels and 9 annexes, balancer 12 panels and 12 annexes
+Diverged: 0

@@ -1,0 +1,42 @@
+The re-check
+winners {'adamw': 0.001, 'muon': 0.002}
+adamw {"tier": "confirmation", "optimizer": "adamw", "steps": 15259, "val_loss": {"0.00025": 3.2348525151610374, "0.0005": 3.1575717329978943, "0.001": 3.126186951994896, "0.002": 3.1319915652275085}, "best": 0.001, "extension": null, "edge": false}
+lr0.00025                                1526 readings to step 15259, val 3.2349 at 15259
+lr0.0005                                 1526 readings to step 15259, val 3.1576 at 15259
+lr0.001                                  1526 readings to step 15259, val 3.1262 at 15259
+lr0.002                                  1526 readings to step 15259, val 3.1320 at 15259
+muon {"tier": "confirmation", "optimizer": "muon", "steps": 15259, "val_loss": {"0.0005": 3.0836899131536484, "0.001": 3.0582367926836014, "0.002": 3.0544927045702934, "0.004": 3.0729009807109833}, "best": 0.002, "extension": null, "edge": false}
+lr0.0005                                 1526 readings to step 15259, val 3.0837 at 15259
+lr0.001                                  1526 readings to step 15259, val 3.0582 at 15259
+lr0.002                                  1526 readings to step 15259, val 3.0545 at 15259
+lr0.004                                  1526 readings to step 15259, val 3.0729 at 15259
+
+The confirmation runs
+confirmation-adamw-s0                    4578 readings to step 45776, val 2.9393 at 45776, bias_span 0.1621, router_input_similarity 0.1037, max_load_ratio_early 1.1384, router_update_common_share 0.1030
+confirmation-adamw-s1                    4578 readings to step 45776, val 2.9426 at 45776, bias_span 0.1191, router_input_similarity 0.0937, max_load_ratio_early 1.1395, router_update_common_share 0.0999
+confirmation-adamw-s2                    4578 readings to step 45776, val 2.9385 at 45776, bias_span 0.1251, router_input_similarity 0.0591, max_load_ratio_early 1.1372, router_update_common_share 0.1366
+confirmation-muon-s0                     4578 readings to step 45776, val 2.8914 at 45776, bias_span 0.2496, router_input_similarity 0.5996, max_load_ratio_early 5.5934, router_update_common_share 0.2052
+confirmation-muon-s1                     4578 readings to step 45776, val 2.8971 at 45776, bias_span 0.3594, router_input_similarity 0.5891, max_load_ratio_early 7.2374, router_update_common_share 0.1905
+confirmation-muon-s2                     4578 readings to step 45776, val 2.8982 at 45776, bias_span 0.2535, router_input_similarity 0.6418, max_load_ratio_early 6.1414, router_update_common_share 0.1940
+confirmation-muon_except_router-s0       4578 readings to step 45776, val 2.8952 at 45776, bias_span 0.2297, router_input_similarity 0.7132, max_load_ratio_early 7.5338, router_update_common_share 0.5438
+confirmation-muon_except_router-s1       4578 readings to step 45776, val 2.9012 at 45776, bias_span 0.2401, router_input_similarity 0.8072, max_load_ratio_early 6.4572, router_update_common_share 0.5533
+confirmation-muon_except_router-s2       4578 readings to step 45776, val 2.9012 at 45776, bias_span 0.3112, router_input_similarity 0.6631, max_load_ratio_early 7.7036, router_update_common_share 0.6235
+runs 9, missing []; train_windows [9820365]
+
+The balancer block
+mechanism-adamw-balancer4x-s6            1526 readings to step 15259, val 3.2473 at 15259, bias_span 0.0981, router_input_similarity 0.0763, max_load_ratio_early 1.0868, router_update_common_share 0.1244
+mechanism-adamw-balancer4x-s7            1526 readings to step 15259, val 3.2707 at 15259, bias_span 0.0820, router_input_similarity 0.0717, max_load_ratio_early 1.0938, router_update_common_share 0.1218
+mechanism-adamw-balancer4x-s8            1526 readings to step 15259, val 3.2592 at 15259, bias_span 0.0831, router_input_similarity 0.0801, max_load_ratio_early 1.0854, router_update_common_share 0.1222
+mechanism-adamw-s6                       1526 readings to step 15259, val 3.2474 at 15259, bias_span 0.1119, router_input_similarity 0.0752, max_load_ratio_early 1.1425, router_update_common_share 0.1245
+mechanism-adamw-s7                       1526 readings to step 15259, val 3.2641 at 15259, bias_span 0.0881, router_input_similarity 0.0711, max_load_ratio_early 1.1156, router_update_common_share 0.1245
+mechanism-adamw-s8                       1526 readings to step 15259, val 3.2642 at 15259, bias_span 0.0853, router_input_similarity 0.0875, max_load_ratio_early 1.1101, router_update_common_share 0.1134
+mechanism-muon-balancer4x-s6             1526 readings to step 15259, val 3.1762 at 15259, bias_span 0.1379, router_input_similarity 0.3994, max_load_ratio_early 1.5750, router_update_common_share 0.1621
+mechanism-muon-balancer4x-s7             1526 readings to step 15259, val 3.1831 at 15259, bias_span 0.1481, router_input_similarity 0.3991, max_load_ratio_early 1.7796, router_update_common_share 0.1577
+mechanism-muon-balancer4x-s8             1526 readings to step 15259, val 3.1714 at 15259, bias_span 0.0965, router_input_similarity 0.4002, max_load_ratio_early 1.5405, router_update_common_share 0.1643
+mechanism-muon-s6                        1526 readings to step 15259, val 3.1786 at 15259, bias_span 0.1527, router_input_similarity 0.3991, max_load_ratio_early 4.4839, router_update_common_share 0.1562
+mechanism-muon-s7                        1526 readings to step 15259, val 3.1821 at 15259, bias_span 0.1770, router_input_similarity 0.4034, max_load_ratio_early 3.3138, router_update_common_share 0.1578
+mechanism-muon-s8                        1526 readings to step 15259, val 3.1701 at 15259, bias_span 0.1799, router_input_similarity 0.4171, max_load_ratio_early 4.0859, router_update_common_share 0.1661
+runs 12, missing []; train_windows [9820365]
+
+largest difference from the analyses: bias_span_first 5.5e-10, router_input_similarity_first 1.1e-16, max_load_ratio_first_early 0.0e+00, router_update_common_share_first 1.1e-16
+problems: none
