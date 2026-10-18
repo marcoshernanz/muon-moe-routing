@@ -1,0 +1,4 @@
+RQ3 with (i): 33 RQ3 runs (52.4 card-hours) and 15 confirmation runs (103.4); the chain 41.2 h wall, 155.8 card-hours busy (94 percent), dollars first chain's host (Taiwan) 91 / Japan 97 / North Carolina 126
+RQ3 without (i): 30 RQ3 runs (47.5 card-hours) and 15 confirmation runs (103.4); the chain 40.5 h wall, 150.9 card-hours busy (93 percent), dollars first chain's host (Taiwan) 89 / Japan 95 / North Carolina 124
+RQ3 alone: 33 runs, the chain 14.3 h wall, 52.4 card-hours busy (91 percent), dollars first chain's host (Taiwan) 32 / Japan 34 / North Carolina 44
+The confirmation tier alone: 15 runs, the chain 34.6 h wall, 103.4 card-hours busy (75 percent), dollars first chain's host (Taiwan) 76 / Japan 81 / North Carolina 106

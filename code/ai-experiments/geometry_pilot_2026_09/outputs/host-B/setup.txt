@@ -1,0 +1,13 @@
+index, name, driver_version, memory.total [MiB], clocks.max.sm [MHz], power.limit [W], power.max_limit [W]
+0, NVIDIA GeForce RTX 5090, 580.159.03, 32607 MiB, 3090 MHz, 575.00 W, 575.00 W
+cpus 24
+Model name:                              Intel(R) Xeon(R) CPU E5-2670 v3 @ 2.30GHz
+               total        used        free      shared  buff/cache   available
+Mem:              62           2          51           0           8          59
+Swap:              0           0           0
+overlay         120G  9.4M  120G   1% /
+ + yarl==1.24.5
+uv sync 364 s
+2.14.0+cu130 13.0 ['NVIDIA GeForce RTX 5090']
+hf download 414 s
+download() 2 s, 1021 files, 19G

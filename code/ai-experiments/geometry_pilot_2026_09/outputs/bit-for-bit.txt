@@ -1,0 +1,7 @@
+mechanism-adamw-s0 against runs/tuning/adamw/lr0.002:
+metrics.jsonl: 763 lines, the same bit for bit (lengths 763 and 763)
+routing.jsonl: 763 lines, the same bit for bit (lengths 763 and 763)
+
+mechanism-muon-s0 against runs/tuning/muon/lr0.004:
+metrics.jsonl: 763 lines, the same bit for bit (lengths 763 and 763)
+routing.jsonl: 763 lines, the same bit for bit (lengths 763 and 763)

@@ -1,0 +1,13 @@
+index, name, driver_version, memory.total [MiB], clocks.max.sm [MHz], power.limit [W], power.max_limit [W]
+0, NVIDIA GeForce RTX 5090, 580.126.09, 32607 MiB, 3090 MHz, 575.00 W, 575.00 W
+cpus 96
+Model name:                           AMD EPYC 7R32 48-Core Processor
+               total        used        free      shared  buff/cache   available
+Mem:             188          11          24           0         153         176
+Swap:              7           0           7
+overlay         120G  2.5M  120G   1% /
+ + yarl==1.24.5
+uv sync 301 s
+2.14.0+cu130 13.0 ['NVIDIA GeForce RTX 5090']
+hf download 1239 s
+download() 5 s, 1021 files, 19G
