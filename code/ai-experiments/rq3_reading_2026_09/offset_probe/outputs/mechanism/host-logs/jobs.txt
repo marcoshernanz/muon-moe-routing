@@ -1,0 +1,13 @@
+16:44:34 gpu 2: muon_except_router-0.5-1-plain-s3: exit 0 in 1275s
+16:44:35 gpu 1: muon-1-1-plain-s3: exit 0 in 1275s
+16:44:35 gpu 3: muon-1-4-plain-s3: exit 0 in 1276s
+16:44:36 gpu 0: muon-1-1-centred-s3: exit 0 in 1276s
+17:01:46 gpu 0: adamw-1-1-plain-s3: exit 0 in 1030s
+17:04:31 gpu 3: muon-1-4-plain-s4: exit 0 in 1196s
+17:04:31 gpu 1: muon_except_router-0.5-1-plain-s4: exit 0 in 1196s
+17:04:31 gpu 2: muon-1-1-centred-s4: exit 0 in 1197s
+17:21:46 gpu 0: muon-1-1-centred-s5: exit 0 in 1201s
+17:24:18 gpu 2: muon-0.5-1-plain-s3: exit 0 in 1186s
+17:24:20 gpu 3: muon_except_router-0.5-1-plain-s5: exit 0 in 1189s
+17:24:26 gpu 1: muon-1-4-plain-s5: exit 0 in 1195s
+done in 3667s; not run: []

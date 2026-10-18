@@ -1,0 +1,10 @@
+index, name, driver_version, memory.total [MiB], power.limit [W]
+0, NVIDIA GeForce RTX 5090, 595.84, 32607 MiB, 600.00 W
+1, NVIDIA GeForce RTX 5090, 595.84, 32607 MiB, 600.00 W
+2, NVIDIA GeForce RTX 5090, 595.84, 32607 MiB, 600.00 W
+3, NVIDIA GeForce RTX 5090, 595.84, 32607 MiB, 600.00 W
+ + yarl==1.24.5
+uv sync 315 s
+hf download 1999 s
+download() 13 s, 1021 files
+SETUP_OK

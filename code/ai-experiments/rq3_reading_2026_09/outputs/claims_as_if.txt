@@ -1,0 +1,26 @@
+   claim                         endpoint       lower             higher   view  seeds  difference     low    high   effect signs verdict
+       O       max_load_ratio_first_early       adamw               muon tokens      3     -2.9276 -3.5157 -2.1653  -5.9564   ---    pass
+       O       max_load_ratio_first_early       adamw               muon   loss      3     -2.9276 -3.5157 -2.1653  -5.9564   ---    pass
+       O       max_load_ratio_first_early       adamw muon_except_router tokens      3     -5.4981 -5.7517 -5.0570 -19.7957   ---    pass
+       O       max_load_ratio_first_early       adamw muon_except_router   loss      3     -5.4981 -5.7517 -5.0570 -19.7957   ---    pass
+O-router       max_load_ratio_first_early        muon muon_except_router tokens      3     -2.5705 -3.5204 -1.9550  -4.5538   ---    pass
+O-router       max_load_ratio_first_early        muon muon_except_router   loss      3     -2.5705 -3.5204 -1.9550  -4.5538   ---    pass
+  offset            mean_score_span_first       adamw               muon tokens      3     -0.0447 -0.0579 -0.0377  -2.3081   ---    pass
+  offset            mean_score_span_first       adamw               muon   loss      3     -0.0563 -0.0724 -0.0468  -2.6778   ---    pass
+  offset            mean_score_span_first       adamw muon_except_router tokens      3     -0.0422 -0.0578 -0.0320  -3.2136   ---    pass
+  offset            mean_score_span_first       adamw muon_except_router   loss      3     -0.0522 -0.0640 -0.0453  -4.1104   ---    pass
+  offset            mean_score_span_first muon_router               muon tokens      3     -0.0398 -0.0742 -0.0047  -1.9041   ---    pass
+  offset            mean_score_span_first muon_router               muon   loss      3     -0.0506 -0.0862 -0.0131  -2.3405   ---    pass
+  offset            mean_score_span_first muon_router muon_except_router tokens      3     -0.0372 -0.0605 -0.0029  -2.4370   ---    pass
+  offset            mean_score_span_first muon_router muon_except_router   loss      3     -0.0464 -0.0667 -0.0135  -3.1716   ---    pass
+       U router_update_common_share_first       adamw muon_except_router tokens      3     -0.3678 -0.3747 -0.3620 -62.3385   ---    pass
+       U router_update_common_share_first       adamw muon_except_router   loss      3     -0.3685 -0.3748 -0.3626 -60.6911   ---    pass
+       U router_update_common_share_first        muon muon_except_router tokens      3     -0.3370 -0.3422 -0.3283 -70.0213   ---    pass
+       U router_update_common_share_first        muon muon_except_router   loss      3     -0.3370 -0.3421 -0.3283 -70.0248   ---    pass
+
+Per arm and seed, max_load_ratio_first_early:
+adamw                1.126 1.136 1.146
+muon_router          1.157 1.159 1.164
+muon                 4.228 3.301 4.662
+muon_except_router   6.183 6.821 6.898
+muon-muonlr0.5x      1.610 1.638 1.931

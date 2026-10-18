@@ -1,0 +1,65 @@
+First mixture; span, cosine and offset over steps 501-3,000, the busiest expert's load over 301-500 and 501-1,262 (8 is every token on one expert), the router update's common share over 301-1,262, validation loss at step 3,000.
+  run                                                  span load 301-500   load early       cosine       offset       common   val loss
+probe adamw s3 (to step 3000)
+  probe                                              0.1540       1.1847       1.1256       0.0500       0.1081       0.1130     3.7909
+  chain adamw                                        0.1540       1.1847       1.1256       0.0500       0.1081       0.1130     3.7909
+probe muon-balancer4x s3 (to step 3000)
+  probe                                              0.1890       1.9644       1.5411       0.4203       0.1291       0.1897     3.7239
+  chain muon                                         0.4113       4.9976       4.2276       0.4531       0.2639       0.1843     3.7236
+  chain adamw                                        0.1540       1.1847       1.1256       0.0500       0.1081       0.1130     3.7909
+probe muon-balancer4x s4 (to step 3000)
+  probe                                              0.1938       1.8107       1.4371       0.4144       0.1356       0.1803     3.7247
+  chain muon                                         0.4533       3.8554       3.3010       0.4392       0.2710       0.1882     3.7255
+  chain adamw                                        0.1703       1.1943       1.1358       0.0541       0.1394       0.1163     3.8010
+probe muon-balancer4x s5 (to step 3000)
+  probe                                              0.2812       2.0284       1.8055       0.4312       0.2057       0.1961     3.7266
+  chain muon                                         0.3589       7.3158       4.6617       0.4516       0.2540       0.1873     3.7301
+  chain adamw                                        0.1497       1.1828       1.1460       0.0563       0.1188       0.1189     3.7878
+probe muon-centred s3 (to step 3000)
+  probe                                              0.2051       1.1688       1.1084       0.4229       0.0459       0.1355     3.7245
+  chain muon                                         0.4113       4.9976       4.2276       0.4531       0.2639       0.1843     3.7236
+  chain adamw                                        0.1540       1.1847       1.1256       0.0500       0.1081       0.1130     3.7909
+probe muon-centred s4 (to step 3000)
+  probe                                              0.2096       1.2114       1.1605       0.4102       0.0386       0.1370     3.7257
+  chain muon                                         0.4533       3.8554       3.3010       0.4392       0.2710       0.1882     3.7255
+  chain adamw                                        0.1703       1.1943       1.1358       0.0541       0.1394       0.1163     3.8010
+probe muon-centred s5 (to step 3000)
+  probe                                              0.2145       1.4143       1.1344       0.4294       0.0286       0.1395     3.7289
+  chain muon                                         0.3589       7.3158       4.6617       0.4516       0.2540       0.1873     3.7301
+  chain adamw                                        0.1497       1.1828       1.1460       0.0563       0.1188       0.1189     3.7878
+probe muon-muonlr0.5x s3 (to step 3000)
+  probe                                              0.2071       1.6972       1.6097       0.3981       0.1542       0.1719     3.6861
+  chain muon-muonlr0.5x                              0.2071       1.6972       1.6097       0.3981       0.1542       0.1719     3.6861
+probe muon s3 (to step 3000)
+  probe                                              0.4113       4.9976       4.2276       0.4531       0.2639       0.1843     3.7236
+  chain muon                                         0.4113       4.9976       4.2276       0.4531       0.2639       0.1843     3.7236
+probe muon_except_router-muonlr0.5x s3 (to step 3000)
+  probe                                              0.2920       4.1174       4.1826       0.4142       0.1844       0.4745     3.6885
+  chain muon-muonlr0.5x                              0.2071       1.6972       1.6097       0.3981       0.1542       0.1719     3.6861
+  chain muon_except_router                           0.3566       6.2853       6.1827       0.4444       0.2497       0.4877     3.7291
+probe muon_except_router-muonlr0.5x s4 (to step 3000)
+  probe                                              0.3423       5.7128       4.1505       0.4111       0.2108       0.4785     3.6913
+  chain muon-muonlr0.5x                              0.1914       1.9374       1.6381       0.4151       0.1439       0.1799     3.6888
+  chain muon_except_router                           0.4232       7.7611       6.8214       0.4184       0.3437       0.4725     3.7286
+probe muon_except_router-muonlr0.5x s5 (to step 3000)
+  probe                                              0.2977       4.9726       5.5314       0.4218       0.2027       0.4932     3.6948
+  chain muon-muonlr0.5x                              0.2626       2.0435       1.9306       0.4143       0.1766       0.1908     3.6920
+  chain muon_except_router                           0.3876       7.3689       6.8977       0.4428       0.2989       0.4915     3.7310
+
+Per probe arm, seed means, and the chain's arms at the same seeds:
+  arm (seeds)                                          span load 301-500   load early       cosine       offset       common   val loss
+  probe adamw (3)                                    0.1540       1.1847       1.1256       0.0500       0.1081       0.1130     3.7909
+  chain adamw                                        0.1540       1.1847       1.1256       0.0500       0.1081       0.1130     3.7909
+  probe muon-balancer4x (3,4,5)                      0.2213       1.9345       1.5946       0.4220       0.1568       0.1887     3.7251
+  chain muon                                         0.4078       5.3896       4.0634       0.4480       0.2630       0.1866     3.7264
+  chain adamw                                        0.1580       1.1873       1.1358       0.0534       0.1221       0.1161     3.7932
+  probe muon-centred (3,4,5)                         0.2097       1.2649       1.1344       0.4208       0.0377       0.1374     3.7264
+  chain muon                                         0.4078       5.3896       4.0634       0.4480       0.2630       0.1866     3.7264
+  chain adamw                                        0.1580       1.1873       1.1358       0.0534       0.1221       0.1161     3.7932
+  probe muon-muonlr0.5x (3)                          0.2071       1.6972       1.6097       0.3981       0.1542       0.1719     3.6861
+  chain muon-muonlr0.5x                              0.2071       1.6972       1.6097       0.3981       0.1542       0.1719     3.6861
+  probe muon (3)                                     0.4113       4.9976       4.2276       0.4531       0.2639       0.1843     3.7236
+  chain muon                                         0.4113       4.9976       4.2276       0.4531       0.2639       0.1843     3.7236
+  probe muon_except_router-muonlr0.5x (3,4,5)        0.3107       4.9343       4.6215       0.4157       0.1993       0.4821     3.6915
+  chain muon-muonlr0.5x                              0.2204       1.8927       1.7261       0.4092       0.1582       0.1809     3.6889
+  chain muon_except_router                           0.3891       7.1384       6.6339       0.4352       0.2974       0.4839     3.7296

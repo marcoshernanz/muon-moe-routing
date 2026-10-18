@@ -1,0 +1,131 @@
+First mixture per run and window of steps (1-300, 301-500, 501-800, 801-1500, 1501-3000):
+span = bias span; logit = spread of the batch-mean logit (the offset the scores carry); offset = spread of w_e . x_bar (what an uncentred input would give);
+strength = |mean input| / mean |input|; lean = spread of the rows' components along the mean input, times mean |input|; load = busiest expert / even share;
+mirror = correlation across experts of the bias with minus the mean logit, per step; mirror_u = the same with minus w_e . x_bar
+
+adamw s3 (to step 3000, final val loss 3.7909)
+  span               0.1411    0.1274    0.2046    0.1759    0.1338
+  logit_spread       0.6635    0.3666    0.5406    0.5178    0.4521
+  offset_spread      0.6635    0.3666    0.5406    0.5178    0.4521
+  strength           0.2519    0.1159    0.1605    0.1965    0.2297
+  lean_spread        3.1003    3.1538    3.3627    2.6502    1.9729
+  max_load           1.8774    1.1847    1.1495    1.1074    1.0823
+  mirror             0.8697    0.5936    0.8168    0.8528    0.8146
+  mirror_uncentred   0.8697    0.5936    0.8168    0.8528    0.8146
+muon s3 (to step 3000, final val loss 3.7236)
+  span               0.2107    0.4994    0.6909    0.6275    0.2545
+  logit_spread       1.1558    4.4306    9.5581    5.3175    3.4516
+  offset_spread      1.1558    4.4306    9.5581    5.3175    3.4516
+  strength           0.4152    0.5453    0.6655    0.6945    0.6653
+  lean_spread        2.8235    7.9760   14.3193    7.6480    5.1854
+  max_load           2.2342    4.9976    5.5436    3.0541    1.8502
+  mirror             0.9015    0.8242    0.7091    0.7502    0.8300
+  mirror_uncentred   0.9015    0.8242    0.7091    0.7502    0.8300
+muon-muonlr0.5x s3 (to step 3000, final val loss 3.6861)
+  span               0.1726    0.2144    0.2383    0.2695    0.1719
+  logit_spread       0.8434    0.9009    1.5469    2.6290    1.8946
+  offset_spread      0.8434    0.9009    1.5469    2.6290    1.8946
+  strength           0.4444    0.5363    0.6346    0.6401    0.6246
+  lean_spread        1.9498    1.6752    2.4282    4.1055    3.0321
+  max_load           1.7157    1.6972    1.8214    1.4083    1.2025
+  mirror             0.9538    0.8604    0.7653    0.7806    0.7942
+  mirror_uncentred   0.9538    0.8604    0.7653    0.7806    0.7942
+muon_except_router-muonlr0.5x s3 (to step 3000, final val loss 3.6885)
+  span               0.1949    0.4207    0.5469    0.4331    0.1755
+  logit_spread       1.0366    2.5402    5.5866    5.0223    5.7595
+  offset_spread      1.0366    2.5402    5.5866    5.0223    5.7595
+  strength           0.4446    0.5321    0.6396    0.6581    0.6366
+  lean_spread        2.3887    4.6884    8.7063    7.6403    9.0415
+  max_load           2.2538    4.1174    4.1450    3.9625    2.3578
+  mirror             0.8513    0.5448    0.7590    0.6438    0.7364
+  mirror_uncentred   0.8513    0.5448    0.7590    0.6438    0.7364
+muon_except_router-muonlr0.5x s4 (to step 3000, final val loss 3.6913)
+  span               0.2083    0.2561    0.5406    0.4435    0.2555
+  logit_spread       1.1445    2.9051    5.5448    5.7227    5.2278
+  offset_spread      1.1445    2.9051    5.5448    5.7227    5.2278
+  strength           0.4350    0.5265    0.6385    0.6597    0.6318
+  lean_spread        2.6818    5.3740    8.6397    8.6670    8.2790
+  max_load           2.3106    5.7128    4.1893    3.7674    2.3791
+  mirror             0.8852    0.5270    0.7307    0.6643    0.7670
+  mirror_uncentred   0.8852    0.5270    0.7307    0.6643    0.7670
+muon_except_router-muonlr0.5x s5 (to step 3000, final val loss 3.6948)
+  span               0.1827    0.2510    0.5210    0.4144    0.1985
+  logit_spread       0.9943    3.0821    7.3947    4.9878    5.4372
+  offset_spread      0.9943    3.0821    7.3947    4.9878    5.4372
+  strength           0.4520    0.5341    0.6416    0.6721    0.6392
+  lean_spread        2.2298    5.6517   11.5095    7.4156    8.5072
+  max_load           2.1581    4.9726    5.2999    5.2791    2.7351
+  mirror             0.7715    0.5461    0.8012    0.6550    0.6925
+  mirror_uncentred   0.7715    0.5461    0.8012    0.6550    0.6925
+muon-balancer4x s3 (to step 3000, final val loss 3.7239)
+  span               0.2276    0.3202    0.3201    0.2353    0.1416
+  logit_spread       0.8680    1.4754    1.6364    1.1726    0.8795
+  offset_spread      0.8680    1.4754    1.6364    1.1726    0.8795
+  strength           0.4183    0.5573    0.6609    0.6660    0.6374
+  lean_spread        2.0664    2.6558    2.4781    1.7584    1.3791
+  max_load           1.2332    1.9644    1.8482    1.2792    1.1512
+  mirror             0.9609    0.8365    0.7447    0.8096    0.8315
+  mirror_uncentred   0.9609    0.8365    0.7447    0.8096    0.8315
+muon-balancer4x s4 (to step 3000, final val loss 3.7247)
+  span               0.2217    0.3506    0.3293    0.2455    0.1423
+  logit_spread       0.9006    1.5182    1.9117    1.4751    1.1787
+  offset_spread      0.9006    1.5182    1.9117    1.4751    1.1787
+  strength           0.4064    0.5386    0.6488    0.6574    0.6368
+  lean_spread        2.2266    2.8198    2.9457    2.2406    1.8510
+  max_load           1.3182    1.8107    1.6125    1.2851    1.2005
+  mirror             0.9677    0.8561    0.7935    0.8319    0.8436
+  mirror_uncentred   0.9677    0.8561    0.7935    0.8319    0.8436
+muon-balancer4x s5 (to step 3000, final val loss 3.7266)
+  span               0.2139    0.3468    0.4675    0.3482    0.2127
+  logit_spread       0.8305    1.5505    3.6126    3.2153    1.8033
+  offset_spread      0.8305    1.5505    3.6126    3.2153    1.8033
+  strength           0.4212    0.5570    0.6717    0.6789    0.6432
+  lean_spread        1.9883    2.7826    5.3674    4.7226    2.7993
+  max_load           1.2739    2.0284    2.3523    1.3844    1.2345
+  mirror             0.9531    0.8021    0.7836    0.8239    0.8672
+  mirror_uncentred   0.9531    0.8021    0.7836    0.8239    0.8672
+muon-centred s3 (to step 3000, final val loss 3.7245)
+  span               0.0607    0.1632    0.2416    0.2402    0.1816
+  logit_spread       0.0000    0.0000    0.0000    0.0000    0.0000
+  offset_spread      0.8758    3.0826    6.9093    6.6351    4.8518
+  strength           0.4135    0.5559    0.6662    0.6695    0.6377
+  lean_spread        2.1133    5.3991   10.3571    9.8999    7.6049
+  max_load           1.1019    1.1688    1.1335    1.0930    1.0943
+  mirror            -0.0094   -0.0611   -0.0059    0.0655    0.0283
+  mirror_uncentred   0.2420   -0.2527   -0.5396   -0.5706   -0.5000
+muon-centred s4 (to step 3000, final val loss 3.7257)
+  span               0.0602    0.1373    0.2230    0.2435    0.1912
+  logit_spread       0.0000    0.0000    0.0000    0.0000    0.0000
+  offset_spread      1.0796    3.4976    6.7742    6.7833    4.9700
+  strength           0.4035    0.5395    0.6523    0.6595    0.6286
+  lean_spread        2.7053    6.3562   10.3710   10.2792    7.8996
+  max_load           1.0819    1.2114    1.1973    1.1214    1.0777
+  mirror            -0.1092    0.0110   -0.0335   -0.0074   -0.0182
+  mirror_uncentred   0.1799   -0.0386   -0.5773   -0.6115   -0.5518
+muon-centred s5 (to step 3000, final val loss 3.7289)
+  span               0.0568    0.1610    0.2544    0.2339    0.1976
+  logit_spread       0.0000    0.0000    0.0000    0.0000    0.0000
+  offset_spread      0.9020    3.7800    7.9049    8.5773    6.4662
+  strength           0.4177    0.5502    0.6729    0.6787    0.6399
+  lean_spread        2.1656    6.7060   11.7191   12.6245   10.0981
+  max_load           1.1114    1.4143    1.1872    1.0918    1.0707
+  mirror             0.0099   -0.0161   -0.0467   -0.0011   -0.0185
+  mirror_uncentred   0.2479   -0.2119   -0.6893   -0.6785   -0.5553
+
+Per arm, seed means over steps 501 to 3,000 (after the warmup), and the early load over steps 501 to 800:
+arm                seeds     span    logit   offset  strength     lean   mirror mirror_u  early load  val loss
+adamw                  1   0.1541   0.4811   0.4811    0.2121   2.3293    0.826    0.826       1.149    3.7909
+muon                   1   0.4113   4.7068   4.7068    0.6735   6.9710    0.793    0.793       5.544    3.7236
+muon-muonlr0.5x        1   0.2072   2.0585   2.0585    0.6301   3.2602    0.787    0.787       1.821    3.6861
+muon_except_router-muonlr0.5x     3   0.3107   5.4943   5.4943    0.6440   8.5339    0.714    0.714       4.545    3.6915
+muon-balancer4x        3   0.2214   1.6059   1.6059    0.6496   2.4515    0.831    0.831       1.938    3.7251
+muon-centred           3   0.2098   0.0000   6.1741    0.6483   9.4801    0.000   -0.567       1.173    3.7264
+
+The offset's two factors against all-AdamW (ratios of the seed means over steps 501 to 3,000):
+  muon               offset x9.78 = strength x3.18 and lean spread x2.99; span x2.67
+  muon-muonlr0.5x    offset x4.28 = strength x2.97 and lean spread x1.40; span x1.34
+  muon_except_router-muonlr0.5x offset x11.42 = strength x3.04 and lean spread x3.66; span x2.02
+  muon-balancer4x    offset x3.34 = strength x3.06 and lean spread x1.05; span x1.44
+
+Centred against plain, per seed (span over steps 501 to 3,000; busiest expert over 501 to 800; final validation loss):
+  muon   s3: span 0.4113 -> 0.2052; early load 5.544 -> 1.133; val loss 3.7236 -> 3.7245 (+0.0009)

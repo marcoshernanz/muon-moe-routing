@@ -1,0 +1,17 @@
+adamw: sweep at 0.5B 0.00025 3.5923, 0.0005 3.4585, 0.001 3.4024, 0.002 3.3858, 0.004 3.3939
+  best rate at 0.5B: 2.25e-03 (range 2.06e-03 to 2.61e-03), factor 1.00
+  best rate at 1B  : 1.80e-03 (range 1.65e-03 to 2.09e-03), factor 0.80
+  best rate at 3B  : 1.27e-03 (range 1.16e-03 to 1.47e-03), factor 0.56
+muon: sweep at 0.5B 0.002 3.3027, 0.004 3.3000, 0.008 3.3182, 0.016 3.3850, 0.032 3.4873
+  best rate at 0.5B: 3.10e-03 (range 2.21e-03 to 3.54e-03), factor 1.00
+  best rate at 1B  : 2.48e-03 (range 1.77e-03 to 2.84e-03), factor 0.80
+  best rate at 3B  : 1.75e-03 (range 1.24e-03 to 2.00e-03), factor 0.56
+momentum: sweep at 0.5B 0.00025 3.4566, 0.0005 3.3960, 0.001 3.4047, 0.002 3.7118, 0.004 3.8462, 0.008 3.8385
+  best rate at 0.5B: 6.48e-04 (range 6.18e-04 to 6.86e-04), factor 1.00
+  best rate at 1B  : 5.19e-04 (range 4.95e-04 to 5.50e-04), factor 0.80
+  best rate at 3B  : 3.65e-04 (range 3.48e-04 to 3.87e-04), factor 0.56
+
+Measured at 1B tokens (the second chain), final validation loss per seed 3, 4, 5:
+  Muon 2e-3 minus Muon 4e-3: -0.0119 -0.0099 -0.0075
+  AdamW 2e-3 minus Muon 2e-3: +0.0946 +0.0920 +0.0748
+  AdamW 2e-3 minus Muon 4e-3: +0.0828 +0.0821 +0.0673
