@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+fineweb/
+/kaggle/
+*.egg-info/
+.DS_Store
+runs/
+
+code/data/
+
+thesis/tex/build/
+thesis/tex-report/build/
