@@ -35,3 +35,7 @@ latexmk
 ```
 
 The build uses pdfLaTeX and writes the PDF to `thesis/tex/build/main.pdf`.
+
+## License
+
+Everything under `code/` is under the MIT license (`LICENSE`). The memoria in `thesis/tex/` is not: its rights page applies to it. The template in `thesis/tex/tfgtfmthesisuam/` keeps its own license, the AGPL-3.0.
