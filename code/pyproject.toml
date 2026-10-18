@@ -1,0 +1,81 @@
+[project]
+name = "tfg"
+version = "0.0.0"
+description = "How the Optimizer Shapes Routing: Load Balancing, Specialization, and Stability in Mixture-of-Experts Language Models Trained with Muon"
+requires-python = ">=3.13"
+dependencies = [
+    "datasets>=5.0.1",
+    "huggingface-hub>=1.8.0",
+    "matplotlib>=3.11.1",
+    "numpy>=2.4.2",
+    "pandas>=3.0.5",
+    "scipy>=1.18.1",
+    "tiktoken>=0.14.0",
+    "torch>=2.11.0",
+    "tyro>=1.0.16",
+]
+
+[dependency-groups]
+dev = [
+    "pandas-stubs>=3.0.5.260730",
+    "pylint>=4.0.8",
+    "pyright>=1.1.411",
+    "pytest",
+    "ruff",
+    "scipy-stubs>=1.18.1.0",
+]
+# Only the frozen AI-written pilots under ai-experiments/ need these; the thesis package never imports them.
+pilots = ["jax>=0.9.1", "optax>=0.2.8"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tfg/tests"]
+tmp_path_retention_policy = "failed"
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+src = ["tfg"]
+extend-exclude = ["ai-experiments"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pyright]
+# Same settings as llm-lab and as the editor (.vscode/settings.json): strict, minus the five
+# "unknown type" rules that torch's partially typed API trips constantly.
+typeCheckingMode = "strict"
+pythonVersion = "3.13"
+include = ["tfg"]
+exclude = ["ai-experiments", ".venv"]
+reportUnknownMemberType = false
+reportUnknownVariableType = false
+reportUnknownArgumentType = false
+reportUnknownParameterType = false
+reportUnknownLambdaType = false
+
+[tool.pylint.main]
+# Pylint is off in the editor (as in llm-lab); `uv run pylint tfg` stays as a command-line check.
+ignore = ["ai-experiments", ".venv"]
+
+[tool.pylint."messages control"]
+# Docstrings are written where they help, not to satisfy a linter. A paragraph of a docstring or a comment is one line, wrapped by the editor; ruff format keeps the code itself within the line length.
+disable = [
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "line-too-long",
+]
+
+[tool.pylint.format]
+max-line-length = 100
+
+[tool.pylint.design]
+# Model constructors take the architecture's shape, and train() every run setting, as keywords.
+max-args = 25
+max-positional-arguments = 3
+max-attributes = 20
+# The training loop keeps its state in locals rather than in a class, and its save points inline.
+max-locals = 55
+max-statements = 65
+max-branches = 15
