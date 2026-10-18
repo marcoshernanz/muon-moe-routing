@@ -1,0 +1,586 @@
+== RQ1: (a) against (b), seeds 0 to 2, 1B tokens
+  val_loss                           AdamW 3.2427, 3.2620, 3.2592 | Muon 3.1806, 3.1758, 3.1744
+  bias_span                          AdamW 0.1045, 0.1086, 0.1010 | Muon 0.1406, 0.1390, 0.1325
+  update_load_correlation            AdamW 0.3864, 0.3660, 0.3846 | Muon 0.0285, 0.0205, 0.0228
+  update_load_correlation_spectral   AdamW 0.1073, 0.0967, 0.1031 | Muon 0.0341, 0.0355, 0.0348
+  load_churn                         AdamW 0.0343, 0.0312, 0.0317 | Muon 0.0386, 0.0389, 0.0372
+  load_churn_early                   AdamW 0.0499, 0.0483, 0.0491 | Muon 0.0665, 0.0651, 0.0597
+  load_churn_warmup                  AdamW 0.1023, 0.1035, 0.1016 | Muon 0.0820, 0.0855, 0.0824
+  specialization                     AdamW 0.1096, 0.1013, 0.1035 | Muon 0.1158, 0.1186, 0.1210
+  usage_perplexity                   AdamW 31.8810, 31.9119, 31.9113 | Muon 31.7637, 31.6916, 31.8626
+  max_load_ratio                     AdamW 1.1700, 1.1492, 1.1491 | Muon 1.2427, 1.2876, 1.1989
+muon - adamw, equal tokens         val_loss                             -0.0777 (-0.0862 to -0.0621) effect -10.1 ---
+muon - adamw, equal tokens         bias_span                            +0.0327 (+0.0304 to +0.0361) effect 8.1 +++
+muon - adamw, equal tokens         update_load_correlation              -0.3550 (-0.3618 to -0.3454) effect -41.6 ---
+muon - adamw, equal tokens         update_load_correlation_spectral     -0.0676 (-0.0732 to -0.0611) effect -17.6 ---
+muon - adamw, equal tokens         load_churn                           +0.0058 (+0.0043 to +0.0077) effect 4.3 +++
+muon - adamw, equal tokens         load_churn_early                     +0.0147 (+0.0106 to +0.0168) effect 5.6 +++
+muon - adamw, equal tokens         load_churn_warmup                    -0.0191 (-0.0203 to -0.0180) effect -12.7 ---
+muon - adamw, equal tokens         specialization                       +0.0136 (+0.0062 to +0.0174) effect 3.8 +++
+muon - adamw, equal tokens         usage_perplexity                     -0.1288 (-0.2203 to -0.0487) effect -2.1 ---
+muon - adamw, equal tokens         max_load_ratio                       +0.0870 (+0.0498 to +0.1384) effect 2.7 +++
+  per layer adamw s0: 0.072, 0.152, 0.090, 0.108, 0.084, 0.091, 0.135
+    first 0.0720, other six 0.1099
+  per layer adamw s1: 0.105, 0.118, 0.146, 0.075, 0.090, 0.104, 0.122
+    first 0.1052, other six 0.1092
+  per layer adamw s2: 0.075, 0.091, 0.140, 0.087, 0.098, 0.121, 0.093
+    first 0.0750, other six 0.1053
+  per layer muon s0: 0.223, 0.136, 0.096, 0.124, 0.122, 0.146, 0.137
+    first 0.2229, other six 0.1269
+  per layer muon s1: 0.190, 0.114, 0.122, 0.108, 0.117, 0.128, 0.195
+    first 0.1904, other six 0.1304
+  per layer muon s2: 0.168, 0.132, 0.123, 0.123, 0.117, 0.112, 0.152
+    first 0.1677, other six 0.1267
+  first layer, muon - adamw per seed: +0.1509, +0.0852, +0.0927
+  other six, muon - adamw per seed: +0.0170, +0.0213, +0.0213
+  first layer adamw steps 501-1000: mean 0.189
+  first layer adamw steps 1001-2000: mean 0.138
+  first layer adamw steps 2001-4000: mean 0.108
+  first layer adamw steps 4001-8000: mean 0.086
+  first layer adamw steps 8001-15259: mean 0.062
+  first layer muon steps 501-1000: mean 0.737
+  first layer muon steps 1001-2000: mean 0.394
+  first layer muon steps 2001-4000: mean 0.202
+  first layer muon steps 4001-8000: mean 0.171
+  first layer muon steps 8001-15259: mean 0.139
+  annex columns: Unnamed: 0, saturation, saturation.1, saturation.2, coactivation_max, coactivation_max.1, coactivation_max.2, coactivation_mean, coactivation_mean.1, coactivation_mean.2, routing_purity, routing_purity.1, routing_purity.2, hidden_cosine_between, hidden_cosine_between.1, hidden_cosine_between.2, hidden_cosine_within, hidden_cosine_within.1, hidden_cosine_within.2, routing_cosine_between, routing_cosine_between.1, routing_cosine_between.2, expert_similarity_mean, expert_similarity_mean.1, expert_similarity_mean.2, gradient_alignment_mean, gradient_alignment_mean.1, gradient_alignment_mean.2
+
+== Tuning: 0.5B tokens, seed 0
+  adamw     0.00025 loss 3.5923 span 0.1197 first 0.1088
+  adamw     0.00050 loss 3.4585 span 0.1317 first 0.1442
+  adamw     0.00100 loss 3.4024 span 0.1135 first 0.1101
+  adamw     0.00200 loss 3.3858 span 0.1126 first 0.0830
+  adamw     0.00400 loss 3.3939 span 0.1205 first 0.0803
+  muon      0.00200 loss 3.3027 span 0.1233 first 0.1579
+  muon      0.00400 loss 3.3000 span 0.1623 first 0.2949
+  muon      0.00800 loss 3.3182 span 0.2132 first 0.4495
+  muon      0.01600 loss 3.3850 span 0.2920 first 0.9427
+  muon      0.03200 loss 3.4873 span 0.4080 first 0.9586
+  momentum  0.00025 loss 3.4566 span 0.1234 first 0.1291
+  momentum  0.00050 loss 3.3960 span 0.1069 first 0.1360
+  momentum  0.00100 loss 3.4047 span 0.2106 first 0.3902
+  momentum  0.00200 loss 3.7118 span 0.2810 first 0.2113
+  momentum  0.00400 loss 3.8462 span 0.2894 first 0.2120
+  momentum  0.00800 loss 3.8385 span 0.3220 first 0.1912
+
+== RQ2: the stress runs
+                                                     loss_capped                     load_churn_warmup                     router_logit_max_peak                        residual_max_peak                                  spikes        
+                                                            mean       min       max              mean       min       max                  mean        min         max              mean            min            max      mean min max
+family             lr_multiplier balancer_multiplier                                                                                                                                                                                     
+adamw              1.0           1.0                    3.589643  3.581357  3.593944          0.099968  0.098648  0.101814             14.417074  13.059900   16.570545       1023.956950     870.402832    1155.335938  0.000000   0   0
+                   2.0           1.0                    3.687379  3.682093  3.694815          0.103537  0.102089  0.104525             14.541812  13.631797   15.080918       1740.329386    1531.865967    2136.719238  0.333333   0   1
+                   4.0           1.0                    3.805164  3.801832  3.807584          0.116242  0.114213  0.118340             17.032734  16.198389   18.475187       4060.972819    3746.613281    4238.578125  0.000000   0   0
+                   8.0           1.0                    4.013704  4.009645  4.016188          0.138433  0.135496  0.141665             22.436763  21.301786   23.638201      81877.113932   32070.443359  164222.593750  0.000000   0   0
+                   16.0          1.0                    4.345114  4.337733  4.352399          0.153226  0.147950  0.156282             34.482992  33.947739   35.077843     381458.880208  143549.187500  751931.062500  1.666667   0   5
+muon               1.0           1.0                    3.583475  3.580991  3.586482          0.082763  0.080427  0.085633             16.281528  14.788058   18.877672       2080.754354    1857.885620    2224.421875  0.000000   0   0
+                   2.0           1.0                    3.707564  3.705573  3.710422          0.094062  0.091565  0.096628             18.792296  18.262436   19.772194       5121.525065    4728.687988    5617.007812  0.000000   0   0
+                   4.0           1.0                    3.882864  3.880295  3.886383          0.101694  0.100612  0.103042             27.221932  24.756792   29.861721       9159.328125    8857.135742    9726.130859  0.000000   0   0
+                   8.0           1.0                    4.122756  4.121481  4.125027          0.106425  0.105440  0.108372             31.943546  24.016426   40.637440      19173.681641   18719.361328   19768.349609  0.000000   0   0
+                   16.0          1.0                    4.442750  4.436021  4.451150          0.109034  0.105913  0.110599             97.600868  54.989883  169.822601      83228.510417   79547.164062   86672.257812  2.000000   0   6
+muon-balancer4x    4.0           4.0                    3.883178  3.880377  3.887334          0.090440  0.089265  0.092423             24.056331  18.118408   30.428051       8854.131022    7893.617676    9795.894531  0.000000   0   0
+muon_except_router 1.0           1.0                    3.585621  3.582059  3.589661          0.122390  0.119730  0.125373             14.258094  12.086245   15.440724       2317.430990    2096.448975    2463.821289  0.000000   0   0
+                   2.0           1.0                    3.708202  3.705666  3.710238          0.132472  0.130515  0.135098             14.002187  13.531460   14.710368       4932.285319    4434.081543    5583.877930  0.000000   0   0
+                   4.0           1.0                    3.881381  3.878766  3.883441          0.147036  0.141548  0.154494             15.191202  14.954638   15.582673       9199.642578    8831.346680    9638.901367  0.000000   0   0
+                   8.0           1.0                    4.121229  4.120032  4.122253          0.161648  0.156678  0.168457             17.859557  17.031982   19.131426      22920.574870   21745.359375   24670.804688  0.000000   0   0
+                   16.0          1.0                    4.442527  4.439499  4.447851          0.159708  0.157686  0.162666             31.656648  29.378605   34.266411      90078.364583   85581.031250   98345.890625  0.333333   0   1
+               family  sensitivity
+0               adamw     0.184330
+1                muon     0.240690
+2  muon_except_router     0.238487
+  episodes: 7
+                                     run              family  lr_multiplier  seed  start   end  step      loss    excess  large
+0               mechanism-adamw-lr16x-s1               adamw           16.0     1   4071  4071  4071  4.566111  0.222835  False
+1               mechanism-adamw-lr16x-s1               adamw           16.0     1   4490  4493  4492  4.704629  0.359324  False
+2                mechanism-adamw-lr2x-s2               adamw            2.0     2    581   581   581  4.822733  0.165637  False
+3                mechanism-muon-lr16x-s0                muon           16.0     0   5460  5460  5460  4.917162  0.493763  False
+4                mechanism-muon-lr16x-s0                muon           16.0     0   5969  5969  5969  6.372466  1.956073   True
+5                mechanism-muon-lr16x-s0                muon           16.0     0   7156  7159  7156  6.246766  1.823732   True
+6  mechanism-muon_except_router-lr16x-s1  muon_except_router           16.0     1   4996  4996  4996  4.658216  0.238365  False
+
+== RQ3: seeds 3 to 5, 1B tokens
+  (a)                val_loss 3.2527 [3.2439, 3.2575] | bias_span_first 0.0951 [0.0910, 0.1021] | router_input_similarity_first 0.0706 [0.0674, 0.0745] | mean_score_span_first 0.0950 [0.0855, 0.1096] | bias_span 0.1028 [0.0990, 0.1075] | load_churn_warmup 0.1018 [0.0988, 0.1033] | max_load_ratio_first_early 1.1358 [1.1256, 1.1460] | router_update_common_share_first 0.1292 [0.1249, 0.1352] | update_load_correlation 0.3707 [0.3546, 0.3852] | specialization 0.1082 [0.1066, 0.1090] | usage_perplexity_final 31.9482 [31.9305, 31.9628] | usage_perplexity_first_final 31.9832 [31.9787, 31.9864] | bias_span_first_early 0.1896 [0.1869, 0.1915] | bias_span_first_final 0.0607 [0.0510, 0.0710]
+  (b)                val_loss 3.1753 [3.1738, 3.1767] | bias_span_first 0.1978 [0.1373, 0.2654] | router_input_similarity_first 0.4082 [0.3987, 0.4131] | mean_score_span_first 0.1397 [0.1239, 0.1675] | bias_span 0.1403 [0.1333, 0.1492] | load_churn_warmup 0.0837 [0.0829, 0.0847] | max_load_ratio_first_early 4.0634 [3.3010, 4.6617] | router_update_common_share_first 0.1600 [0.1574, 0.1614] | update_load_correlation 0.0201 [0.0131, 0.0276] | specialization 0.1246 [0.1240, 0.1257] | usage_perplexity_final 31.9314 [31.9219, 31.9389] | usage_perplexity_first_final 31.8770 [31.8024, 31.9437] | bias_span_first_early 0.6662 [0.5936, 0.7227] | bias_span_first_final 0.1043 [0.0550, 0.1460]
+  (c)                val_loss 3.1774 [3.1766, 3.1783] | bias_span_first 0.1746 [0.1573, 0.1928] | router_input_similarity_first 0.3914 [0.3840, 0.4029] | mean_score_span_first 0.1371 [0.1221, 0.1477] | bias_span 0.1235 [0.1224, 0.1244] | load_churn_warmup 0.1219 [0.1217, 0.1222] | max_load_ratio_first_early 6.6339 [6.1827, 6.8977] | router_update_common_share_first 0.4970 [0.4897, 0.5018] | update_load_correlation 0.0362 [0.0297, 0.0480] | specialization 0.1340 [0.1293, 0.1371] | usage_perplexity_final 31.8376 [31.8182, 31.8500] | usage_perplexity_first_final 31.2746 [31.2122, 31.3439] | bias_span_first_early 0.6930 [0.6264, 0.7775] | bias_span_first_final 0.1027 [0.0660, 0.1380]
+  (d)                val_loss 3.2052 [3.1988, 3.2102] | bias_span_first 0.4089 [0.3284, 0.5535] | router_input_similarity_first 0.1456 [0.1310, 0.1596] | mean_score_span_first 0.2982 [0.2548, 0.3810] | bias_span 0.1754 [0.1603, 0.1892] | load_churn_warmup 0.1028 [0.1022, 0.1034] | max_load_ratio_first_early 3.2401 [2.4336, 4.5981] | router_update_common_share_first 0.2013 [0.1977, 0.2080] | update_load_correlation 0.0188 [0.0148, 0.0226] | specialization 0.1255 [0.1221, 0.1293] | usage_perplexity_final 31.9402 [31.9296, 31.9546] | usage_perplexity_first_final 31.9605 [31.9559, 31.9696] | bias_span_first_early 0.7159 [0.6363, 0.7598] | bias_span_first_final 0.3050 [0.2330, 0.4470]
+  (e)                val_loss 3.2204 [3.2162, 3.2237] | bias_span_first 0.1296 [0.0842, 0.1779] | router_input_similarity_first 0.0534 [0.0442, 0.0604] | mean_score_span_first 0.1092 [0.0678, 0.1549] | bias_span 0.1182 [0.0995, 0.1336] | load_churn_warmup 0.1036 [0.1022, 0.1059] | max_load_ratio_first_early 2.0646 [1.3790, 3.3824] | router_update_common_share_first 0.2129 [0.2097, 0.2181] | update_load_correlation 0.4306 [0.4168, 0.4561] | specialization 0.1249 [0.1237, 0.1269] | usage_perplexity_final 31.9182 [31.9092, 31.9361] | usage_perplexity_first_final 31.9833 [31.9822, 31.9847] | bias_span_first_early 0.4165 [0.2673, 0.6340] | bias_span_first_final 0.0847 [0.0350, 0.1570]
+  (g)                val_loss 3.2481 [3.2435, 3.2551] | bias_span_first 0.0988 [0.0934, 0.1089] | router_input_similarity_first 0.0738 [0.0496, 0.0876] | mean_score_span_first 0.0999 [0.0872, 0.1192] | bias_span 0.1168 [0.1128, 0.1193] | load_churn_warmup 0.0923 [0.0899, 0.0938] | max_load_ratio_first_early 1.1602 [1.1572, 1.1645] | router_update_common_share_first 0.1514 [0.1350, 0.1635] | update_load_correlation 0.3826 [0.3696, 0.3913] | specialization 0.0994 [0.0940, 0.1048] | usage_perplexity_final 31.9587 [31.9534, 31.9673] | usage_perplexity_first_final 31.9856 [31.9826, 31.9895] | bias_span_first_early 0.1970 [0.1757, 0.2103] | bias_span_first_final 0.0580 [0.0480, 0.0630]
+  (h)                val_loss 3.2269 [3.2221, 3.2333] | bias_span_first 0.0939 [0.0895, 0.0997] | router_input_similarity_first 0.0332 [0.0301, 0.0366] | mean_score_span_first 0.0899 [0.0838, 0.0969] | bias_span 0.1101 [0.1079, 0.1122] | load_churn_warmup 0.1005 [0.0983, 0.1019] | max_load_ratio_first_early 1.2390 [1.2292, 1.2551] | router_update_common_share_first 0.1686 [0.1634, 0.1752] | update_load_correlation 0.4641 [0.4479, 0.4806] | specialization 0.1144 [0.1118, 0.1189] | usage_perplexity_final 31.9256 [31.9026, 31.9447] | usage_perplexity_first_final 31.9533 [31.9333, 31.9775] | bias_span_first_early 0.2201 [0.2092, 0.2269] | bias_span_first_final 0.0753 [0.0660, 0.0900]
+  (i)                val_loss 3.2099 [3.2062, 3.2147] | bias_span_first 0.2288 [0.1729, 0.3112] | router_input_similarity_first 0.0538 [0.0475, 0.0617] | mean_score_span_first 0.1828 [0.1330, 0.2327] | bias_span 0.1404 [0.1250, 0.1671] | load_churn_warmup 0.0998 [0.0985, 0.1018] | max_load_ratio_first_early 5.0676 [3.9699, 5.8449] | router_update_common_share_first 0.2256 [0.2188, 0.2326] | update_load_correlation 0.4492 [0.4148, 0.4749] | specialization 0.1248 [0.1116, 0.1349] | usage_perplexity_final 31.9181 [31.9037, 31.9450] | usage_perplexity_first_final 31.9803 [31.9763, 31.9868] | bias_span_first_early 0.7645 [0.6812, 0.8282] | bias_span_first_final 0.1577 [0.1290, 0.1970]
+  (b) at half rate   val_loss 3.1655 [3.1619, 3.1691] | bias_span_first 0.1191 [0.1119, 0.1293] | router_input_similarity_first 0.4011 [0.3888, 0.4123] | mean_score_span_first 0.0996 [0.0915, 0.1039] | bias_span 0.1146 [0.1068, 0.1254] | load_churn_warmup 0.0735 [0.0727, 0.0749] | max_load_ratio_first_early 1.7261 [1.6097, 1.9306] | router_update_common_share_first 0.1607 [0.1565, 0.1656] | update_load_correlation 0.0013 [-0.0036, 0.0053] | specialization 0.1328 [0.1324, 0.1334] | usage_perplexity_final 31.9379 [31.9229, 31.9553] | usage_perplexity_first_final 31.9372 [31.9083, 31.9661] | bias_span_first_early 0.3008 [0.2567, 0.3789] | bias_span_first_final 0.0603 [0.0530, 0.0660]
+  (a) no bias        val_loss 3.3034 [3.2985, 3.3113] | bias_span_first 0.0000 [0.0000, 0.0000] | router_input_similarity_first 0.1043 [0.0942, 0.1243] | mean_score_span_first 0.3482 [0.3153, 0.3733] | bias_span 0.0000 [0.0000, 0.0000] | load_churn_warmup 0.0758 [0.0714, 0.0804] | max_load_ratio_first_early 5.6723 [5.3070, 6.0610] | router_update_common_share_first 0.1083 [0.1015, 0.1143] | update_load_correlation 0.6324 [0.5974, 0.6552] | specialization 0.0434 [0.0405, 0.0454] | usage_perplexity_final 11.0052 [10.7648, 11.3204] | usage_perplexity_first_final 9.5540 [8.1692, 10.2600] | bias_span_first_early 0.0000 [0.0000, 0.0000] | bias_span_first_final 0.0000 [0.0000, 0.0000]
+  (b) no bias        val_loss 3.1885 [3.1857, 3.1919] | bias_span_first 0.0000 [0.0000, 0.0000] | router_input_similarity_first 0.4020 [0.4013, 0.4023] | mean_score_span_first 0.5073 [0.4853, 0.5243] | bias_span 0.0000 [0.0000, 0.0000] | load_churn_warmup 0.0716 [0.0699, 0.0729] | max_load_ratio_first_early 7.7998 [7.6744, 7.9173] | router_update_common_share_first 0.2314 [0.2205, 0.2419] | update_load_correlation 0.2061 [0.1228, 0.3445] | specialization 0.0805 [0.0760, 0.0893] | usage_perplexity_final 17.2034 [16.3625, 17.9905] | usage_perplexity_first_final 6.4528 [5.9366, 6.7728] | bias_span_first_early 0.0000 [0.0000, 0.0000] | bias_span_first_final 0.0000 [0.0000, 0.0000]
+muon - adamw, tokens               bias_span_first                      +0.1027 (+0.0452 to +0.1744) effect 2.2 +++
+muon - adamw, tokens               router_input_similarity_first        +0.3376 (+0.3242 to +0.3455) effect 53.0 +++
+muon - adamw, tokens               bias_span                            +0.0375 (+0.0309 to +0.0502) effect 5.8 +++
+muon - adamw, tokens               val_loss                             -0.0774 (-0.0828 to -0.0673) effect -14.2 ---
+muon - adamw, tokens               max_load_ratio_first_early           +2.9276 (+2.1653 to +3.5157) effect 6.0 +++
+muon - adamw, tokens               router_update_common_share_first     +0.0307 (+0.0260 to +0.0337) effect 7.5 +++
+muon - adamw, tokens               load_churn_warmup                    -0.0181 (-0.0198 to -0.0158) effect -9.2 ---
+muon - adamw, tokens               mean_score_span_first                +0.0447 (+0.0377 to +0.0579) effect 2.3 +++
+muon_except_router - adamw, tokens bias_span_first                      +0.0795 (+0.0652 to +0.0907) effect 6.0 +++
+muon_except_router - adamw, tokens router_input_similarity_first        +0.3208 (+0.3127 to +0.3355) effect 42.4 +++
+muon_except_router - adamw, tokens bias_span                            +0.0207 (+0.0149 to +0.0246) effect 6.6 +++
+muon_except_router - adamw, tokens val_loss                             -0.0752 (-0.0809 to -0.0657) effect -14.0 ---
+muon_except_router - adamw, tokens max_load_ratio_first_early           +5.4981 (+5.0570 to +5.7517) effect 19.8 +++
+muon_except_router - adamw, tokens router_update_common_share_first     +0.3678 (+0.3620 to +0.3747) effect 62.3 +++
+muon_except_router - adamw, tokens load_churn_warmup                    +0.0201 (+0.0184 to +0.0231) effect 10.8 +++
+muon_except_router - adamw, tokens mean_score_span_first                +0.0422 (+0.0320 to +0.0578) effect 3.2 +++
+muon - muon_router, tokens         bias_span_first                      +0.0990 (+0.0284 to +0.1715) effect 2.2 +++
+muon - muon_router, tokens         router_input_similarity_first        +0.3344 (+0.3145 to +0.3635) effect 20.9 +++
+muon - muon_router, tokens         bias_span                            +0.0235 (+0.0140 to +0.0364) effect 3.8 +++
+muon - muon_router, tokens         val_loss                             -0.0728 (-0.0813 to -0.0681) effect -16.4 ---
+muon - muon_router, tokens         max_load_ratio_first_early           +2.9032 (+2.1420 to +3.4972) effect 5.9 +++
+muon - muon_router, tokens         router_update_common_share_first     +0.0086 (-0.0024 to +0.0264) effect 0.8 -++
+muon - muon_router, tokens         load_churn_warmup                    -0.0086 (-0.0104 to -0.0070) effect -5.3 ---
+muon - muon_router, tokens         mean_score_span_first                +0.0398 (+0.0047 to +0.0742) effect 1.9 +++
+muon_except_router - muon_router, tokens bias_span_first                      +0.0758 (+0.0484 to +0.0993) effect 5.4 +++
+muon_except_router - muon_router, tokens router_input_similarity_first        +0.3176 (+0.3031 to +0.3345) effect 19.3 +++
+muon_except_router - muon_router, tokens bias_span                            +0.0067 (+0.0041 to +0.0109) effect 2.6 +++
+muon_except_router - muon_router, tokens val_loss                             -0.0707 (-0.0777 to -0.0669) effect -16.2 ---
+muon_except_router - muon_router, tokens max_load_ratio_first_early           +5.4737 (+5.0255 to +5.7332) effect 19.7 +++
+muon_except_router - muon_router, tokens router_update_common_share_first     +0.3457 (+0.3383 to +0.3547) effect 30.5 +++
+muon_except_router - muon_router, tokens load_churn_warmup                    +0.0296 (+0.0278 to +0.0319) effect 19.7 +++
+muon_except_router - muon_router, tokens mean_score_span_first                +0.0372 (+0.0029 to +0.0605) effect 2.4 +++
+muon_router - adamw, tokens        bias_span_first                      +0.0037 (-0.0087 to +0.0168) effect 0.5 -++
+muon_router - adamw, tokens        router_input_similarity_first        +0.0032 (-0.0204 to +0.0202) effect 0.2 +-+
+muon_router - adamw, tokens        bias_span                            +0.0140 (+0.0108 to +0.0174) effect 3.5 +++
+muon_router - adamw, tokens        val_loss                             -0.0045 (-0.0139 to +0.0018) effect -0.7 --+
+muon_router - adamw, tokens        max_load_ratio_first_early           +0.0244 (+0.0185 to +0.0316) effect 3.2 +++
+muon_router - adamw, tokens        router_update_common_share_first     +0.0221 (+0.0073 to +0.0307) effect 2.0 +++
+muon_router - adamw, tokens        load_churn_warmup                    -0.0095 (-0.0101 to -0.0088) effect -4.0 ---
+muon_router - adamw, tokens        mean_score_span_first                +0.0049 (-0.0163 to +0.0337) effect 0.3 --+
+muon_except_router - muon, tokens  bias_span_first                      -0.0232 (-0.0917 to +0.0200) effect -0.5 +-+
+muon_except_router - muon, tokens  router_input_similarity_first        -0.0168 (-0.0290 to -0.0100) effect -1.8 ---
+muon_except_router - muon, tokens  bias_span                            -0.0168 (-0.0256 to -0.0089) effect -2.9 ---
+muon_except_router - muon, tokens  val_loss                             +0.0021 (+0.0012 to +0.0036) effect 1.8 +++
+muon_except_router - muon, tokens  max_load_ratio_first_early           +2.5705 (+1.9550 to +3.5204) effect 4.6 +++
+muon_except_router - muon, tokens  router_update_common_share_first     +0.3370 (+0.3283 to +0.3422) effect 70.0 +++
+muon_except_router - muon, tokens  load_churn_warmup                    +0.0382 (+0.0375 to +0.0389) effect 55.0 +++
+muon_except_router - muon, tokens  mean_score_span_first                -0.0025 (-0.0259 to +0.0201) effect -0.1 +--
+muon_experts - adamw, tokens       bias_span_first                      +0.3138 (+0.2362 to +0.4514) effect 3.5 +++
+muon_experts - adamw, tokens       router_input_similarity_first        +0.0750 (+0.0611 to +0.0922) effect 7.2 +++
+muon_experts - adamw, tokens       bias_span                            +0.0726 (+0.0584 to +0.0816) effect 6.8 +++
+muon_experts - adamw, tokens       val_loss                             -0.0475 (-0.0577 to -0.0337) effect -7.0 ---
+muon_experts - adamw, tokens       max_load_ratio_first_early           +2.1043 (+1.2979 to +3.4521) effect 2.5 +++
+muon_experts - adamw, tokens       router_update_common_share_first     +0.0721 (+0.0625 to +0.0803) effect 12.9 +++
+muon_experts - adamw, tokens       load_churn_warmup                    +0.0010 (-0.0004 to +0.0034) effect 0.5 ++-
+muon_experts - adamw, tokens       mean_score_span_first                +0.2032 (+0.1492 to +0.2911) effect 3.9 +++
+muon_attention_dense - adamw, tokens bias_span_first                      +0.1337 (+0.0808 to +0.2202) effect 2.6 +++
+muon_attention_dense - adamw, tokens router_input_similarity_first        -0.0168 (-0.0270 to -0.0082) effect -2.9 ---
+muon_attention_dense - adamw, tokens bias_span                            +0.0376 (+0.0216 to +0.0680) effect 2.3 +++
+muon_attention_dense - adamw, tokens val_loss                             -0.0427 (-0.0476 to -0.0378) effect -6.9 ---
+muon_attention_dense - adamw, tokens max_load_ratio_first_early           +3.9318 (+2.8239 to +4.7091) effect 5.7 +++
+muon_attention_dense - adamw, tokens router_update_common_share_first     +0.0964 (+0.0836 to +0.1049) effect 15.6 +++
+muon_attention_dense - adamw, tokens load_churn_warmup                    -0.0020 (-0.0041 to -0.0003) effect -0.9 ---
+muon_attention_dense - adamw, tokens mean_score_span_first                +0.0878 (+0.0475 to +0.1231) effect 2.4 +++
+muon_attention - adamw, tokens     bias_span_first                      +0.0345 (-0.0080 to +0.0757) effect 1.0 ++-
+muon_attention - adamw, tokens     router_input_similarity_first        -0.0172 (-0.0304 to -0.0069) effect -2.7 ---
+muon_attention - adamw, tokens     bias_span                            +0.0154 (-0.0024 to +0.0346) effect 1.2 ++-
+muon_attention - adamw, tokens     val_loss                             -0.0323 (-0.0413 to -0.0227) effect -5.4 ---
+muon_attention - adamw, tokens     max_load_ratio_first_early           +0.9288 (+0.2330 to +2.2568) effect 1.2 +++
+muon_attention - adamw, tokens     router_update_common_share_first     +0.0836 (+0.0820 to +0.0859) effect 16.8 +++
+muon_attention - adamw, tokens     load_churn_warmup                    +0.0018 (-0.0006 to +0.0035) effect 0.8 ++-
+muon_attention - adamw, tokens     mean_score_span_first                +0.0142 (-0.0176 to +0.0650) effect 0.4 +--
+muon_dense - adamw, tokens         bias_span_first                      -0.0012 (-0.0127 to +0.0087) effect -0.2 -++
+muon_dense - adamw, tokens         router_input_similarity_first        -0.0375 (-0.0418 to -0.0333) effect -10.9 ---
+muon_dense - adamw, tokens         bias_span                            +0.0073 (+0.0027 to +0.0103) effect 2.1 +++
+muon_dense - adamw, tokens         val_loss                             -0.0257 (-0.0354 to -0.0185) effect -3.8 ---
+muon_dense - adamw, tokens         max_load_ratio_first_early           +0.1032 (+0.0832 to +0.1193) effect 8.4 +++
+muon_dense - adamw, tokens         router_update_common_share_first     +0.0394 (+0.0321 to +0.0503) effect 6.9 +++
+muon_dense - adamw, tokens         load_churn_warmup                    -0.0013 (-0.0022 to -0.0004) effect -0.6 ---
+muon_dense - adamw, tokens         mean_score_span_first                -0.0051 (-0.0258 to +0.0070) effect -0.5 +-+
+muon-muonlr0.5x - adamw, tokens    bias_span_first                      +0.0240 (+0.0098 to +0.0371) effect 3.1 +++
+muon-muonlr0.5x - adamw, tokens    router_input_similarity_first        +0.3304 (+0.3214 to +0.3424) effect 37.9 +++
+muon-muonlr0.5x - adamw, tokens    bias_span                            +0.0118 (-0.0008 to +0.0235) effect 1.6 -++
+muon-muonlr0.5x - adamw, tokens    val_loss                             -0.0871 (-0.0946 to -0.0748) effect -14.7 ---
+muon-muonlr0.5x - adamw, tokens    max_load_ratio_first_early           +0.5903 (+0.4841 to +0.7846) effect 4.7 +++
+muon-muonlr0.5x - adamw, tokens    router_update_common_share_first     +0.0314 (+0.0213 to +0.0378) effect 6.3 +++
+muon-muonlr0.5x - adamw, tokens    load_churn_warmup                    -0.0283 (-0.0306 to -0.0258) effect -13.9 ---
+muon-muonlr0.5x - adamw, tokens    mean_score_span_first                +0.0046 (-0.0057 to +0.0178) effect 0.4 +-+
+muon-muonlr0.5x - muon, tokens     bias_span_first                      -0.0787 (-0.1493 to -0.0080) effect -1.7 ---
+muon-muonlr0.5x - muon, tokens     router_input_similarity_first        -0.0071 (-0.0240 to +0.0034) effect -0.7 --+
+muon-muonlr0.5x - muon, tokens     bias_span                            -0.0257 (-0.0377 to -0.0079) effect -2.9 ---
+muon-muonlr0.5x - muon, tokens     val_loss                             -0.0098 (-0.0119 to -0.0075) effect -3.6 ---
+muon-muonlr0.5x - muon, tokens     max_load_ratio_first_early           -2.3373 (-2.7311 to -1.6629) effect -4.6 ---
+muon-muonlr0.5x - muon, tokens     router_update_common_share_first     +0.0007 (-0.0047 to +0.0041) effect 0.2 -++
+muon-muonlr0.5x - muon, tokens     load_churn_warmup                    -0.0102 (-0.0120 to -0.0085) effect -9.5 ---
+muon-muonlr0.5x - muon, tokens     mean_score_span_first                -0.0401 (-0.0636 to -0.0207) effect -2.3 ---
+muon - muon_experts, tokens        bias_span_first                      -0.2111 (-0.3628 to -0.0794) effect -2.1 ---
+muon - muon_experts, tokens        router_input_similarity_first        +0.2626 (+0.2525 to +0.2820) effect 22.5 +++
+muon - muon_experts, tokens        bias_span                            -0.0351 (-0.0508 to -0.0270) effect -3.0 ---
+muon - muon_experts, tokens        val_loss                             -0.0299 (-0.0335 to -0.0250) effect -7.1 ---
+muon - muon_experts, tokens        max_load_ratio_first_early           +0.8233 (+0.0636 to +1.5389) effect 0.8 +++
+muon - muon_experts, tokens        router_update_common_share_first     -0.0413 (-0.0466 to -0.0365) effect -9.3 ---
+muon - muon_experts, tokens        load_churn_warmup                    -0.0191 (-0.0194 to -0.0187) effect -24.0 ---
+muon - muon_experts, tokens        mean_score_span_first                -0.1585 (-0.2534 to -0.0913) effect -3.0 ---
+muon_except_router - muon_experts, tokens bias_span_first                      -0.2343 (-0.3607 to -0.1710) effect -2.6 ---
+muon_except_router - muon_experts, tokens router_input_similarity_first        +0.2458 (+0.2411 to +0.2530) effect 19.9 +++
+muon_except_router - muon_experts, tokens bias_span                            -0.0519 (-0.0667 to -0.0359) effect -5.1 ---
+muon_except_router - muon_experts, tokens val_loss                             -0.0278 (-0.0320 to -0.0214) effect -6.7 ---
+muon_except_router - muon_experts, tokens max_load_ratio_first_early           +3.3938 (+2.2996 to +4.3878) effect 3.9 +++
+muon_except_router - muon_experts, tokens router_update_common_share_first     +0.2957 (+0.2817 to +0.3042) effect 48.2 +++
+muon_except_router - muon_experts, tokens load_churn_warmup                    +0.0191 (+0.0188 to +0.0197) effect 38.9 +++
+muon_except_router - muon_experts, tokens mean_score_span_first                -0.1611 (-0.2333 to -0.1172) effect -3.1 ---
+muon-unbalanced - adamw-unbalanced usage_perplexity_final               +6.1982 (+5.5976 to +6.6700) effect 10.1 +++
+muon-unbalanced - adamw-unbalanced usage_perplexity_first_final         -3.1011 (-3.5835 to -2.2327) effect -3.4 ---
+muon-unbalanced - adamw-unbalanced val_loss                             -0.1149 (-0.1232 to -0.1085) effect -21.5 ---
+muon-unbalanced - adamw-unbalanced collapsed_experts_final              -8.4762 (-9.7143 to -7.5714) effect -12.1 ---
+muon - adamw, specialization       specialization                       +0.0164 (+0.0150 to +0.0174) effect 13.8 +++
+muon - adamw, specialization       update_load_correlation              -0.3506 (-0.3592 to -0.3349) effect -29.2 ---
+  log span on log offset over 27 balanced runs: slope 1.180, R2 0.933
+  log span on log cosine: R2 0.109
+  adamw first-layer mean_score_span peak (step, value): [(50, 0.28934621810913086), (40, 0.3957720994949341), (30, 0.4130098819732666)]
+  adamw first-layer bias_span peak (step, value): [(130, 0.23600012063980103), (640, 0.2310001254081726), (620, 0.2580001652240753)]
+  adamw first-layer router_input_similarity peak (step, value): [(30, 0.6587392025645975), (40, 0.6963589152531912), (40, 0.7333765748951214)]
+  adamw first-layer max_load_ratio peak (step, value): [(20, 5.4041748046875), (40, 5.931884765625), (30, 6.9107666015625)]
+  adamw busiest expert steps 301-500: 1.18, 1.19, 1.18
+  adamw busiest expert steps 501-1262: 1.13, 1.14, 1.15
+  adamw busiest expert steps 1263-3000: 1.09, 1.09, 1.09
+  adamw busiest expert steps 3001-15259: 1.06, 1.06, 1.07
+  muon first-layer mean_score_span peak (step, value): [(630, 0.8200399875640869), (490, 0.6395893096923828), (540, 0.9622315168380737)]
+  muon first-layer bias_span peak (step, value): [(890, 0.8989955186843872), (690, 0.7439975142478943), (830, 0.887995719909668)]
+  muon first-layer router_input_similarity peak (step, value): [(1060, 0.5074319099563847), (920, 0.4810668096156932), (890, 0.5174840001174337)]
+  muon first-layer max_load_ratio peak (step, value): [(990, 6.204833984375), (730, 6.09423828125), (470, 7.9208984375)]
+  muon busiest expert steps 301-500: 5.00, 3.86, 7.32
+  muon busiest expert steps 501-1262: 4.23, 3.30, 4.66
+  muon busiest expert steps 1263-3000: 1.93, 1.66, 1.79
+  muon busiest expert steps 3001-15259: 1.63, 1.36, 1.30
+  muon_except_router first-layer mean_score_span peak (step, value): [(530, 0.8519806265830994), (720, 0.9942666292190552), (610, 0.9944106340408325)]
+  muon_except_router first-layer bias_span peak (step, value): [(800, 0.7859969735145569), (920, 0.9919943809509277), (850, 0.8559960722923279)]
+  muon_except_router first-layer router_input_similarity peak (step, value): [(1060, 0.5275555597326717), (1180, 0.4968764524843767), (1210, 0.5186746245154628)]
+  muon_except_router first-layer max_load_ratio peak (step, value): [(1310, 7.8179931640625), (490, 7.9849853515625), (610, 7.990234375)]
+  muon_except_router busiest expert steps 301-500: 6.29, 7.76, 7.37
+  muon_except_router busiest expert steps 501-1262: 6.18, 6.82, 6.90
+  muon_except_router busiest expert steps 1263-3000: 3.51, 2.70, 3.44
+  muon_except_router busiest expert steps 3001-15259: 2.15, 1.89, 1.74
+
+== Bias speed: seeds 6 to 8
+  adamw                  bias_span_first 0.1119, 0.0881, 0.0853 | max_load_ratio_first_early 1.1425, 1.1156, 1.1101 | router_input_similarity_first 0.0752, 0.0711, 0.0875 | bias_span 0.1029, 0.1023, 0.1031 | val_loss 3.2474, 3.2641, 3.2642 | update_load_correlation 0.3682, 0.3718, 0.3631 | load_churn 0.0324, 0.0316, 0.0337
+  adamw-balancer4x       bias_span_first 0.0981, 0.0820, 0.0831 | max_load_ratio_first_early 1.0868, 1.0938, 1.0854 | router_input_similarity_first 0.0763, 0.0717, 0.0801 | bias_span 0.1055, 0.0940, 0.1042 | val_loss 3.2473, 3.2707, 3.2592 | update_load_correlation 0.1990, 0.1845, 0.2080 | load_churn 0.0327, 0.0304, 0.0335
+  muon                   bias_span_first 0.1527, 0.1770, 0.1799 | max_load_ratio_first_early 4.4839, 3.3138, 4.0859 | router_input_similarity_first 0.3991, 0.4034, 0.4171 | bias_span 0.1327, 0.1459, 0.1373 | val_loss 3.1786, 3.1821, 3.1701 | update_load_correlation 0.0176, 0.0187, 0.0341 | load_churn 0.0372, 0.0369, 0.0391
+  muon-balancer4x        bias_span_first 0.1379, 0.1481, 0.0965 | max_load_ratio_first_early 1.5750, 1.7796, 1.5405 | router_input_similarity_first 0.3994, 0.3991, 0.4002 | bias_span 0.1314, 0.1316, 0.1183 | val_loss 3.1762, 3.1831, 3.1714 | update_load_correlation 0.0098, 0.0070, 0.0083 | load_churn 0.0378, 0.0374, 0.0369
+muon - adamw, tokens               bias_span_first                      +0.0748 (+0.0408 to +0.0946) effect 5.1 +++
+muon - adamw, tokens               max_load_ratio_first_early           +2.8385 (+2.1981 to +3.3414) effect 6.7 +++
+muon - adamw, tokens               router_input_similarity_first        +0.3286 (+0.3239 to +0.3323) effect 36.5 +++
+muon - adamw, tokens               bias_span                            +0.0359 (+0.0297 to +0.0436) effect 7.6 +++
+muon - adamw, tokens               val_loss                             -0.0816 (-0.0941 to -0.0688) effect -10.1 ---
+muon - adamw, tokens               update_load_correlation              -0.3442 (-0.3531 to -0.3291) effect -47.8 ---
+muon - adamw, tokens               load_churn                           +0.0052 (+0.0048 to +0.0054) effect 4.6 +++
+muon-balancer4x - adamw-balancer4x, tokens bias_span_first                      +0.0398 (+0.0134 to +0.0662) effect 2.0 +++
+muon-balancer4x - adamw-balancer4x, tokens max_load_ratio_first_early           +0.5430 (+0.4550 to +0.6857) effect 5.9 +++
+muon-balancer4x - adamw-balancer4x, tokens router_input_similarity_first        +0.3235 (+0.3202 to +0.3274) effect 108.0 +++
+muon-balancer4x - adamw-balancer4x, tokens bias_span                            +0.0259 (+0.0141 to +0.0376) effect 3.7 +++
+muon-balancer4x - adamw-balancer4x, tokens val_loss                             -0.0822 (-0.0879 to -0.0711) effect -8.9 ---
+muon-balancer4x - adamw-balancer4x, tokens update_load_correlation              -0.1888 (-0.1997 to -0.1775) effect -22.4 ---
+muon-balancer4x - adamw-balancer4x, tokens load_churn                           +0.0051 (+0.0034 to +0.0070) effect 4.3 +++
+muon-balancer4x - muon, tokens     bias_span_first                      -0.0424 (-0.0834 to -0.0148) effect -1.9 ---
+muon-balancer4x - muon, tokens     max_load_ratio_first_early           -2.3295 (-2.9088 to -1.5342) effect -5.4 ---
+muon-balancer4x - muon, tokens     router_input_similarity_first        -0.0070 (-0.0169 to +0.0003) effect -1.0 +--
+muon-balancer4x - muon, tokens     bias_span                            -0.0115 (-0.0190 to -0.0012) effect -1.6 ---
+muon-balancer4x - muon, tokens     val_loss                             -0.0000 (-0.0024 to +0.0013) effect -0.0 -++
+muon-balancer4x - muon, tokens     update_load_correlation              -0.0151 (-0.0258 to -0.0078) effect -2.3 ---
+muon-balancer4x - muon, tokens     load_churn                           -0.0004 (-0.0022 to +0.0006) effect -0.4 ++-
+adamw-balancer4x - adamw, tokens   bias_span_first                      -0.0074 (-0.0138 to -0.0022) effect -0.6 ---
+adamw-balancer4x - adamw, tokens   max_load_ratio_first_early           -0.0340 (-0.0557 to -0.0218) effect -2.7 ---
+adamw-balancer4x - adamw, tokens   router_input_similarity_first        -0.0019 (-0.0074 to +0.0011) effect -0.3 ++-
+adamw-balancer4x - adamw, tokens   bias_span                            -0.0015 (-0.0082 to +0.0026) effect -0.3 +-+
+adamw-balancer4x - adamw, tokens   val_loss                             +0.0005 (-0.0050 to +0.0066) effect 0.0 -+-
+adamw-balancer4x - adamw, tokens   update_load_correlation              -0.1705 (-0.1873 to -0.1552) effect -19.1 ---
+adamw-balancer4x - adamw, tokens   load_churn                           -0.0004 (-0.0012 to +0.0003) effect -0.3 +--
+
+== Balance loss: seeds 3 to 5, paired with RQ3
+  adamw                              bias_span_first 0.1021, 0.0910, 0.0921 | router_input_similarity_first 0.0674, 0.0699, 0.0745 | mean_score_span_first 0.0899, 0.1096, 0.0855 | max_load_ratio_first_early 1.1256, 1.1358, 1.1460 | raw_max_load_ratio_first 1.8808, 2.1607, 1.7442 | router_update_common_share_first 0.1352, 0.1277, 0.1249 | val_loss 3.2566, 3.2575, 3.2439 | bias_span 0.1075, 0.0990, 0.1019 | specialization 0.1066, 0.1089, 0.1090
+  adamw-balanceloss0.0001            bias_span_first 0.0709, 0.0661, 0.0807 | router_input_similarity_first 0.0739, 0.0587, 0.0755 | mean_score_span_first 0.0648, 0.0659, 0.0658 | max_load_ratio_first_early 1.1365, 1.1322, 1.1552 | raw_max_load_ratio_first 1.4703, 1.5216, 1.5778 | router_update_common_share_first 0.1287, 0.1378, 0.1292 | val_loss 3.2553, 3.2543, 3.2492 | bias_span 0.0979, 0.0941, 0.1067 | specialization 0.1034, 0.0991, 0.1120
+  muon                               bias_span_first 0.1907, 0.2654, 0.1373 | router_input_similarity_first 0.4128, 0.4131, 0.3987 | mean_score_span_first 0.1276, 0.1675, 0.1239 | max_load_ratio_first_early 4.2276, 3.3010, 4.6617 | raw_max_load_ratio_first 3.2433, 4.6911, 2.6075 | router_update_common_share_first 0.1612, 0.1614, 0.1574 | val_loss 3.1738, 3.1754, 3.1767 | bias_span 0.1384, 0.1492, 0.1333 | specialization 0.1240, 0.1257, 0.1240
+  muon-balanceloss0.0001             bias_span_first 0.1921, 0.1427, 0.1256 | router_input_similarity_first 0.4116, 0.4052, 0.4050 | mean_score_span_first 0.0868, 0.0856, 0.0744 | max_load_ratio_first_early 2.7309, 3.1371, 2.5689 | raw_max_load_ratio_first 2.0448, 2.0380, 2.0111 | router_update_common_share_first 0.1619, 0.1597, 0.1558 | val_loss 3.1756, 3.1763, 3.1764 | bias_span 0.1265, 0.1219, 0.1217 | specialization 0.1215, 0.1221, 0.1195
+  muon_except_router                 bias_span_first 0.1928, 0.1737, 0.1573 | router_input_similarity_first 0.4029, 0.3840, 0.3873 | mean_score_span_first 0.1477, 0.1416, 0.1221 | max_load_ratio_first_early 6.1827, 6.8214, 6.8977 | raw_max_load_ratio_first 4.9751, 3.8592, 4.0989 | router_update_common_share_first 0.5018, 0.4897, 0.4995 | val_loss 3.1774, 3.1766, 3.1783 | bias_span 0.1224, 0.1237, 0.1244 | specialization 0.1357, 0.1371, 0.1293
+  muon_except_router-balanceloss0.0001 bias_span_first 0.1438, 0.1200, 0.1202 | router_input_similarity_first 0.4008, 0.3962, 0.3963 | mean_score_span_first 0.0814, 0.0782, 0.0700 | max_load_ratio_first_early 6.1594, 6.0976, 6.4977 | raw_max_load_ratio_first 2.6585, 2.5859, 2.6564 | router_update_common_share_first 0.4961, 0.4973, 0.5020 | val_loss 3.1761, 3.1771, 3.1779 | bias_span 0.1114, 0.1077, 0.1091 | specialization 0.1283, 0.1283, 0.1264
+muon-balanceloss0.0001 - adamw-balanceloss0.0001, tokens bias_span_first                      +0.0809 (+0.0448 to +0.1213) effect 3.2 +++
+muon-balanceloss0.0001 - adamw-balanceloss0.0001, tokens router_input_similarity_first        +0.3379 (+0.3294 to +0.3465) effect 47.5 +++
+muon-balanceloss0.0001 - adamw-balanceloss0.0001, tokens mean_score_span_first                +0.0168 (+0.0086 to +0.0220) effect 3.4 +++
+muon-balanceloss0.0001 - adamw-balanceloss0.0001, tokens max_load_ratio_first_early           +1.6710 (+1.4137 to +2.0049) effect 8.1 +++
+muon-balanceloss0.0001 - adamw-balanceloss0.0001, tokens raw_max_load_ratio_first             +0.5081 (+0.4333 to +0.5745) effect 12.7 +++
+muon-balanceloss0.0001 - adamw-balanceloss0.0001, tokens router_update_common_share_first     +0.0272 (+0.0219 to +0.0332) effect 6.4 +++
+muon-balanceloss0.0001 - adamw-balanceloss0.0001, tokens val_loss                             -0.0768 (-0.0797 to -0.0728) effect -33.1 ---
+muon-balanceloss0.0001 - adamw-balanceloss0.0001, tokens bias_span                            +0.0238 (+0.0150 to +0.0286) effect 4.8 +++
+muon-balanceloss0.0001 - adamw-balanceloss0.0001, tokens specialization                       +0.0162 (+0.0075 to +0.0231) effect 3.4 +++
+muon_except_router-balanceloss0.0001 - adamw-balanceloss0.0001, tokens bias_span_first                      +0.0554 (+0.0394 to +0.0729) effect 5.0 +++
+muon_except_router-balanceloss0.0001 - adamw-balanceloss0.0001, tokens router_input_similarity_first        +0.3284 (+0.3207 to +0.3375) effect 48.0 +++
+muon_except_router-balanceloss0.0001 - adamw-balanceloss0.0001, tokens mean_score_span_first                +0.0110 (+0.0042 to +0.0166) effect 2.6 +++
+muon_except_router-balanceloss0.0001 - adamw-balanceloss0.0001, tokens max_load_ratio_first_early           +5.1103 (+4.9654 to +5.3425) effect 33.5 +++
+muon_except_router-balanceloss0.0001 - adamw-balanceloss0.0001, tokens raw_max_load_ratio_first             +1.1104 (+1.0643 to +1.1882) effect 23.1 +++
+muon_except_router-balanceloss0.0001 - adamw-balanceloss0.0001, tokens router_update_common_share_first     +0.3665 (+0.3595 to +0.3728) effect 86.3 +++
+muon_except_router-balanceloss0.0001 - adamw-balanceloss0.0001, tokens val_loss                             -0.0759 (-0.0792 to -0.0713) effect -31.8 ---
+muon_except_router-balanceloss0.0001 - adamw-balanceloss0.0001, tokens bias_span                            +0.0098 (+0.0025 to +0.0136) effect 2.1 +++
+muon_except_router-balanceloss0.0001 - adamw-balanceloss0.0001, tokens specialization                       +0.0228 (+0.0143 to +0.0293) effect 4.8 +++
+muon-balanceloss0.0001 - muon, tokens bias_span_first                      -0.0443 (-0.1227 to +0.0015) effect -0.9 +--
+muon-balanceloss0.0001 - muon, tokens router_input_similarity_first        -0.0010 (-0.0079 to +0.0063) effect -0.1 --+
+muon-balanceloss0.0001 - muon, tokens mean_score_span_first                -0.0574 (-0.0820 to -0.0408) effect -3.2 ---
+muon-balanceloss0.0001 - muon, tokens max_load_ratio_first_early           -1.2512 (-2.0928 to -0.1639) effect -2.3 ---
+muon-balanceloss0.0001 - muon, tokens raw_max_load_ratio_first             -1.4827 (-2.6532 to -0.5964) effect -2.0 ---
+muon-balanceloss0.0001 - muon, tokens router_update_common_share_first     -0.0009 (-0.0017 to +0.0008) effect -0.3 +--
+muon-balanceloss0.0001 - muon, tokens val_loss                             +0.0008 (-0.0003 to +0.0018) effect 0.8 ++-
+muon-balanceloss0.0001 - muon, tokens bias_span                            -0.0169 (-0.0273 to -0.0116) effect -2.8 ---
+muon-balanceloss0.0001 - muon, tokens specialization                       -0.0035 (-0.0045 to -0.0025) effect -2.9 ---
+muon_except_router-balanceloss0.0001 - muon_except_router, tokens bias_span_first                      -0.0466 (-0.0537 to -0.0371) effect -2.9 ---
+muon_except_router-balanceloss0.0001 - muon_except_router, tokens router_input_similarity_first        +0.0063 (-0.0021 to +0.0122) effect 0.9 -++
+muon_except_router-balanceloss0.0001 - muon_except_router, tokens mean_score_span_first                -0.0606 (-0.0663 to -0.0521) effect -5.9 ---
+muon_except_router-balanceloss0.0001 - muon_except_router, tokens max_load_ratio_first_early           -0.3824 (-0.7238 to -0.0233) effect -1.2 ---
+muon_except_router-balanceloss0.0001 - muon_except_router, tokens raw_max_load_ratio_first             -1.6775 (-2.3166 to -1.2733) effect -4.0 ---
+muon_except_router-balanceloss0.0001 - muon_except_router, tokens router_update_common_share_first     +0.0014 (-0.0057 to +0.0076) effect 0.3 -++
+muon_except_router-balanceloss0.0001 - muon_except_router, tokens val_loss                             -0.0004 (-0.0013 to +0.0005) effect -0.4 -+-
+muon_except_router-balanceloss0.0001 - muon_except_router, tokens bias_span                            -0.0141 (-0.0160 to -0.0111) effect -9.4 ---
+muon_except_router-balanceloss0.0001 - muon_except_router, tokens specialization                       -0.0064 (-0.0088 to -0.0029) effect -2.1 ---
+adamw-balanceloss0.0001 - adamw, tokens bias_span_first                      -0.0225 (-0.0312 to -0.0114) effect -3.3 ---
+adamw-balanceloss0.0001 - adamw, tokens router_input_similarity_first        -0.0012 (-0.0113 to +0.0066) effect -0.2 +-+
+adamw-balanceloss0.0001 - adamw, tokens mean_score_span_first                -0.0295 (-0.0437 to -0.0197) effect -3.2 ---
+adamw-balanceloss0.0001 - adamw, tokens max_load_ratio_first_early           +0.0055 (-0.0036 to +0.0109) effect 0.5 +-+
+adamw-balanceloss0.0001 - adamw, tokens raw_max_load_ratio_first             -0.4054 (-0.6391 to -0.1664) effect -2.6 ---
+adamw-balanceloss0.0001 - adamw, tokens router_update_common_share_first     +0.0027 (-0.0065 to +0.0101) effect 0.5 -++
+adamw-balanceloss0.0001 - adamw, tokens val_loss                             +0.0003 (-0.0032 to +0.0053) effect 0.0 --+
+adamw-balanceloss0.0001 - adamw, tokens bias_span                            -0.0032 (-0.0096 to +0.0048) effect -0.6 --+
+adamw-balanceloss0.0001 - adamw, tokens specialization                       -0.0033 (-0.0098 to +0.0030) effect -0.7 --+
+
+== The large model: 3B tokens, seeds 0 to 2
+  adamw                  val_loss 2.9393, 2.9426, 2.9385 | bias_span_first 0.1621, 0.1191, 0.1251 | router_input_similarity_first 0.1037, 0.0937, 0.0591 | bias_span 0.0997, 0.0983, 0.0991 | load_churn_warmup 0.1188, 0.1178, 0.1166 | max_load_ratio_first_early 1.1384, 1.1395, 1.1372 | router_update_common_share_first 0.1030, 0.0999, 0.1366 | update_load_correlation 0.4078, 0.3989, 0.4052 | specialization 0.1226, 0.1140, 0.1214 | spikes 0.0000, 0.0000, 0.0000
+  muon                   val_loss 2.8914, 2.8971, 2.8982 | bias_span_first 0.2496, 0.3594, 0.2535 | router_input_similarity_first 0.5996, 0.5891, 0.6418 | bias_span 0.1279, 0.1437, 0.1258 | load_churn_warmup 0.0828, 0.0836, 0.0803 | max_load_ratio_first_early 5.5934, 7.2374, 6.1414 | router_update_common_share_first 0.2052, 0.1905, 0.1940 | update_load_correlation 0.0038, 0.0030, 0.0075 | specialization 0.1404, 0.1396, 0.1385 | spikes 0.0000, 0.0000, 0.0000
+  muon_except_router     val_loss 2.8952, 2.9012, 2.9012 | bias_span_first 0.2297, 0.2401, 0.3112 | router_input_similarity_first 0.7132, 0.8072, 0.6631 | bias_span 0.1238, 0.1202, 0.1302 | load_churn_warmup 0.1216, 0.1224, 0.1177 | max_load_ratio_first_early 7.5338, 6.4572, 7.7036 | router_update_common_share_first 0.5438, 0.5533, 0.6235 | update_load_correlation 0.0097, 0.0098, 0.0046 | specialization 0.1470, 0.1430, 0.1372 | spikes 2.0000, 6.0000, 2.0000
+muon - adamw, tokens               val_loss                             -0.0446 (-0.0479 to -0.0403) effect -14.8 ---
+muon - adamw, tokens               bias_span_first                      +0.1521 (+0.0875 to +0.2402) effect 3.2 +++
+muon - adamw, tokens               router_input_similarity_first        +0.5247 (+0.4954 to +0.5827) effect 20.4 +++
+muon - adamw, tokens               bias_span                            +0.0335 (+0.0268 to +0.0454) effect 4.8 +++
+muon - adamw, tokens               load_churn_warmup                    -0.0355 (-0.0363 to -0.0342) effect -24.5 ---
+muon - adamw, tokens               max_load_ratio_first_early           +5.1857 (+4.4550 to +6.0979) effect 8.8 +++
+muon - adamw, tokens               router_update_common_share_first     +0.0834 (+0.0574 to +0.1022) effect 5.4 +++
+muon - adamw, tokens               update_load_correlation              -0.3992 (-0.4040 to -0.3959) effect -108.7 ---
+muon - adamw, tokens               specialization                       +0.0201 (+0.0171 to +0.0255) effect 6.0 +++
+muon - adamw, tokens               spikes                               +0.0000 (+0.0000 to +0.0000) effect nan 000
+muon_except_router - adamw, tokens val_loss                             -0.0409 (-0.0441 to -0.0373) effect -14.2 ---
+muon_except_router - adamw, tokens bias_span_first                      +0.1249 (+0.0675 to +0.1861) effect 3.5 +++
+muon_except_router - adamw, tokens router_input_similarity_first        +0.6424 (+0.6040 to +0.7135) effect 11.8 +++
+muon_except_router - adamw, tokens bias_span                            +0.0257 (+0.0219 to +0.0311) effect 7.1 +++
+muon_except_router - adamw, tokens load_churn_warmup                    +0.0028 (+0.0011 to +0.0046) effect 1.4 +++
+muon_except_router - adamw, tokens max_load_ratio_first_early           +6.0932 (+5.3176 to +6.5664) effect 12.7 +++
+muon_except_router - adamw, tokens router_update_common_share_first     +0.4603 (+0.4408 to +0.4869) effect 13.5 +++
+muon_except_router - adamw, tokens update_load_correlation              -0.3960 (-0.4006 to -0.3891) effect -102.7 ---
+muon_except_router - adamw, tokens specialization                       +0.0231 (+0.0158 to +0.0290) effect 4.8 +++
+muon_except_router - adamw, tokens spikes                               +3.3333 (+2.0000 to +6.0000) effect 2.0 +++
+muon_except_router - muon, tokens  val_loss                             +0.0037 (+0.0030 to +0.0041) effect 1.0 +++
+muon_except_router - muon, tokens  bias_span_first                      -0.0272 (-0.1192 to +0.0577) effect -0.5 --+
+muon_except_router - muon, tokens  router_input_similarity_first        +0.1177 (+0.0213 to +0.2181) effect 2.1 +++
+muon_except_router - muon, tokens  bias_span                            -0.0078 (-0.0235 to +0.0043) effect -1.0 --+
+muon_except_router - muon, tokens  load_churn_warmup                    +0.0383 (+0.0373 to +0.0388) effect 17.6 +++
+muon_except_router - muon, tokens  max_load_ratio_first_early           +0.9075 (-0.7803 to +1.9404) effect 1.2 +-+
+muon_except_router - muon, tokens  router_update_common_share_first     +0.3769 (+0.3386 to +0.4295) effect 12.1 +++
+muon_except_router - muon, tokens  update_load_correlation              +0.0033 (-0.0029 to +0.0068) effect 1.2 ++-
+muon_except_router - muon, tokens  specialization                       +0.0029 (-0.0013 to +0.0066) effect 0.8 ++-
+muon_except_router - muon, tokens  spikes                               +3.3333 (+2.0000 to +6.0000) effect 2.0 +++
+
+== The contrasts tfg.claims decided, both views
+  rq1           P              bias_span                          muon                                   < adamw                                  tokens +0.0327 (+0.0304 to +0.0361) +++ fail
+  rq1           P              bias_span                          muon                                   < adamw                                  loss   +0.0384 (+0.0363 to +0.0417) +++ fail
+  rq1           C1             load_churn                         muon                                   < adamw                                  tokens +0.0058 (+0.0043 to +0.0077) +++ fail
+  rq1           C1             load_churn                         muon                                   < adamw                                  loss   +0.0075 (+0.0058 to +0.0095) +++ fail
+  rq1           C2             load_churn_early                   muon                                   < adamw                                  tokens +0.0147 (+0.0106 to +0.0168) +++ fail
+  rq1           C2             load_churn_early                   muon                                   < adamw                                  loss   +0.0147 (+0.0106 to +0.0168) +++ fail
+  rq1           C4             specialization                     adamw                                  < muon                                   tokens -0.0136 (-0.0174 to -0.0062) --- pass
+  rq1           C5             val_loss                           muon                                   < adamw                                  tokens -0.0777 (-0.0862 to -0.0621) --- pass
+  rq1           C6             update_load_correlation            muon                                   < adamw                                  tokens -0.3550 (-0.3618 to -0.3454) --- pass
+  rq1           C6             update_load_correlation            muon                                   < adamw                                  loss   -0.3504 (-0.3574 to -0.3409) --- pass
+  rq1           C7             router_row_dispersion_early        muon                                   < adamw                                  tokens -0.0010 (-0.0029 to +0.0016) -+- direction
+  rq1           C7             router_row_dispersion_early        muon                                   < adamw                                  loss   -0.0010 (-0.0029 to +0.0016) -+- direction
+  rq1           H2-late        bias_span                          muon                                   < adamw                                  tokens +0.0327 (+0.0304 to +0.0361) +++ fail
+  rq1           H2-late        bias_span                          muon                                   < adamw                                  loss   +0.0384 (+0.0363 to +0.0417) +++ fail
+  rq3           S              bias_span_first                    adamw                                  < muon                                   tokens -0.1027 (-0.1744 to -0.0452) --- pass
+  rq3           S              bias_span_first                    adamw                                  < muon                                   loss   -0.1220 (-0.2001 to -0.0603) --- pass
+  rq3           S              bias_span_first                    adamw                                  < muon_except_router                     tokens -0.0795 (-0.0907 to -0.0652) --- pass
+  rq3           S              bias_span_first                    adamw                                  < muon_except_router                     loss   -0.0939 (-0.1006 to -0.0818) --- pass
+  rq3           S              bias_span_first                    muon_router                            < muon                                   tokens -0.0990 (-0.1715 to -0.0284) --- pass
+  rq3           S              bias_span_first                    muon_router                            < muon                                   loss   -0.1168 (-0.1927 to -0.0435) --- pass
+  rq3           S              bias_span_first                    muon_router                            < muon_except_router                     tokens -0.0758 (-0.0993 to -0.0484) --- pass
+  rq3           S              bias_span_first                    muon_router                            < muon_except_router                     loss   -0.0891 (-0.1093 to -0.0650) --- pass
+  rq3           S-rate         bias_span_first                    adamw                                  < muon-muonlr0.5x                        tokens -0.0240 (-0.0371 to -0.0098) --- pass
+  rq3           S-rate         bias_span_first                    adamw                                  < muon-muonlr0.5x                        loss   -0.0401 (-0.0561 to -0.0247) --- pass
+  rq3           S-parts        bias_span_first                    adamw                                  < muon_experts                           tokens -0.3138 (-0.4514 to -0.2362) --- pass
+  rq3           S-parts        bias_span_first                    adamw                                  < muon_experts                           loss   -0.3290 (-0.4679 to -0.2468) --- pass
+  rq3           S-parts        bias_span_first                    adamw                                  < muon_attention_dense                   tokens -0.1337 (-0.2202 to -0.0808) --- pass
+  rq3           S-parts        bias_span_first                    adamw                                  < muon_attention_dense                   loss   -0.1464 (-0.2354 to -0.0867) --- pass
+  rq3           G              router_input_similarity_first      adamw                                  < muon                                   tokens -0.3376 (-0.3455 to -0.3242) --- pass
+  rq3           G              router_input_similarity_first      adamw                                  < muon                                   loss   -0.3406 (-0.3488 to -0.3278) --- pass
+  rq3           G              router_input_similarity_first      adamw                                  < muon_except_router                     tokens -0.3208 (-0.3355 to -0.3127) --- pass
+  rq3           G              router_input_similarity_first      adamw                                  < muon_except_router                     loss   -0.3238 (-0.3380 to -0.3167) --- pass
+  rq3           G              router_input_similarity_first      muon_router                            < muon                                   tokens -0.3344 (-0.3635 to -0.3145) --- pass
+  rq3           G              router_input_similarity_first      muon_router                            < muon                                   loss   -0.3373 (-0.3650 to -0.3182) --- pass
+  rq3           G              router_input_similarity_first      muon_router                            < muon_except_router                     tokens -0.3176 (-0.3345 to -0.3031) --- pass
+  rq3           G              router_input_similarity_first      muon_router                            < muon_except_router                     loss   -0.3205 (-0.3365 to -0.3071) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_experts                           < muon                                   tokens -0.2626 (-0.2820 to -0.2525) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_experts                           < muon                                   loss   -0.2639 (-0.2828 to -0.2543) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_experts                           < muon_except_router                     tokens -0.2458 (-0.2530 to -0.2411) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_experts                           < muon_except_router                     loss   -0.2472 (-0.2541 to -0.2433) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_attention                         < muon                                   tokens -0.3548 (-0.3574 to -0.3524) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_attention                         < muon                                   loss   -0.3565 (-0.3583 to -0.3543) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_attention                         < muon_except_router                     tokens -0.3380 (-0.3431 to -0.3283) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_attention                         < muon_except_router                     loss   -0.3398 (-0.3457 to -0.3296) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_dense                             < muon                                   tokens -0.3750 (-0.3827 to -0.3659) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_dense                             < muon                                   loss   -0.3771 (-0.3850 to -0.3688) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_dense                             < muon_except_router                     tokens -0.3582 (-0.3728 to -0.3474) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_dense                             < muon_except_router                     loss   -0.3604 (-0.3747 to -0.3490) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_attention_dense                   < muon                                   tokens -0.3543 (-0.3605 to -0.3511) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_attention_dense                   < muon                                   loss   -0.3557 (-0.3619 to -0.3523) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_attention_dense                   < muon_except_router                     tokens -0.3375 (-0.3506 to -0.3223) --- pass
+  rq3           G-parts        router_input_similarity_first      muon_attention_dense                   < muon_except_router                     loss   -0.3390 (-0.3518 to -0.3236) --- pass
+  rq3           R              bias_span                          adamw                                  < muon                                   tokens -0.0375 (-0.0502 to -0.0309) --- pass
+  rq3           R              bias_span                          adamw                                  < muon                                   loss   -0.0431 (-0.0573 to -0.0353) --- pass
+  rq3           M              load_churn_warmup                  adamw                                  < muon_except_router                     tokens -0.0201 (-0.0231 to -0.0184) --- pass
+  rq3           M              load_churn_warmup                  adamw                                  < muon_except_router                     loss   -0.0201 (-0.0231 to -0.0184) --- pass
+  rq3           M              load_churn_warmup                  muon                                   < muon_except_router                     tokens -0.0382 (-0.0389 to -0.0375) --- pass
+  rq3           M              load_churn_warmup                  muon                                   < muon_except_router                     loss   -0.0382 (-0.0389 to -0.0375) --- pass
+  rq3           C3             usage_perplexity_final             adamw-unbalanced                       < muon-unbalanced                        tokens -6.1982 (-6.6700 to -5.5976) --- pass
+  rq3           C3             usage_perplexity_final             adamw-unbalanced                       < muon-unbalanced                        loss   -6.1257 (-6.7984 to -5.4817) --- pass
+  rq3           C4             specialization                     adamw                                  < muon                                   tokens -0.0164 (-0.0174 to -0.0150) --- pass
+  rq3           C5             val_loss                           muon                                   < adamw                                  tokens -0.0774 (-0.0828 to -0.0673) --- pass
+  rq3           C6             update_load_correlation            muon                                   < adamw                                  tokens -0.3506 (-0.3592 to -0.3349) --- pass
+  rq3           C6             update_load_correlation            muon                                   < adamw                                  loss   -0.3461 (-0.3563 to -0.3295) --- pass
+  rq3           C6             update_load_correlation            muon                                   < muon_attention                         tokens -0.4105 (-0.4285 to -0.3992) --- pass
+  rq3           C6             update_load_correlation            muon                                   < muon_attention                         loss   -0.4076 (-0.4251 to -0.3958) --- pass
+  rq3           C6             update_load_correlation            muon                                   < muon_router                            tokens -0.3624 (-0.3737 to -0.3499) --- pass
+  rq3           C6             update_load_correlation            muon                                   < muon_router                            loss   -0.3579 (-0.3708 to -0.3445) --- pass
+  rq3           C6             update_load_correlation            muon                                   < muon_dense                             tokens -0.4440 (-0.4675 to -0.4282) --- pass
+  rq3           C6             update_load_correlation            muon                                   < muon_dense                             loss   -0.4407 (-0.4654 to -0.4241) --- pass
+  rq3           C6             update_load_correlation            muon                                   < muon_attention_dense                   tokens -0.4291 (-0.4473 to -0.4017) --- pass
+  rq3           C6             update_load_correlation            muon                                   < muon_attention_dense                   loss   -0.4271 (-0.4453 to -0.4000) --- pass
+  rq3           C6             update_load_correlation            muon_except_router                     < adamw                                  tokens -0.3345 (-0.3426 to -0.3237) --- pass
+  rq3           C6             update_load_correlation            muon_except_router                     < adamw                                  loss   -0.3284 (-0.3339 to -0.3198) --- pass
+  rq3           C6             update_load_correlation            muon_except_router                     < muon_attention                         tokens -0.3944 (-0.4081 to -0.3871) --- pass
+  rq3           C6             update_load_correlation            muon_except_router                     < muon_attention                         loss   -0.3908 (-0.4038 to -0.3822) --- pass
+  rq3           C6             update_load_correlation            muon_except_router                     < muon_router                            tokens -0.3464 (-0.3571 to -0.3387) --- pass
+  rq3           C6             update_load_correlation            muon_except_router                     < muon_router                            loss   -0.3407 (-0.3499 to -0.3348) --- pass
+  rq3           C6             update_load_correlation            muon_except_router                     < muon_dense                             tokens -0.4279 (-0.4509 to -0.4158) --- pass
+  rq3           C6             update_load_correlation            muon_except_router                     < muon_dense                             loss   -0.4235 (-0.4455 to -0.4112) --- pass
+  rq3           C6             update_load_correlation            muon_except_router                     < muon_attention_dense                   tokens -0.4130 (-0.4271 to -0.3851) --- pass
+  rq3           C6             update_load_correlation            muon_except_router                     < muon_attention_dense                   loss   -0.4102 (-0.4257 to -0.3803) --- pass
+  rq3           C6             update_load_correlation            muon_experts                           < adamw                                  tokens -0.3519 (-0.3626 to -0.3356) --- pass
+  rq3           C6             update_load_correlation            muon_experts                           < adamw                                  loss   -0.3484 (-0.3592 to -0.3323) --- pass
+  rq3           C6             update_load_correlation            muon_experts                           < muon_attention                         tokens -0.4118 (-0.4335 to -0.3999) --- pass
+  rq3           C6             update_load_correlation            muon_experts                           < muon_attention                         loss   -0.4105 (-0.4326 to -0.3979) --- pass
+  rq3           C6             update_load_correlation            muon_experts                           < muon_router                            tokens -0.3638 (-0.3721 to -0.3506) --- pass
+  rq3           C6             update_load_correlation            muon_experts                           < muon_router                            loss   -0.3608 (-0.3700 to -0.3474) --- pass
+  rq3           C6             update_load_correlation            muon_experts                           < muon_dense                             tokens -0.4453 (-0.4659 to -0.4289) --- pass
+  rq3           C6             update_load_correlation            muon_experts                           < muon_dense                             loss   -0.4435 (-0.4652 to -0.4261) --- pass
+  rq3           C6             update_load_correlation            muon_experts                           < muon_attention_dense                   tokens -0.4304 (-0.4523 to -0.4000) --- pass
+  rq3           C6             update_load_correlation            muon_experts                           < muon_attention_dense                   loss   -0.4309 (-0.4553 to -0.3991) --- pass
+  rq3           C7             router_row_dispersion_early        muon                                   < adamw                                  tokens +0.0000 (-0.0102 to +0.0118) --+ fail
+  rq3           C7             router_row_dispersion_early        muon                                   < adamw                                  loss   +0.0000 (-0.0102 to +0.0118) --+ fail
+  rq3           C7             router_row_dispersion_early        muon                                   < muon_except_router                     tokens -0.0939 (-0.1005 to -0.0866) --- pass
+  rq3           C7             router_row_dispersion_early        muon                                   < muon_except_router                     loss   -0.0939 (-0.1005 to -0.0866) --- pass
+  rq3           C7             router_row_dispersion_early        muon                                   < muon_experts                           tokens -0.0224 (-0.0302 to -0.0151) --- pass
+  rq3           C7             router_row_dispersion_early        muon                                   < muon_experts                           loss   -0.0224 (-0.0302 to -0.0151) --- pass
+  rq3           C7             router_row_dispersion_early        muon                                   < muon_attention                         tokens -0.0333 (-0.0352 to -0.0302) --- pass
+  rq3           C7             router_row_dispersion_early        muon                                   < muon_attention                         loss   -0.0333 (-0.0352 to -0.0302) --- pass
+  rq3           C7             router_row_dispersion_early        muon                                   < muon_dense                             tokens +0.0014 (-0.0040 to +0.0101) --+ fail
+  rq3           C7             router_row_dispersion_early        muon                                   < muon_dense                             loss   +0.0014 (-0.0040 to +0.0101) --+ fail
+  rq3           C7             router_row_dispersion_early        muon                                   < muon_attention_dense                   tokens -0.0433 (-0.0570 to -0.0343) --- pass
+  rq3           C7             router_row_dispersion_early        muon                                   < muon_attention_dense                   loss   -0.0433 (-0.0570 to -0.0343) --- pass
+  rq3           C7             router_row_dispersion_early        muon_router                            < adamw                                  tokens -0.0220 (-0.0256 to -0.0186) --- pass
+  rq3           C7             router_row_dispersion_early        muon_router                            < adamw                                  loss   -0.0220 (-0.0256 to -0.0186) --- pass
+  rq3           C7             router_row_dispersion_early        muon_router                            < muon_except_router                     tokens -0.1160 (-0.1310 to -0.1021) --- pass
+  rq3           C7             router_row_dispersion_early        muon_router                            < muon_except_router                     loss   -0.1160 (-0.1310 to -0.1021) --- pass
+  rq3           C7             router_row_dispersion_early        muon_router                            < muon_experts                           tokens -0.0445 (-0.0456 to -0.0424) --- pass
+  rq3           C7             router_row_dispersion_early        muon_router                            < muon_experts                           loss   -0.0445 (-0.0456 to -0.0424) --- pass
+  rq3           C7             router_row_dispersion_early        muon_router                            < muon_attention                         tokens -0.0553 (-0.0606 to -0.0498) --- pass
+  rq3           C7             router_row_dispersion_early        muon_router                            < muon_attention                         loss   -0.0553 (-0.0606 to -0.0498) --- pass
+  rq3           C7             router_row_dispersion_early        muon_router                            < muon_dense                             tokens -0.0207 (-0.0243 to -0.0174) --- pass
+  rq3           C7             router_row_dispersion_early        muon_router                            < muon_dense                             loss   -0.0207 (-0.0243 to -0.0174) --- pass
+  rq3           C7             router_row_dispersion_early        muon_router                            < muon_attention_dense                   tokens -0.0654 (-0.0724 to -0.0590) --- pass
+  rq3           C7             router_row_dispersion_early        muon_router                            < muon_attention_dense                   loss   -0.0654 (-0.0724 to -0.0590) --- pass
+  balancer      S              bias_span_first                    adamw                                  < muon                                   tokens -0.0748 (-0.0946 to -0.0408) --- pass
+  balancer      S              bias_span_first                    adamw                                  < muon                                   loss   -0.0927 (-0.1135 to -0.0525) --- pass
+  balancer      G              router_input_similarity_first      adamw                                  < muon                                   tokens -0.3286 (-0.3323 to -0.3239) --- pass
+  balancer      G              router_input_similarity_first      adamw                                  < muon                                   loss   -0.3306 (-0.3354 to -0.3262) --- pass
+  balancer      R              bias_span                          adamw                                  < muon                                   tokens -0.0359 (-0.0436 to -0.0297) --- pass
+  balancer      R              bias_span                          adamw                                  < muon                                   loss   -0.0413 (-0.0494 to -0.0345) --- pass
+  balancer      C4             specialization                     adamw                                  < muon                                   tokens -0.0186 (-0.0297 to -0.0116) --- pass
+  balancer      C5             val_loss                           muon                                   < adamw                                  tokens -0.0816 (-0.0941 to -0.0688) --- pass
+  balancer      C6             update_load_correlation            muon                                   < adamw                                  tokens -0.3442 (-0.3531 to -0.3291) --- pass
+  balancer      C6             update_load_correlation            muon                                   < adamw                                  loss   -0.3396 (-0.3485 to -0.3228) --- pass
+  balancer      S-fast         bias_span_first                    adamw-balancer4x                       < muon-balancer4x                        tokens -0.0398 (-0.0662 to -0.0134) --- pass
+  balancer      S-fast         bias_span_first                    adamw-balancer4x                       < muon-balancer4x                        loss   -0.0513 (-0.0771 to -0.0243) --- pass
+  balancer      L              bias_span_first                    muon-balancer4x                        < muon                                   tokens -0.0424 (-0.0834 to -0.0148) --- pass
+  balancer      L              bias_span_first                    muon-balancer4x                        < muon                                   loss   -0.0424 (-0.0834 to -0.0148) --- pass
+  balancer      O-fast         max_load_ratio_first_early         muon-balancer4x                        < muon                                   tokens -2.3295 (-2.9088 to -1.5342) --- pass
+  balancer      O-fast         max_load_ratio_first_early         muon-balancer4x                        < muon                                   loss   -2.3295 (-2.9088 to -1.5342) --- pass
+  balancer      C7             router_row_dispersion_early        muon                                   < adamw                                  tokens -0.0079 (-0.0154 to -0.0026) --- pass
+  balancer      C7             router_row_dispersion_early        muon                                   < adamw                                  loss   -0.0079 (-0.0154 to -0.0026) --- pass
+  balance_loss  S              bias_span_first                    adamw                                  < muon                                   tokens -0.1027 (-0.1744 to -0.0452) --- pass
+  balance_loss  S              bias_span_first                    adamw                                  < muon                                   loss   -0.1220 (-0.2001 to -0.0603) --- pass
+  balance_loss  S              bias_span_first                    adamw                                  < muon_except_router                     tokens -0.0795 (-0.0907 to -0.0652) --- pass
+  balance_loss  S              bias_span_first                    adamw                                  < muon_except_router                     loss   -0.0939 (-0.1006 to -0.0818) --- pass
+  balance_loss  G              router_input_similarity_first      adamw                                  < muon                                   tokens -0.3376 (-0.3455 to -0.3242) --- pass
+  balance_loss  G              router_input_similarity_first      adamw                                  < muon                                   loss   -0.3406 (-0.3488 to -0.3278) --- pass
+  balance_loss  G              router_input_similarity_first      adamw                                  < muon_except_router                     tokens -0.3208 (-0.3355 to -0.3127) --- pass
+  balance_loss  G              router_input_similarity_first      adamw                                  < muon_except_router                     loss   -0.3238 (-0.3380 to -0.3167) --- pass
+  balance_loss  R              bias_span                          adamw                                  < muon                                   tokens -0.0375 (-0.0502 to -0.0309) --- pass
+  balance_loss  R              bias_span                          adamw                                  < muon                                   loss   -0.0431 (-0.0573 to -0.0353) --- pass
+  balance_loss  M              load_churn_warmup                  adamw                                  < muon_except_router                     tokens -0.0201 (-0.0231 to -0.0184) --- pass
+  balance_loss  M              load_churn_warmup                  adamw                                  < muon_except_router                     loss   -0.0201 (-0.0231 to -0.0184) --- pass
+  balance_loss  M              load_churn_warmup                  muon                                   < muon_except_router                     tokens -0.0382 (-0.0389 to -0.0375) --- pass
+  balance_loss  M              load_churn_warmup                  muon                                   < muon_except_router                     loss   -0.0382 (-0.0389 to -0.0375) --- pass
+  balance_loss  C4             specialization                     adamw                                  < muon                                   tokens -0.0164 (-0.0174 to -0.0150) --- pass
+  balance_loss  C5             val_loss                           muon                                   < adamw                                  tokens -0.0774 (-0.0828 to -0.0673) --- pass
+  balance_loss  C6             update_load_correlation            muon                                   < adamw                                  tokens -0.3506 (-0.3592 to -0.3349) --- pass
+  balance_loss  C6             update_load_correlation            muon                                   < adamw                                  loss   -0.3461 (-0.3563 to -0.3295) --- pass
+  balance_loss  C6             update_load_correlation            muon_except_router                     < adamw                                  tokens -0.3345 (-0.3426 to -0.3237) --- pass
+  balance_loss  C6             update_load_correlation            muon_except_router                     < adamw                                  loss   -0.3284 (-0.3339 to -0.3198) --- pass
+  balance_loss  S-loss         bias_span_first                    adamw-balanceloss0.0001                < muon-balanceloss0.0001                 tokens -0.0809 (-0.1213 to -0.0448) --- pass
+  balance_loss  S-loss         bias_span_first                    adamw-balanceloss0.0001                < muon-balanceloss0.0001                 loss   -0.1006 (-0.1436 to -0.0591) --- pass
+  balance_loss  S-loss         bias_span_first                    adamw-balanceloss0.0001                < muon_except_router-balanceloss0.0001   tokens -0.0554 (-0.0729 to -0.0394) --- pass
+  balance_loss  S-loss         bias_span_first                    adamw-balanceloss0.0001                < muon_except_router-balanceloss0.0001   loss   -0.0703 (-0.0860 to -0.0555) --- pass
+  balance_loss  G-loss         router_input_similarity_first      adamw-balanceloss0.0001                < muon-balanceloss0.0001                 tokens -0.3379 (-0.3465 to -0.3294) --- pass
+  balance_loss  G-loss         router_input_similarity_first      adamw-balanceloss0.0001                < muon-balanceloss0.0001                 loss   -0.3404 (-0.3487 to -0.3338) --- pass
+  balance_loss  G-loss         router_input_similarity_first      adamw-balanceloss0.0001                < muon_except_router-balanceloss0.0001   tokens -0.3284 (-0.3375 to -0.3207) --- pass
+  balance_loss  G-loss         router_input_similarity_first      adamw-balanceloss0.0001                < muon_except_router-balanceloss0.0001   loss   -0.3309 (-0.3392 to -0.3241) --- pass
+  balance_loss  L-loss         bias_span_first                    muon-balanceloss0.0001                 < muon                                   tokens -0.0443 (-0.1227 to +0.0015) +-- direction
+  balance_loss  L-loss         bias_span_first                    muon-balanceloss0.0001                 < muon                                   loss   -0.0443 (-0.1227 to +0.0014) +-- direction
+  balance_loss  O-loss         max_load_ratio_first_early         muon-balanceloss0.0001                 < muon                                   tokens -1.2512 (-2.0928 to -0.1639) --- pass
+  balance_loss  O-loss         max_load_ratio_first_early         muon-balanceloss0.0001                 < muon                                   loss   -1.2512 (-2.0928 to -0.1639) --- pass
+  balance_loss  L-loss-router  bias_span_first                    muon_except_router-balanceloss0.0001   < muon_except_router                     tokens -0.0466 (-0.0537 to -0.0371) --- pass
+  balance_loss  L-loss-router  bias_span_first                    muon_except_router-balanceloss0.0001   < muon_except_router                     loss   -0.0466 (-0.0538 to -0.0371) --- pass
+  balance_loss  C7             router_row_dispersion_early        muon                                   < adamw                                  tokens +0.0000 (-0.0102 to +0.0118) --+ fail
+  balance_loss  C7             router_row_dispersion_early        muon                                   < adamw                                  loss   +0.0000 (-0.0102 to +0.0118) --+ fail
+  balance_loss  C7             router_row_dispersion_early        muon                                   < muon_except_router                     tokens -0.0939 (-0.1005 to -0.0866) --- pass
+  balance_loss  C7             router_row_dispersion_early        muon                                   < muon_except_router                     loss   -0.0939 (-0.1005 to -0.0866) --- pass
+  confirmation  S              bias_span_first                    adamw                                  < muon                                   tokens -0.1521 (-0.2402 to -0.0875) --- pass
+  confirmation  S              bias_span_first                    adamw                                  < muon                                   loss   -0.1724 (-0.2687 to -0.1143) --- pass
+  confirmation  S              bias_span_first                    adamw                                  < muon_except_router                     tokens -0.1249 (-0.1861 to -0.0675) --- pass
+  confirmation  S              bias_span_first                    adamw                                  < muon_except_router                     loss   -0.1083 (-0.1436 to -0.0709) --- pass
+  confirmation  G              router_input_similarity_first      adamw                                  < muon                                   tokens -0.5247 (-0.5827 to -0.4954) --- pass
+  confirmation  G              router_input_similarity_first      adamw                                  < muon                                   loss   -0.5333 (-0.5933 to -0.5010) --- pass
+  confirmation  G              router_input_similarity_first      adamw                                  < muon_except_router                     tokens -0.6424 (-0.7135 to -0.6040) --- pass
+  confirmation  G              router_input_similarity_first      adamw                                  < muon_except_router                     loss   -0.6481 (-0.7148 to -0.6124) --- pass
+  confirmation  R              bias_span                          adamw                                  < muon                                   tokens -0.0335 (-0.0454 to -0.0268) --- pass
+  confirmation  R              bias_span                          adamw                                  < muon                                   loss   -0.0374 (-0.0506 to -0.0295) --- pass
+  confirmation  M              load_churn_warmup                  adamw                                  < muon_except_router                     tokens -0.0028 (-0.0046 to -0.0011) --- pass
+  confirmation  M              load_churn_warmup                  adamw                                  < muon_except_router                     loss   -0.0028 (-0.0046 to -0.0011) --- pass
+  confirmation  M              load_churn_warmup                  muon                                   < muon_except_router                     tokens -0.0383 (-0.0388 to -0.0373) --- pass
+  confirmation  M              load_churn_warmup                  muon                                   < muon_except_router                     loss   -0.0383 (-0.0388 to -0.0373) --- pass
+  confirmation  C4             specialization                     adamw                                  < muon                                   tokens -0.0201 (-0.0255 to -0.0171) --- pass
+  confirmation  C5             val_loss                           muon                                   < adamw                                  tokens -0.0446 (-0.0479 to -0.0403) --- pass
+  confirmation  C6             update_load_correlation            muon                                   < adamw                                  tokens -0.3992 (-0.4040 to -0.3959) --- pass
+  confirmation  C6             update_load_correlation            muon                                   < adamw                                  loss   -0.3960 (-0.4015 to -0.3929) --- pass
+  confirmation  C6             update_load_correlation            muon_except_router                     < adamw                                  tokens -0.3960 (-0.4006 to -0.3891) --- pass
+  confirmation  C6             update_load_correlation            muon_except_router                     < adamw                                  loss   -0.3927 (-0.3972 to -0.3850) --- pass
+  confirmation  O              max_load_ratio_first_early         adamw                                  < muon                                   tokens -5.1857 (-6.0979 to -4.4550) --- pass
+  confirmation  O              max_load_ratio_first_early         adamw                                  < muon                                   loss   -5.1857 (-6.0979 to -4.4550) --- pass
+  confirmation  O              max_load_ratio_first_early         adamw                                  < muon_except_router                     tokens -6.0932 (-6.5664 to -5.3176) --- pass
+  confirmation  O              max_load_ratio_first_early         adamw                                  < muon_except_router                     loss   -6.0932 (-6.5664 to -5.3176) --- pass
+  confirmation  O-router       max_load_ratio_first_early         muon                                   < muon_except_router                     tokens -0.9075 (-1.9404 to +0.7803) -+- direction
+  confirmation  O-router       max_load_ratio_first_early         muon                                   < muon_except_router                     loss   -0.9075 (-1.9404 to +0.7803) -+- direction
+  confirmation  U              router_update_common_share_first   adamw                                  < muon_except_router                     tokens -0.4603 (-0.4869 to -0.4408) --- pass
+  confirmation  U              router_update_common_share_first   adamw                                  < muon_except_router                     loss   -0.4623 (-0.4887 to -0.4413) --- pass
+  confirmation  U              router_update_common_share_first   muon                                   < muon_except_router                     tokens -0.3769 (-0.4295 to -0.3386) --- pass
+  confirmation  U              router_update_common_share_first   muon                                   < muon_except_router                     loss   -0.3772 (-0.4296 to -0.3388) --- pass
+  confirmation  C7             router_row_dispersion_early        muon                                   < adamw                                  tokens +0.0153 (+0.0117 to +0.0177) +++ fail
+  confirmation  C7             router_row_dispersion_early        muon                                   < adamw                                  loss   +0.0153 (+0.0117 to +0.0177) +++ fail
+  confirmation  C7             router_row_dispersion_early        muon                                   < muon_except_router                     tokens -0.1146 (-0.1266 to -0.1020) --- pass
+  confirmation  C7             router_row_dispersion_early        muon                                   < muon_except_router                     loss   -0.1146 (-0.1266 to -0.1020) --- pass
+
