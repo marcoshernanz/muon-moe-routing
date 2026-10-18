@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/root/code/tfg/analysis.py", line 1014, in <module>
+    tyro.cli(report)
+    ~~~~~~~~^^^^^^^^
+  File "/root/code/.venv/lib/python3.14/site-packages/tyro/_cli.py", line 328, in cli
+    out = run_with_args_from_cli()
+  File "/root/code/tfg/analysis.py", line 952, in report
+    table = collect(runs_dir)
+  File "/root/code/tfg/analysis.py", line 418, in collect
+    table = pd.DataFrame([endpoints(run_dir) for run_dir in run_dirs(runs_dir)])
+                                                            ~~~~~~~~^^^^^^^^^^
+  File "/root/code/tfg/analysis.py", line 412, in run_dirs
+    raise FileNotFoundError(f"no runs under {runs_dir}")
+FileNotFoundError: no runs under smoke/rq3

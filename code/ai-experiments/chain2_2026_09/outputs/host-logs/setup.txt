@@ -1,0 +1,20 @@
+index, name, driver_version, memory.total [MiB], clocks.max.sm [MHz], power.limit [W], power.max_limit [W], pcie.link.gen.max, pcie.link.width.max
+0, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 3090 MHz, 575.00 W, 600.00 W, 4, 16
+1, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 3090 MHz, 575.00 W, 600.00 W, 4, 16
+2, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 3105 MHz, 575.00 W, 600.00 W, 4, 16
+3, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 3105 MHz, 575.00 W, 600.00 W, 4, 16
+cpus 144
+Model name:                              Intel(R) Xeon(R) Platinum 8352V CPU @ 2.10GHz
+               total        used        free      shared  buff/cache   available
+Mem:             503          19          27           8         469         483
+Swap:              7           0           7
+overlay         200G  2.5M  200G   1% /
+ + yarl==1.24.5
+uv sync 306 s
+2.14.0+cu130 13.0 ['NVIDIA GeForce RTX 5090', 'NVIDIA GeForce RTX 5090', 'NVIDIA GeForce RTX 5090', 'NVIDIA GeForce RTX 5090']
+hf download 483 s
+download() 3 s, 1021 files, 19G
+Repo card metadata block was not found. Setting CardData to empty.
+code: 2000000 tokens
+wiki: 2000000 tokens
+panel 30 s

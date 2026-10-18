@@ -1,0 +1,39 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/root/code/tfg/program.py", line 433, in <module>
+    main()
+    ~~~~^^
+  File "/root/code/tfg/program.py", line 429, in main
+    return tyro.extras.subcommand_cli_from_dict(BLOCKS, args=args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/root/code/.venv/lib/python3.14/site-packages/tyro/extras/_subcommand_cli_from_dict.py", line 125, in subcommand_cli_from_dict
+    return cli(
+        Union[  # type: ignore
+    ...<24 lines>...
+        registry=registry,
+    )
+  File "/root/code/.venv/lib/python3.14/site-packages/tyro/_cli.py", line 281, in cli
+    output = _cli_impl(
+        f,
+    ...<12 lines>...
+        **deprecated_kwargs,
+    )
+  File "/root/code/.venv/lib/python3.14/site-packages/tyro/_cli.py", line 648, in _cli_impl
+    get_out, consumed_keywords = _calling.callable_with_args(
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        f,
+        ^^
+    ...<3 lines>...
+        field_name_prefix="",
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/root/code/.venv/lib/python3.14/site-packages/tyro/_calling.py", line 255, in callable_with_args
+    value = get_value()
+  File "/root/code/tfg/program.py", line 413, in evaluate
+    workers.each(run_dirs(shared.runs_dir / block), evaluate_run, wait=False)
+                 ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/code/tfg/analysis.py", line 412, in run_dirs
+    raise FileNotFoundError(f"no runs under {runs_dir}")
+FileNotFoundError: no runs under smoke/rq3

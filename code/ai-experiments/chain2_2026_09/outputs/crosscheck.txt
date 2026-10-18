@@ -1,0 +1,36 @@
+mechanism-adamw-s3                   readings 1526 to step 15259, span 0.1021 (off by 7.2e-12), cosine 0.0674 (off by 0.0e+00), validation loss 3.2566 at step 15259
+mechanism-adamw-s4                   readings 1526 to step 15259, span 0.0910 (off by 1.1e-10), cosine 0.0699 (off by 0.0e+00), validation loss 3.2575 at step 15259
+mechanism-adamw-s5                   readings 1526 to step 15259, span 0.0921 (off by 8.6e-11), cosine 0.0745 (off by 0.0e+00), validation loss 3.2439 at step 15259
+mechanism-adamw-unbalanced-s3        readings 1526 to step 15259, span 0.0000 (off by 0.0e+00), cosine 0.0944 (off by 1.4e-17), validation loss 3.3113 at step 15259
+mechanism-adamw-unbalanced-s4        readings 1526 to step 15259, span 0.0000 (off by 0.0e+00), cosine 0.1243 (off by 1.4e-17), validation loss 3.2985 at step 15259
+mechanism-adamw-unbalanced-s5        readings 1526 to step 15259, span 0.0000 (off by 0.0e+00), cosine 0.0942 (off by 1.4e-17), validation loss 3.3004 at step 15259
+mechanism-muon-muonlr0.5x-s3         readings 1526 to step 15259, span 0.1119 (off by 3.5e-10), cosine 0.3888 (off by 5.6e-17), validation loss 3.1619 at step 15259
+mechanism-muon-muonlr0.5x-s4         readings 1526 to step 15259, span 0.1160 (off by 4.2e-12), cosine 0.4123 (off by 5.6e-17), validation loss 3.1655 at step 15259
+mechanism-muon-muonlr0.5x-s5         readings 1526 to step 15259, span 0.1293 (off by 4.6e-10), cosine 0.4020 (off by 0.0e+00), validation loss 3.1691 at step 15259
+mechanism-muon-s3                    readings 1526 to step 15259, span 0.1907 (off by 2.4e-10), cosine 0.4128 (off by 0.0e+00), validation loss 3.1738 at step 15259
+mechanism-muon-s4                    readings 1526 to step 15259, span 0.2654 (off by 5.2e-10), cosine 0.4131 (off by 0.0e+00), validation loss 3.1754 at step 15259
+mechanism-muon-s5                    readings 1526 to step 15259, span 0.1373 (off by 2.3e-10), cosine 0.3987 (off by 5.6e-17), validation loss 3.1767 at step 15259
+mechanism-muon-unbalanced-s3         readings 1526 to step 15259, span 0.0000 (off by 0.0e+00), cosine 0.4023 (off by 5.6e-17), validation loss 3.1880 at step 15259
+mechanism-muon-unbalanced-s4         readings 1526 to step 15259, span 0.0000 (off by 0.0e+00), cosine 0.4022 (off by 5.6e-17), validation loss 3.1857 at step 15259
+mechanism-muon-unbalanced-s5         readings 1526 to step 15259, span 0.0000 (off by 0.0e+00), cosine 0.4013 (off by 5.6e-17), validation loss 3.1919 at step 15259
+mechanism-muon_attention-s3          readings 1526 to step 15259, span 0.1779 (off by 1.6e-11), cosine 0.0604 (off by 0.0e+00), validation loss 3.2237 at step 15259
+mechanism-muon_attention-s4          readings 1526 to step 15259, span 0.1267 (off by 1.3e-11), cosine 0.0557 (off by 6.9e-18), validation loss 3.2162 at step 15259
+mechanism-muon_attention-s5          readings 1526 to step 15259, span 0.0842 (off by 4.7e-11), cosine 0.0442 (off by 6.9e-18), validation loss 3.2213 at step 15259
+mechanism-muon_attention_dense-s3    readings 1526 to step 15259, span 0.2022 (off by 3.8e-10), cosine 0.0523 (off by 0.0e+00), validation loss 3.2090 at step 15259
+mechanism-muon_attention_dense-s4    readings 1526 to step 15259, span 0.3112 (off by 4.8e-10), cosine 0.0617 (off by 0.0e+00), validation loss 3.2147 at step 15259
+mechanism-muon_attention_dense-s5    readings 1526 to step 15259, span 0.1729 (off by 2.0e-10), cosine 0.0475 (off by 0.0e+00), validation loss 3.2062 at step 15259
+mechanism-muon_dense-s3              readings 1526 to step 15259, span 0.0895 (off by 8.7e-13), cosine 0.0301 (off by 3.5e-18), validation loss 3.2333 at step 15259
+mechanism-muon_dense-s4              readings 1526 to step 15259, span 0.0997 (off by 1.3e-10), cosine 0.0366 (off by 0.0e+00), validation loss 3.2221 at step 15259
+mechanism-muon_dense-s5              readings 1526 to step 15259, span 0.0924 (off by 8.4e-11), cosine 0.0328 (off by 6.9e-18), validation loss 3.2254 at step 15259
+mechanism-muon_except_router-s3      readings 1526 to step 15259, span 0.1928 (off by 9.3e-11), cosine 0.4029 (off by 5.6e-17), validation loss 3.1774 at step 15259
+mechanism-muon_except_router-s4      readings 1526 to step 15259, span 0.1737 (off by 5.6e-10), cosine 0.3840 (off by 5.6e-17), validation loss 3.1766 at step 15259
+mechanism-muon_except_router-s5      readings 1526 to step 15259, span 0.1573 (off by 3.2e-11), cosine 0.3873 (off by 5.6e-17), validation loss 3.1783 at step 15259
+mechanism-muon_experts-s3            readings 1526 to step 15259, span 0.5535 (off by 1.2e-09), cosine 0.1596 (off by 0.0e+00), validation loss 3.1988 at step 15259
+mechanism-muon_experts-s4            readings 1526 to step 15259, span 0.3448 (off by 4.3e-10), cosine 0.1310 (off by 0.0e+00), validation loss 3.2066 at step 15259
+mechanism-muon_experts-s5            readings 1526 to step 15259, span 0.3284 (off by 3.9e-10), cosine 0.1461 (off by 0.0e+00), validation loss 3.2102 at step 15259
+mechanism-muon_router-s3             readings 1526 to step 15259, span 0.0934 (off by 8.2e-12), cosine 0.0876 (off by 1.4e-17), validation loss 3.2551 at step 15259
+mechanism-muon_router-s4             readings 1526 to step 15259, span 0.0939 (off by 3.9e-10), cosine 0.0496 (off by 0.0e+00), validation loss 3.2435 at step 15259
+mechanism-muon_router-s5             readings 1526 to step 15259, span 0.1089 (off by 1.5e-10), cosine 0.0842 (off by 0.0e+00), validation loss 3.2458 at step 15259
+runs 33, missing []; train_windows [9820365]
+largest difference from the analysis: span 1.2e-09, cosine 5.6e-17
+problems: none

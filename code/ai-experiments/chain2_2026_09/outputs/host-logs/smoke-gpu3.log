@@ -1,0 +1,87 @@
+smoke/rq3/mechanism-adamw-s0: another worker is on it
+smoke/rq3/mechanism-muon-s0: another worker is on it
+run 3 of 11: smoke/rq3/mechanism-muon_except_router-s0
+[W925 20:00:12.269979487 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3932160, total: 33668726784).
+[W925 20:00:12.272793327 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3932160, total: 33668726784).
+[W925 20:00:12.273534078 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3932160, total: 33668726784).
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/root/code/tfg/program.py", line 433, in <module>
+    main()
+    ~~~~^^
+  File "/root/code/tfg/program.py", line 429, in main
+    return tyro.extras.subcommand_cli_from_dict(BLOCKS, args=args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/root/code/.venv/lib/python3.14/site-packages/tyro/extras/_subcommand_cli_from_dict.py", line 125, in subcommand_cli_from_dict
+    return cli(
+        Union[  # type: ignore
+    ...<24 lines>...
+        registry=registry,
+    )
+  File "/root/code/.venv/lib/python3.14/site-packages/tyro/_cli.py", line 281, in cli
+    output = _cli_impl(
+        f,
+    ...<12 lines>...
+        **deprecated_kwargs,
+    )
+  File "/root/code/.venv/lib/python3.14/site-packages/tyro/_cli.py", line 648, in _cli_impl
+    get_out, consumed_keywords = _calling.callable_with_args(
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        f,
+        ^^
+    ...<3 lines>...
+        field_name_prefix="",
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/root/code/.venv/lib/python3.14/site-packages/tyro/_calling.py", line 255, in callable_with_args
+    value = get_value()
+  File "/root/code/tfg/program.py", line 291, in rq3
+    return launch(
+        shared, shared.runs_dir / "rq3", runs, tier=tier, steps=steps_of(tier, tokens), rates=rates
+    )
+  File "/root/code/tfg/program.py", line 177, in launch
+    workers.each(dirs, run, wait=wait)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/code/tfg/workers.py", line 31, in each
+    train(run_dir)
+    ~~~~~^^^^^^^^^
+  File "/root/code/tfg/program.py", line 163, in run
+    records = train(
+        tier=tier,
+    ...<7 lines>...
+        **shared.training,
+    )
+  File "/root/code/tfg/train.py", line 443, in train
+    loss, norms = train_step(
+                  ~~~~~~~~~~^
+        model,
+        ^^^^^^
+    ...<6 lines>...
+        balancer_multiplier=balancer_multiplier,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/root/code/tfg/train.py", line 173, in train_step
+    loss = loss_of(inputs, targets)  # []
+  File "/root/code/tfg/train.py", line 139, in loss_of
+    return cross_entropy(model(inputs), targets)  # []
+                         ~~~~~^^^^^^^^
+  File "/root/code/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/root/code/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/code/tfg/model.py", line 317, in forward
+    return self.lm_head(hidden)  # [B, T, V]
+           ~~~~~~~~~~~~^^^^^^^^
+  File "/root/code/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/root/code/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/code/.venv/lib/python3.14/site-packages/torch/nn/modules/linear.py", line 134, in forward
+    return F.linear(input, self.weight, self.bias)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 64.00 MiB. GPU 0 has a total capacity of 31.36 GiB of which 43.75 MiB is free. Including non-PyTorch memory, this process has 31.30 GiB memory in use. Of the allocated memory 30.65 GiB is allocated by PyTorch, and 53.99 MiB is reserved by PyTorch but unallocated.
