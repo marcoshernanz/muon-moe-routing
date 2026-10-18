@@ -1,0 +1,92 @@
+The first mixture, whole (every step after the warmup), mean over seeds; margins over the bias's step u of the run
+  group                                                       n   logit norm      entropy     margin/u        low/u        churn      busiest  raw busiest       cosine         span same busiest
+  mech rq1          adamw                                     3        4.136        3.432       20.757        1.960        0.018        1.071          nan          nan        0.084        0.051
+  mech rq1          muon                                      3       17.627        2.983       10.241        0.312        0.052        1.674          nan          nan        0.194        0.490
+  mech rq2          adamw-lr16x                               3       31.223        1.897       65.765        1.668        0.130        2.228          nan          nan        0.211        0.347
+  mech rq2          adamw-lr2x                                3        5.537        3.405       27.258        2.483        0.026        1.122          nan          nan        0.095        0.120
+  mech rq2          adamw-lr4x                                3       10.006        3.215       62.614        5.922        0.053        1.363          nan          nan        0.232        0.233
+  mech rq2          adamw-lr8x                                3       23.516        2.316       83.072        3.361        0.094        1.745          nan          nan        0.286        0.257
+  mech rq2          adamw                                     3        4.494        3.423       23.366        2.236        0.021        1.089          nan          nan        0.103        0.068
+  mech rq2          muon-lr16x                                3       38.196        1.804       17.507        0.798        0.219        5.377          nan          nan        0.784        0.811
+  mech rq2          muon-lr2x                                 3       18.017        2.920        8.497        0.219        0.076        1.894          nan          nan        0.314        0.417
+  mech rq2          muon-lr4x-balancer4x                      3       15.387        3.008        4.709        0.253        0.062        1.404          nan          nan        0.340        0.196
+  mech rq2          muon-lr4x                                 3       17.402        2.919       10.388        0.324        0.086        1.640          nan          nan        0.481        0.258
+  mech rq2          muon-lr8x                                 3       19.780        2.639       13.001        0.762        0.123        3.232          nan          nan        0.503        0.495
+  mech rq2          muon                                      3       18.773        2.907       10.380        0.228        0.076        2.155          nan          nan        0.280        0.535
+  mech rq2          muon_except_router-lr16x                  3       27.070        2.129        9.417        0.497        0.232        4.719          nan          nan        0.684        0.673
+  mech rq2          muon_except_router-lr2x                   3       20.267        2.952        4.214        0.131        0.141        2.845          nan          nan        0.317        0.394
+  mech rq2          muon_except_router-lr4x                   3       18.524        2.982        7.188        0.222        0.126        2.040          nan          nan        0.312        0.230
+  mech rq2          muon_except_router-lr8x                   3       18.204        2.855        9.436        0.489        0.149        2.456          nan          nan        0.433        0.242
+  mech rq2          muon_except_router                        3       21.793        2.885        3.316        0.096        0.183        3.622          nan          nan        0.316        0.376
+  mech rq3          adamw                                     3        4.183        3.430       21.932        2.051        0.018        1.071        1.929        0.071        0.095        0.048
+  mech rq3          adamw-unbalanced (no bias)                3        6.829        3.384       50.954        5.374        0.011        6.309        6.309        0.104        0.000        0.996
+  mech rq3          muon-muonlr0.5x                           3       14.568        3.124       19.319        1.300        0.033        1.170        2.241        0.401        0.119        0.109
+  mech rq3          muon                                      3       17.557        2.986       11.542        0.342        0.050        1.607        3.514        0.408        0.198        0.461
+  mech rq3          muon-unbalanced (no bias)                 3       16.475        2.777      119.000       10.388        0.014        7.792        7.792        0.402        0.000        0.969
+  mech rq3          muon_attention                            3        6.244        3.398       23.503        2.247        0.022        1.141        2.220        0.053        0.130        0.103
+  mech rq3          muon_attention_dense                      3        7.983        3.358       21.500        1.912        0.030        1.390        3.636        0.054        0.229        0.164
+  mech rq3          muon_dense                                3        7.980        3.339       22.648        2.255        0.038        1.164        1.640        0.033        0.094        0.069
+  mech rq3          muon_except_router                        3       21.600        2.980        4.652        0.122        0.087        2.323        4.311        0.391        0.175        0.604
+  mech rq3          muon_experts                              3        9.626        3.319        9.109        0.603        0.034        1.279        5.643        0.146        0.409        0.167
+  mech rq3          muon_router                               3        5.735        3.399       27.796        2.556        0.018        1.079        1.866        0.074        0.099        0.085
+  mech balancer     adamw-balancer4x                          3        4.023        3.433        5.277        0.483        0.025        1.098        1.959        0.076        0.088        0.044
+  mech balancer     adamw                                     3        4.053        3.432       22.683        2.043        0.018        1.069        2.092        0.078        0.095        0.039
+  mech balancer     muon-balancer4x                           3       13.531        3.147        5.722        0.371        0.045        1.233        2.389        0.400        0.128        0.114
+  mech balancer     muon                                      3       16.879        3.036       12.463        0.345        0.048        1.577        3.055        0.407        0.170        0.486
+  conf confirmation adamw                                     3        3.225        3.439       20.525        1.975        0.019        1.073        2.671        0.085        0.135        0.043
+  conf confirmation muon                                      3       21.261        2.868        4.842        0.133        0.115        2.963        6.567        0.610        0.288        0.541
+  conf confirmation muon_except_router                        3       26.116        2.719        0.898        0.069        0.356        3.893        7.898        0.728        0.260        0.212
+
+The first mixture, early (the early window, the 5 percent of steps after the warmup), mean over seeds; margins over the bias's step u of the run
+  group                                                       n   logit norm      entropy     margin/u        low/u        churn      busiest  raw busiest       cosine         span same busiest
+  mech rq1          adamw                                     3        3.738        3.424       31.132        2.676        0.027        1.132          nan          nan        0.176        0.169
+  mech rq1          muon                                      3       19.253        2.708       27.431        0.647        0.116        4.279          nan          nan        0.697        0.707
+  mech rq2          adamw-lr16x                               3       33.893        1.676       44.288        0.534        0.125        2.058          nan          nan        0.354        0.342
+  mech rq2          adamw-lr2x                                3        4.499        3.407       34.895        3.008        0.040        1.202          nan          nan        0.169        0.126
+  mech rq2          adamw-lr4x                                3        8.889        3.251       63.942        5.678        0.062        1.532          nan          nan        0.246        0.414
+  mech rq2          adamw-lr8x                                3       25.668        2.135       44.487        0.795        0.110        2.347          nan          nan        0.618        0.450
+  mech rq2          adamw                                     3        3.904        3.421       32.191        2.849        0.031        1.155          nan          nan        0.179        0.225
+  mech rq2          muon-lr16x                                3       20.396        2.562       27.368        1.588        0.121        1.779          nan          nan        0.341        0.117
+  mech rq2          muon-lr2x                                 3       23.264        2.361       17.317        0.277        0.119        5.294          nan          nan        0.749        0.820
+  mech rq2          muon-lr4x-balancer4x                      3       16.276        2.892        7.389        0.450        0.059        1.347          nan          nan        0.288        0.162
+  mech rq2          muon-lr4x                                 3       18.888        2.781       11.660        0.545        0.086        2.553          nan          nan        0.566        0.613
+  mech rq2          muon-lr8x                                 3       19.097        2.732       16.471        0.905        0.085        1.634          nan          nan        0.365        0.207
+  mech rq2          muon                                      3       18.959        2.654       34.072        0.814        0.125        4.765          nan          nan        0.702        0.667
+  mech rq2          muon_except_router-lr16x                  3       18.308        2.824       16.377        1.083        0.152        1.980          nan          nan        0.293        0.072
+  mech rq2          muon_except_router-lr2x                   3       23.563        2.550        9.144        0.137        0.253        6.614          nan          nan        0.705        0.748
+  mech rq2          muon_except_router-lr4x                   3       18.398        2.919        6.066        0.198        0.179        4.014          nan          nan        0.551        0.604
+  mech rq2          muon_except_router-lr8x                   3       17.905        2.900        8.152        0.385        0.131        2.206          nan          nan        0.462        0.252
+  mech rq2          muon_except_router                        3       27.631        2.276       18.918        0.191        0.268        7.109          nan          nan        0.710        0.847
+  mech rq3          adamw                                     3        3.874        3.421       32.822        2.764        0.028        1.136        1.982        0.035        0.190        0.151
+  mech rq3          adamw-unbalanced (no bias)                3        6.209        3.364       70.518        6.961        0.021        5.672        5.672        0.038        0.000        0.973
+  mech rq3          muon-muonlr0.5x                           3       11.827        3.194       26.943        2.335        0.072        1.726        2.484        0.425        0.301        0.338
+  mech rq3          muon                                      3       19.120        2.744       28.327        0.570        0.116        4.063        4.986        0.466        0.666        0.689
+  mech rq3          muon-unbalanced (no bias)                 3       26.382        1.956      208.842       21.919        0.032        7.800        7.800        0.435        0.000        0.902
+  mech rq3          muon_attention                            3        5.895        3.372       32.715        3.164        0.053        2.065        3.524        0.064        0.417        0.529
+  mech rq3          muon_attention_dense                      3       10.021        3.218       23.149        1.814        0.062        5.068        7.356        0.067        0.764        0.973
+  mech rq3          muon_dense                                3        3.958        3.415       25.634        2.461        0.051        1.239        2.539        0.034        0.220        0.089
+  mech rq3          muon_except_router                        3       24.256        2.632       10.888        0.164        0.246        6.634        7.008        0.452        0.693        0.796
+  mech rq3          muon_experts                              3       11.611        3.154       18.632        1.202        0.073        3.240        6.663        0.134        0.716        0.644
+  mech rq3          muon_router                               3        6.628        3.349       46.928        3.991        0.028        1.160        1.713        0.035        0.197        0.231
+  mech balancer     adamw-balancer4x                          3        3.738        3.425        7.873        0.658        0.024        1.089        2.049        0.032        0.164        0.040
+  mech balancer     adamw                                     3        3.819        3.423       34.369        2.734        0.026        1.123        2.085        0.032        0.186        0.089
+  mech balancer     muon-balancer4x                           3       11.927        3.094       12.235        1.058        0.072        1.632        2.318        0.448        0.322        0.293
+  mech balancer     muon                                      3       17.447        2.827       30.263        0.762        0.110        3.961        5.225        0.459        0.703        0.702
+  conf confirmation adamw                                     3        4.528        3.408       38.019        3.034        0.027        1.138        2.960        0.051        0.345        0.147
+  conf confirmation muon                                      3       21.949        2.488       21.079        0.847        0.131        6.324        7.180        0.672        0.757        0.809
+  conf confirmation muon_except_router                        3       36.350        1.719        9.007        0.717        0.476        7.232        7.928        0.701        0.762        0.498
+
+Rank correlations over every balanced run of a tier, the first mixture over the whole run (n runs)
+  mechanism (n = 93): logit norm ~ margin/u -0.30 (93); margin/u ~ churn -0.42 (93); logit norm ~ churn +0.92 (93); cosine ~ logit norm +0.66 (39); churn ~ busiest +0.96 (93); margin/u ~ busiest -0.44 (93); cosine ~ span +0.43 (39); logit norm ~ span +0.72 (93)
+  confirmation (n = 9): logit norm ~ margin/u -0.90 (9); margin/u ~ churn -0.92 (9); logit norm ~ churn +0.98 (9); cosine ~ logit norm +0.90 (9); churn ~ busiest +1.00 (9); margin/u ~ busiest -0.92 (9); cosine ~ span +0.48 (9); logit norm ~ span +0.50 (9)
+
+The confirmation tier per mixture over the whole run, mean over seeds: logit norm / margin over u / churn / busiest
+  adamw                3.2/20.5/0.019/1.07  4.0/28.3/0.020/1.08  10.9/27.9/0.025/1.11  13.7/34.4/0.030/1.13  14.4/38.9/0.042/1.19  15.3/41.7/0.043/1.21  15.4/47.1/0.039/1.18  15.5/51.9/0.038/1.18  15.8/58.5/0.037/1.18  15.9/58.8/0.045/1.22  15.3/63.8/0.049/1.24
+  muon                 21.3/4.8/0.115/2.96  17.7/31.7/0.040/1.28  18.3/37.1/0.038/1.19  18.6/46.4/0.037/1.18  19.3/51.8/0.036/1.19  19.2/58.5/0.041/1.21  19.7/61.0/0.037/1.18  20.0/60.1/0.035/1.18  20.3/65.7/0.037/1.19  19.9/64.5/0.044/1.23  18.8/69.9/0.049/1.26
+  muon_except_router   26.1/0.9/0.356/3.89  23.2/6.4/0.130/2.75  17.7/30.0/0.048/1.24  17.9/39.0/0.044/1.21  18.7/41.4/0.041/1.20  18.7/43.6/0.044/1.22  18.8/50.4/0.041/1.20  19.3/49.2/0.039/1.19  19.6/52.0/0.039/1.19  19.0/52.7/0.050/1.24  17.7/55.8/0.056/1.28
+
+The router on AdamW against the router on Muon at each tier, (c) minus (b) per seed on the first mixture, in the early window and over the whole run (O-router's contrast is the busiest expert in the early window)
+  rq3          early: busiest +1.955 +3.520 +2.236; churn +0.122 +0.153 +0.116; margin/u -16.185 -22.578 -13.554; logit norm +0.281 +9.837 +5.291
+  rq3          whole: busiest +0.722 +0.747 +0.681; churn +0.045 +0.031 +0.037; margin/u -6.358 -7.806 -6.505; logit norm +4.439 +3.868 +3.823
+  confirmation early: busiest +1.940 -0.780 +1.562; churn +0.308 +0.350 +0.377; margin/u -15.020 -13.878 -7.319; logit norm +12.565 +12.101 +18.538
+  confirmation whole: busiest +0.535 +1.399 +0.854; churn +0.147 +0.300 +0.277; margin/u -4.910 -3.040 -3.881; logit norm +2.663 +6.574 +5.328

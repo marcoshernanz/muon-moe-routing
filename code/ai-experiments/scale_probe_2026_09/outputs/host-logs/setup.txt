@@ -1,0 +1,12 @@
+index, name, driver_version, memory.total [MiB], power.limit [W]
+0, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 575.00 W
+1, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 575.00 W
+cpus 144
+               total        used        free      shared  buff/cache   available
+Mem:             487         119         246           0         124         368
+overlay         100G  2.4M  100G   1% /
+ + yarl==1.24.5
+uv sync 328 s
+hf download 418 s
+download() 6 s, 1021 files, 19G
+SETUP_OK

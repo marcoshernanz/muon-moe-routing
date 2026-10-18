@@ -1,0 +1,21 @@
+12:19:25 gpu 0: muon-1-centred-s0: started
+12:19:25 gpu 1: muon-1-plain-s0: started
+13:02:32 gpu 1: muon-1-plain-s0: exit 0 in 2588s
+13:02:32 gpu 1: muon_except_router-1-centred-s0: started
+13:02:40 gpu 0: muon-1-centred-s0: exit 0 in 2596s
+13:02:40 gpu 0: muon_except_router-1-plain-s0: started
+13:44:16 gpu 1: muon_except_router-1-centred-s0: exit 0 in 2503s
+13:44:16 gpu 1: muon-1-centred-s1: started
+13:44:33 gpu 0: muon_except_router-1-plain-s0: exit 0 in 2513s
+13:44:33 gpu 0: muon-1-centred-s2: started
+14:26:25 gpu 0: muon-1-centred-s2: exit 0 in 2512s
+14:26:25 gpu 0: adamw-1-plain-s0: started
+14:26:51 gpu 1: muon-1-centred-s1: exit 0 in 2556s
+14:26:51 gpu 1: muon_except_router-1-centred-s1: started
+15:03:44 gpu 0: adamw-1-plain-s0: exit 0 in 2239s
+15:03:44 gpu 0: muon_except_router-1-centred-s2: started
+15:08:55 gpu 1: muon_except_router-1-centred-s1: exit 0 in 2523s
+15:08:55 gpu 1: muon-4-plain-s0: started
+15:45:15 gpu 0: muon_except_router-1-centred-s2: exit 0 in 2491s
+15:50:43 gpu 1: muon-4-plain-s0: exit 0 in 2508s
+done in 12678s; not run: []
