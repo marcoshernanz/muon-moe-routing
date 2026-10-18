@@ -1,0 +1,6 @@
+adamw s0  span by mixture 0.072 0.152 0.090 0.108 0.084 0.091 0.135  mean 0.1045  without mixture 0 0.1099  |  load cv by mixture 0.032 0.037 0.066 0.088 0.061 0.080 0.108
+adamw s1  span by mixture 0.105 0.118 0.146 0.075 0.090 0.104 0.122  mean 0.1086  without mixture 0 0.1092  |  load cv by mixture 0.032 0.037 0.060 0.069 0.061 0.070 0.094
+adamw s2  span by mixture 0.075 0.091 0.140 0.087 0.098 0.121 0.093  mean 0.1010  without mixture 0 0.1053  |  load cv by mixture 0.032 0.046 0.040 0.069 0.067 0.068 0.104
+muon s0  span by mixture 0.223 0.136 0.096 0.124 0.122 0.146 0.137  mean 0.1406  without mixture 0 0.1269  |  load cv by mixture 0.219 0.072 0.061 0.064 0.064 0.070 0.083
+muon s1  span by mixture 0.190 0.114 0.122 0.108 0.117 0.128 0.195  mean 0.1390  without mixture 0 0.1304  |  load cv by mixture 0.276 0.058 0.077 0.076 0.065 0.060 0.091
+muon s2  span by mixture 0.168 0.132 0.123 0.123 0.117 0.112 0.152  mean 0.1325  without mixture 0 0.1267  |  load cv by mixture 0.126 0.060 0.062 0.076 0.073 0.075 0.073

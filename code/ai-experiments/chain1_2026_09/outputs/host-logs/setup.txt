@@ -1,0 +1,20 @@
+index, name, driver_version, memory.total [MiB], clocks.max.sm [MHz], power.limit [W], power.max_limit [W], pcie.link.gen.max, pcie.link.width.max
+0, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 3090 MHz, 575.00 W, 575.00 W, 4, 16
+1, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 3135 MHz, 575.00 W, 600.00 W, 4, 16
+2, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 3135 MHz, 575.00 W, 600.00 W, 4, 16
+3, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 3090 MHz, 575.00 W, 575.00 W, 4, 16
+cpus 224
+Model name:                              AMD EPYC 7663 56-Core Processor
+               total        used        free      shared  buff/cache   available
+Mem:             472          21         396           0          56         450
+Swap:              7           0           7
+overlay         400G  2.5M  400G   1% /
+ + yarl==1.24.5
+uv sync 3889 s
+2.14.0+cu130 13.0 ['NVIDIA GeForce RTX 5090', 'NVIDIA GeForce RTX 5090', 'NVIDIA GeForce RTX 5090', 'NVIDIA GeForce RTX 5090']
+hf download 562 s
+download() 2 s, 1021 files, 19G
+Repo card metadata block was not found. Setting CardData to empty.
+code: 2000000 tokens
+wiki: 2000000 tokens
+panel 27 s
