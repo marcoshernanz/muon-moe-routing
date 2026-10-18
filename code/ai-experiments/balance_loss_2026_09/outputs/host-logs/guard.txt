@@ -1,0 +1,1 @@
+2026-09-28 21:11:20 guard armed: stop after 36000 s (key present, id 53255222)

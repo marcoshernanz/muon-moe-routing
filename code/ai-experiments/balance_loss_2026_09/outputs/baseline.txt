@@ -1,0 +1,3 @@
+eager: metrics.jsonl 4 records, 0 differ; routing.jsonl 4 records, 0 differ; checkpoint 437 tensors, 0 differ; settings added ['balance_loss'], changed []
+compiled: metrics.jsonl 4 records, 0 differ; routing.jsonl 4 records, 0 differ; checkpoint 437 tensors, 0 differ; settings added ['balance_loss'], changed []
+SAME

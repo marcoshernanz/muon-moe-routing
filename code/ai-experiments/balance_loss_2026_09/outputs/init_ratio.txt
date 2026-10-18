@@ -1,0 +1,7 @@
+mechanism tier at initialization, 8 sequences of 1024 tokens, weight 0.0001
+seed 3: cross-entropy 9.8160, balance loss per mixture 1.0231 1.0400 1.0414 1.0430 1.0512 1.0576 1.0614 (sum 7.3176)
+  router gradient, loss over cross-entropy, per mixture: 1.15e-03 1.86e-03 2.35e-03 3.19e-03 4.15e-03 5.25e-03 5.90e-03; every parameter: 1.17e-04
+seed 4: cross-entropy 9.8058, balance loss per mixture 1.0347 1.0338 1.0390 1.0470 1.0561 1.0639 1.0775 (sum 7.3520)
+  router gradient, loss over cross-entropy, per mixture: 1.32e-03 1.56e-03 2.24e-03 2.96e-03 4.03e-03 5.11e-03 6.09e-03; every parameter: 1.28e-04
+seed 5: cross-entropy 9.7977, balance loss per mixture 1.0240 1.0351 1.0342 1.0528 1.0655 1.0668 1.0760 (sum 7.3544)
+  router gradient, loss over cross-entropy, per mixture: 9.23e-04 1.57e-03 2.05e-03 3.10e-03 3.96e-03 4.68e-03 6.03e-03; every parameter: 1.22e-04

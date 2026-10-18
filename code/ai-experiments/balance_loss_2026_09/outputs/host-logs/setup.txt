@@ -1,0 +1,18 @@
+index, name, driver_version, memory.total [MiB], power.limit [W]
+0, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 575.00 W
+1, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 575.00 W
+2, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 575.00 W
+3, NVIDIA GeForce RTX 5090, 580.173.02, 32607 MiB, 575.00 W
+cpus 144
+               total        used        free      shared  buff/cache   available
+Mem:             503           7         408           0          90         495
+overlay         150G  3.3M  150G   1% /
+ + yarl==1.24.5
+uv sync 61 s
+hf download 322 s
+download() 6 s, 1021 files, 19G
+Repo card metadata block was not found. Setting CardData to empty.
+code: 2000000 tokens
+wiki: 2000000 tokens
+panel, try 1: exit 0 in 31 s
+SETUP_OK

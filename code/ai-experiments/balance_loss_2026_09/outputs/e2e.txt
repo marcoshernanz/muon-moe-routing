@@ -1,0 +1,15 @@
+runs: 18, of which linked: 9
+laptop-adamw-balanceloss0.0001-s3: balance_loss 0.0001, last sequence_balance 3.7213
+laptop-adamw-balanceloss0.0001-s4: balance_loss 0.0001, last sequence_balance 3.593
+laptop-adamw-balanceloss0.0001-s5: balance_loss 0.0001, last sequence_balance 3.5942
+laptop-muon-balanceloss0.0001-s3: balance_loss 0.0001, last sequence_balance 3.955
+laptop-muon-balanceloss0.0001-s4: balance_loss 0.0001, last sequence_balance 3.6124
+laptop-muon-balanceloss0.0001-s5: balance_loss 0.0001, last sequence_balance 3.6226
+laptop-muon_except_router-balanceloss0.0001-s3: balance_loss 0.0001, last sequence_balance 4.0407
+laptop-muon_except_router-balanceloss0.0001-s4: balance_loss 0.0001, last sequence_balance 3.7713
+laptop-muon_except_router-balanceloss0.0001-s5: balance_loss 0.0001, last sequence_balance 3.7665
+{'claim': 'S-loss', 'confirmatory': 'True', 'endpoint': 'bias_span_first', 'contrasts': '4', 'tokens': 'direction', 'loss': 'fail', 'verdict': 'fail'}
+{'claim': 'G-loss', 'confirmatory': 'True', 'endpoint': 'router_input_similarity_first', 'contrasts': '4', 'tokens': 'fail', 'loss': 'fail', 'verdict': 'fail'}
+{'claim': 'L-loss', 'confirmatory': 'True', 'endpoint': 'bias_span_first', 'contrasts': '2', 'tokens': 'pass', 'loss': 'pass', 'verdict': 'pass'}
+{'claim': 'O-loss', 'confirmatory': 'False', 'endpoint': 'max_load_ratio_first_early', 'contrasts': '2', 'tokens': 'fail', 'loss': 'fail', 'verdict': 'fail'}
+{'claim': 'L-loss-router', 'confirmatory': 'False', 'endpoint': 'bias_span_first', 'contrasts': '2', 'tokens': 'pass', 'loss': 'pass', 'verdict': 'pass'}
