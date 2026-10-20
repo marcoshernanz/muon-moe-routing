@@ -1,6 +1,6 @@
 # How the Optimizer Shapes Routing
 
-The code and the LaTeX source of the bachelor's thesis *How the Optimizer Shapes Routing: Load Balancing, Specialization, and Stability in Mixture-of-Experts Language Models Trained with Muon*, by Marcos Hernanz Antón, supervised by Daniel Hernández-Lobato (Grado en Ingeniería Informática, Escuela Politécnica Superior, Universidad Autónoma de Madrid).
+The code and the LaTeX source of the bachelor's thesis *How the Optimizer Shapes Routing: Load Balancing, Specialization, and Stability in Mixture-of-Experts Language Models Trained with Muon*, by Marcos Hernanz Antón, supervised by Daniel Hernández Lobato (Grado en Ingeniería Informática, Escuela Politécnica Superior, Universidad Autónoma de Madrid).
 
 ## Contents
 
