@@ -5,7 +5,8 @@ The code and the LaTeX source of the bachelor's thesis *How the Optimizer Shapes
 ## Contents
 
 - `code/`: the Python package `tfg`, which trains and analyzes every run of the thesis, with its tests in `code/tfg/tests/`, its `pyproject.toml`, and its lockfile `uv.lock`. `code/RUNBOOK.md` gives the full procedure on a rented host.
-- `code/ai-experiments/`: the scripts that make the figures and tables of the Results (`thesis_figures_2026_09/`), the scripts of the probes and of the exploratory analyses, and the scripts that ran each chain of runs, frozen with their outputs. The package `tfg` imports nothing from them.
+- `code/ai-experiments/`: the scripts that make the figures and tables of the Results (`thesis_figures_2026_09/`) and of the paper (`paper_figures_2026_10/`), the scripts of the probes and of the exploratory analyses, and the scripts that ran each chain of runs, frozen with their outputs. The package `tfg` imports nothing from them.
+- `paper/`: the LaTeX source of the short paper on arXiv, *Muon Makes the First Mixture-of-Experts Layer Harder to Balance*, built with `latexmk` into `paper/build/main.pdf`.
 - `thesis/tex/`: the memoria. It is built in the EPS class `tfgtfmthesisuam`, which is in `thesis/tex/tfgtfmthesisuam/` exactly as the school distributes it, under its own license, the AGPL-3.0.
 
 Some files refer to `context/`, for example to `context/decision/EVIDENCE-LOG.md`. These are the working notes of the thesis, which are not published.
@@ -38,4 +39,4 @@ The build uses pdfLaTeX and writes the PDF to `thesis/tex/build/main.pdf`.
 
 ## License
 
-Everything under `code/` is under the MIT license (`LICENSE`). The memoria in `thesis/tex/` is not: its rights page applies to it. The template in `thesis/tex/tfgtfmthesisuam/` keeps its own license, the AGPL-3.0.
+Everything under `code/` is under the MIT license (`LICENSE`). The memoria in `thesis/tex/` and the paper in `paper/` are not: the memoria's rights page and the paper's arXiv license apply to them. The template in `thesis/tex/tfgtfmthesisuam/` keeps its own license, the AGPL-3.0.
