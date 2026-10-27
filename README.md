@@ -2,11 +2,13 @@
 
 The code and the LaTeX source of the bachelor's thesis *How the Optimizer Shapes Routing: Load Balancing, Specialization, and Stability in Mixture-of-Experts Language Models Trained with Muon*, by Marcos Hernanz Antón, supervised by Daniel Hernández Lobato (Grado en Ingeniería Informática, Escuela Politécnica Superior, Universidad Autónoma de Madrid).
 
+Its short version is the paper [*Muon Makes the First Mixture-of-Experts Layer Harder to Balance*](https://hernanz.io/papers/muon-moe-routing/), submitted to arXiv on 27 October 2026.
+
 ## Contents
 
 - `code/`: the Python package `tfg`, which trains and analyzes every run of the thesis, with its tests in `code/tfg/tests/`, its `pyproject.toml`, and its lockfile `uv.lock`. `code/RUNBOOK.md` gives the full procedure on a rented host.
 - `code/ai-experiments/`: the scripts that make the figures and tables of the Results (`thesis_figures_2026_09/`) and of the paper (`paper_figures_2026_10/`), the scripts of the probes and of the exploratory analyses, and the scripts that ran each chain of runs, frozen with their outputs. The package `tfg` imports nothing from them.
-- `paper/`: the LaTeX source of the short paper on arXiv, *Muon Makes the First Mixture-of-Experts Layer Harder to Balance*, built with `latexmk` into `paper/build/main.pdf`.
+- `paper/`: the LaTeX source of the short paper, [*Muon Makes the First Mixture-of-Experts Layer Harder to Balance*](https://hernanz.io/papers/muon-moe-routing/), built with `latexmk` into `paper/build/main.pdf`.
 - `thesis/tex/`: the memoria. It is built in the EPS class `tfgtfmthesisuam`, which is in `thesis/tex/tfgtfmthesisuam/` exactly as the school distributes it, under its own license, the AGPL-3.0.
 
 Some files refer to `context/`, for example to `context/decision/EVIDENCE-LOG.md`. These are the working notes of the thesis, which are not published.
