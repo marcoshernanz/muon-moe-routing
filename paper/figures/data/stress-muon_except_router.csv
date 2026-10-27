@@ -1,0 +1,16 @@
+family,arm,lr_multiplier,balancer_multiplier,seed,loss_capped,load_churn_warmup,router_logit_max_peak,residual_max_peak,spikes
+muon_except_router,muon_except_router,1.00000,1.00000,0,3.58966,0.11973,15.24731,2096.44897,0
+muon_except_router,muon_except_router,1.00000,1.00000,1,3.58514,0.12537,15.44072,2392.02271,0
+muon_except_router,muon_except_router,1.00000,1.00000,2,3.58206,0.12207,12.08624,2463.82129,0
+muon_except_router,muon_except_router-lr2x,2.00000,1.00000,0,3.70870,0.13180,13.53146,4434.08154,0
+muon_except_router,muon_except_router-lr2x,2.00000,1.00000,1,3.71024,0.13510,14.71037,4778.89648,0
+muon_except_router,muon_except_router-lr2x,2.00000,1.00000,2,3.70567,0.13051,13.76473,5583.87793,0
+muon_except_router,muon_except_router-lr4x,4.00000,1.00000,0,3.88344,0.14155,14.95464,9128.67969,0
+muon_except_router,muon_except_router-lr4x,4.00000,1.00000,1,3.88193,0.15449,15.03629,9638.90137,0
+muon_except_router,muon_except_router-lr4x,4.00000,1.00000,2,3.87877,0.14506,15.58267,8831.34668,0
+muon_except_router,muon_except_router-lr8x,8.00000,1.00000,0,4.12003,0.15981,17.41526,21745.35938,0
+muon_except_router,muon_except_router-lr8x,8.00000,1.00000,1,4.12225,0.16846,17.03198,22345.56055,0
+muon_except_router,muon_except_router-lr8x,8.00000,1.00000,2,4.12140,0.15668,19.13143,24670.80469,0
+muon_except_router,muon_except_router-lr16x,16.00000,1.00000,0,4.44023,0.15769,34.26641,85581.03125,0
+muon_except_router,muon_except_router-lr16x,16.00000,1.00000,1,4.44785,0.16267,29.37860,98345.89062,1
+muon_except_router,muon_except_router-lr16x,16.00000,1.00000,2,4.43950,0.15877,31.32493,86308.17188,0

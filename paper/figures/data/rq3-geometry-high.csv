@@ -1,0 +1,10 @@
+arm,seed,bias_span_first,router_input_similarity_first,mean_score_span_first
+muon-muonlr0.5x,3,0.11188,0.38881,0.09150
+muon-muonlr0.5x,4,0.11605,0.41233,0.10394
+muon-muonlr0.5x,5,0.12925,0.40204,0.10322
+muon,3,0.19068,0.41285,0.12762
+muon,4,0.26538,0.41306,0.16751
+muon,5,0.13729,0.39869,0.12390
+muon_except_router,3,0.19278,0.40288,0.14770
+muon_except_router,4,0.17372,0.38403,0.14164
+muon_except_router,5,0.15732,0.38727,0.12210

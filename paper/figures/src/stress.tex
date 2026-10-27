@@ -1,0 +1,60 @@
+% The stress runs of RQ2 (../stress.pdf) against the multiple of the tuned rates, seeds 0 to 2, 0.5B tokens: the final validation loss, the load churn of the warmup over all the MoE layers, and the largest absolute entries of the residual stream and of the router logits over the run. Lines join the means over the seeds and the small marks are the seeds. The memoria's thesis/tex/figures/results-rq2.tex, resized for the paper. Data: ../data/stress-*.csv, written by code/ai-experiments/thesis_figures_2026_09/extract.py.
+% Build: cd paper/figures/src && ./build.sh
+\documentclass[11pt, border=1pt]{standalone}
+\input{style}
+% One panel's seeds and means: \partitions{column}.
+\newcommand{\partitions}[1]{%
+  \addplot[arm a, only marks, mark size=0.7pt, forget plot] table[x=lr_multiplier, y=#1] {../data/stress-adamw.csv};
+  \addplot[arm b, only marks, mark size=0.6pt, forget plot] table[x=lr_multiplier, y=#1] {../data/stress-muon.csv};
+  \addplot[arm c, only marks, mark size=0.8pt, forget plot] table[x=lr_multiplier, y=#1] {../data/stress-muon_except_router.csv};
+  \addplot[arm a] table[x=lr_multiplier, y=#1] {../data/stress-adamw-mean.csv};
+  \addplot[arm b] table[x=lr_multiplier, y=#1] {../data/stress-muon-mean.csv};
+  \addplot[arm c, densely dashed, mark options={solid}] table[x=lr_multiplier, y=#1] {../data/stress-muon_except_router-mean.csv};
+}
+\begin{document}
+\begin{tikzpicture}
+  \begin{groupplot}[
+      paper,
+      group style={group size=2 by 2, horizontal sep=1.6cm, vertical sep=1.2cm},
+      width=6.0cm, height=2.8cm,
+      xmode=log, log basis x=2, xmin=0.8, xmax=20,
+      xtick={1,2,4,8,16}, xticklabels={1, 2, 4, 8, 16},
+      xticklabel style={/pgf/number format/assume math mode=false},
+      aligned ylabel=-0.15,
+    ]
+    \nextgroupplot[
+      ylabel={Final validation loss},
+      ymin=3.5, ymax=4.5, ytick={3.6,3.8,4.0,4.2,4.4},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=1, /pgf/number format/fixed zerofill},
+      legend columns=3, legend style={at={(1.16,1.07)}, anchor=south, /tikz/every even column/.append style={column sep=0.35cm}},
+    ]
+    \addplot[arm a] table[x=lr_multiplier, y=loss_capped] {../data/stress-adamw-mean.csv};
+    \addlegendentry{AdamW}
+    \addplot[arm b] table[x=lr_multiplier, y=loss_capped] {../data/stress-muon-mean.csv};
+    \addlegendentry{Muon}
+    \addplot[arm c, densely dashed, mark options={solid}] table[x=lr_multiplier, y=loss_capped] {../data/stress-muon_except_router-mean.csv};
+    \addlegendentry{Muon, router on AdamW}
+
+    \nextgroupplot[
+      ylabel={Warmup churn},
+      ymin=0.07, ymax=0.175, ytick={0.08,0.1,0.12,0.14,0.16},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=2, /pgf/number format/fixed zerofill},
+    ]
+    \partitions{load_churn_warmup}
+
+    \nextgroupplot[
+      xlabel={Multiple of the tuned rates}, ylabel={Largest $\lvert$residual entry$\rvert$},
+      ymode=log, ymin=500, ymax=1e6,
+    ]
+    \partitions{residual_max_peak}
+
+    \nextgroupplot[
+      xlabel={Multiple of the tuned rates}, ylabel={Largest $\lvert$router logit$\rvert$},
+      ymode=log, ymin=10, ymax=300,
+      ytick={10,30,100,300}, yticklabels={10, 30, 100, 300},
+      yticklabel style={/pgf/number format/assume math mode=false},
+    ]
+    \partitions{router_logit_max_peak}
+  \end{groupplot}
+\end{tikzpicture}
+\end{document}

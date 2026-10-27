@@ -1,0 +1,73 @@
+% Figure 1 (../span.pdf): the span under AdamW and Muon in RQ1 (seeds 0 to 2, 1B tokens) and in the tuning (seed 0, 0.5B tokens). Left, the span of every MoE layer with the range over the seeds; center, the span of the first MoE layer over training in bins of 100 steps, the range shaded, and the mean of the other six layers dashed; right, the span averaged over the layers against the peak learning rate, the selected rates filled. The memoria's thesis/tex/figures/results-rq1.tex, resized for the paper. Data: ../data/rq1-layers-*.csv, rq1-span-*.csv and tuning-*.csv, written by code/ai-experiments/thesis_figures_2026_09/extract.py.
+% Build: cd paper/figures/src && ./build.sh
+\documentclass[11pt, border=1pt]{standalone}
+\input{style}
+\begin{document}
+\begin{tikzpicture}
+  \begin{groupplot}[
+      paper,
+      group style={group size=3 by 1, horizontal sep=1.3cm},
+      width=3.75cm, height=3.1cm,
+    ]
+    \nextgroupplot[
+      xlabel={MoE layer}, ylabel={Span},
+      xtick={1,...,7}, xmin=0.5, xmax=7.5,
+      ymin=0, ymax=0.25, ytick={0,0.1,0.2},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=1, /pgf/number format/fixed zerofill},
+      legend pos=north east,
+    ]
+    \addplot[arm a, only marks, error bars/.cd, y dir=both, y explicit, error bar style={line width=0.5pt}]
+      table[x expr=\thisrow{layer}-0.14, y=mean, y error plus expr=\thisrow{high}-\thisrow{mean}, y error minus expr=\thisrow{mean}-\thisrow{low}] {../data/rq1-layers-adamw.csv};
+    \addlegendentry{AdamW}
+    \addplot[arm b, only marks, error bars/.cd, y dir=both, y explicit, error bar style={line width=0.5pt}]
+      table[x expr=\thisrow{layer}+0.14, y=mean, y error plus expr=\thisrow{high}-\thisrow{mean}, y error minus expr=\thisrow{mean}-\thisrow{low}] {../data/rq1-layers-muon.csv};
+    \addlegendentry{Muon}
+
+    \nextgroupplot[
+      xlabel={Step (thousands)}, ylabel={Span},
+      xmin=0, xmax=15.26, xtick={0,5,10,15},
+      ymin=0, ymax=0.9, ytick={0,0.2,0.4,0.6,0.8},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=1, /pgf/number format/fixed zerofill},
+      legend pos=north east,
+    ]
+    \addlegendimage{black!70, no marks, line width=0.8pt}
+    \addlegendentry{First MoE layer}
+    \addlegendimage{black!70, no marks, dashed, line width=0.6pt}
+    \addlegendentry{Other layers}
+    \addplot[name path=alo, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=first_low] {../data/rq1-span-adamw.csv};
+    \addplot[name path=ahi, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=first_high] {../data/rq1-span-adamw.csv};
+    \addplot[band, fill=moeamber, forget plot] fill between[of=alo and ahi];
+    \addplot[name path=blo, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=first_low] {../data/rq1-span-muon.csv};
+    \addplot[name path=bhi, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=first_high] {../data/rq1-span-muon.csv};
+    \addplot[band, fill=moeblue, forget plot] fill between[of=blo and bhi];
+    \addplot[moeamber, no marks] table[x expr=\thisrow{step}/1000, y=first] {../data/rq1-span-adamw.csv};
+    \addplot[moeblue, no marks] table[x expr=\thisrow{step}/1000, y=first] {../data/rq1-span-muon.csv};
+    \addplot[moeamber, no marks, dashed, line width=0.6pt] table[x expr=\thisrow{step}/1000, y=rest] {../data/rq1-span-adamw.csv};
+    \addplot[moeblue, no marks, dashed, line width=0.6pt] table[x expr=\thisrow{step}/1000, y=rest] {../data/rq1-span-muon.csv};
+
+    \nextgroupplot[
+      xlabel={Learning rate ($\times 10^{-3}$)}, ylabel={Span, all layers},
+      xmode=log, log basis x=2, xmin=1.6e-4, xmax=4.4e-2,
+      xtick={2.5e-4,1e-3,4e-3,1.6e-2}, xticklabels={0.25, 1, 4, 16},
+      xticklabel style={/pgf/number format/assume math mode=false},
+      ymin=0, ymax=0.52, ytick={0,0.1,0.2,0.3,0.4,0.5},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=1, /pgf/number format/fixed zerofill},
+      legend pos=north west,
+    ]
+    \addlegendimage{arm a, mark options={fill=white}}
+    \addlegendentry{AdamW}
+    \addlegendimage{arm b, mark options={fill=white}}
+    \addlegendentry{Muon}
+    \addlegendimage{arm f, mark options={fill=white}}
+    \addlegendentry{Control}
+    % The control is drawn first, so that the open mark of AdamW at 2.5e-4 stays open on top of it.
+    \addplot[arm f, mark options={fill=white}, forget plot] table[x=rate, y=span] {../data/tuning-momentum.csv};
+    \addplot[arm b, mark options={fill=white}, forget plot] table[x=rate, y=span] {../data/tuning-muon.csv};
+    \addplot[arm a, mark options={fill=white}, forget plot] table[x=rate, y=span] {../data/tuning-adamw.csv};
+    % The selected rates are filled and drawn last. At 2e-3 the selected rate of AdamW covers the lowest rate of Muon, whose span is 0.011 higher, as the caption says.
+    \addplot[arm a, only marks, forget plot] coordinates {(2e-3, 0.11256)};
+    \addplot[arm b, only marks, forget plot] coordinates {(4e-3, 0.16235)};
+    \addplot[arm f, only marks, forget plot] coordinates {(5e-4, 0.10688)};
+  \end{groupplot}
+\end{tikzpicture}
+\end{document}

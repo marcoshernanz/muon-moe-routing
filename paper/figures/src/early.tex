@@ -1,0 +1,56 @@
+% The first 3,000 steps of the first MoE layer (../early.pdf): the input cosine, the score offset, the overload and the span under AdamW, Muon, and Muon with the router on AdamW (the runs of RQ3, seeds 3 to 5), and under Muon with the first router's input centered (the offset probe, seeds 3 to 5), in bins of 30 steps. Lines are the means over the seeds and the bands their range; the thin gray line marks the end of the warmup. The memoria's thesis/tex/figures/results-early.tex cut at step 3,000, where the probe stops, with the centered runs added. Data: ../data/rq3-early-*.csv, written by code/ai-experiments/thesis_figures_2026_09/extract.py, and ../data/rq3-early-muon-centered.csv, written by code/ai-experiments/paper_figures_2026_10/extract.py.
+% Build: cd paper/figures/src && ./build.sh
+\documentclass[11pt, border=1pt]{standalone}
+\input{style}
+% One panel's four arms: \arms{column}.
+\newcommand{\arms}[1]{%
+  \addplot[name path=loa, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=#1_low] {../data/rq3-early-adamw.csv};
+  \addplot[name path=hia, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=#1_high] {../data/rq3-early-adamw.csv};
+  \addplot[band, fill=moeamber, forget plot] fill between[of=loa and hia];
+  \addplot[name path=lob, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=#1_low] {../data/rq3-early-muon.csv};
+  \addplot[name path=hib, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=#1_high] {../data/rq3-early-muon.csv};
+  \addplot[band, fill=moeblue, forget plot] fill between[of=lob and hib];
+  \addplot[name path=loc, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=#1_low] {../data/rq3-early-muon_except_router.csv};
+  \addplot[name path=hic, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=#1_high] {../data/rq3-early-muon_except_router.csv};
+  \addplot[band, fill=moegreen, forget plot] fill between[of=loc and hic];
+  \addplot[name path=lod, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=#1_low] {../data/rq3-early-muon-centered.csv};
+  \addplot[name path=hid, draw=none, forget plot] table[x expr=\thisrow{step}/1000, y=#1_high] {../data/rq3-early-muon-centered.csv};
+  \addplot[band, fill=black, forget plot] fill between[of=lod and hid];
+  \addplot[moeamber] table[x expr=\thisrow{step}/1000, y=#1] {../data/rq3-early-adamw.csv};
+  \addplot[moeblue] table[x expr=\thisrow{step}/1000, y=#1] {../data/rq3-early-muon.csv};
+  \addplot[moegreen, densely dashed] table[x expr=\thisrow{step}/1000, y=#1] {../data/rq3-early-muon_except_router.csv};
+  \addplot[black!75, densely dotted, line width=1pt] table[x expr=\thisrow{step}/1000, y=#1] {../data/rq3-early-muon-centered.csv};
+}
+\begin{document}
+\begin{tikzpicture}
+  \begin{groupplot}[
+      paper,
+      group style={group size=2 by 2, horizontal sep=1.6cm, vertical sep=1.2cm},
+      width=6.0cm, height=2.7cm,
+      xmin=0, xmax=3, xtick={0,0.5,1,1.5,2,2.5,3}, xticklabels={0,,1,,2,,3},
+      every axis plot/.append style={no marks},
+      aligned ylabel=-0.16,
+    ]
+    \nextgroupplot[ylabel={Input cosine}, ymin=0, ymax=0.6, ytick={0,0.2,0.4,0.6},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=1, /pgf/number format/fixed zerofill},
+      legend columns=4, legend style={at={(1.16,1.07)}, anchor=south, /tikz/every even column/.append style={column sep=0.35cm}}]
+    \arms{router_input_similarity}
+    \legend{AdamW, Muon, {Muon, router on AdamW}, {Muon, centered input}}
+    \draw[warmup] (axis cs:0.5, 0) -- (axis cs:0.5, 0.6);
+
+    \nextgroupplot[ylabel={Score offset}, ymin=0, ymax=1.1, ytick={0,0.25,0.5,0.75,1},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=2, /pgf/number format/fixed zerofill}]
+    \arms{mean_score_span}
+    \draw[warmup] (axis cs:0.5, 0) -- (axis cs:0.5, 1.1);
+
+    \nextgroupplot[xlabel={Step (thousands)}, ylabel={Overload}, ymin=0, ymax=8.3, ytick={0,2,4,6,8}]
+    \arms{max_load_ratio}
+    \draw[warmup] (axis cs:0.5, 0) -- (axis cs:0.5, 8.3);
+
+    \nextgroupplot[xlabel={Step (thousands)}, ylabel={Span}, ymin=0, ymax=1.1, ytick={0,0.25,0.5,0.75,1},
+      yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=2, /pgf/number format/fixed zerofill}]
+    \arms{bias_span}
+    \draw[warmup] (axis cs:0.5, 0) -- (axis cs:0.5, 1.1);
+  \end{groupplot}
+\end{tikzpicture}
+\end{document}

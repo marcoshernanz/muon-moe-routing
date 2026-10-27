@@ -1,0 +1,48 @@
+% The span of the first MoE layer in the 27 balanced runs of RQ3 (../geometry.pdf) against the score offset of that layer (left, both axes logarithmic, with the least-squares line of the logarithms) and against its input cosine (right). Squares are the runs with the whole backbone on Muon (Muon, Muon with the router on AdamW, Muon at half rate), triangles those with the routed experts on Muon, diamonds those with the attention and the dense FFN on Muon, and circles the other four arms. The memoria's thesis/tex/figures/results-geometry.tex, resized for the paper. Data: ../data/rq3-geometry-*.csv; the line is 1.711 x^1.18, the fit that code/ai-experiments/thesis_figures_2026_09/extract.py prints.
+% Build: cd paper/figures/src && ./build.sh
+\documentclass[11pt, border=1pt]{standalone}
+\input{style}
+\pgfplotsset{
+  experts arm/.style={black!70, only marks, mark=triangle*, mark size=1.7pt, mark options={fill=black!25}},
+  attention arm/.style={black!70, only marks, mark=diamond*, mark size=1.8pt, mark options={fill=black!25}},
+  other arm/.style={black!55, only marks, mark=*, mark size=1.6pt, mark options={fill=white}},
+}
+\begin{document}
+\begin{tikzpicture}
+  \begin{groupplot}[
+      paper,
+      group style={group size=2 by 1, horizontal sep=1.6cm},
+      width=6.0cm, height=3.4cm,
+      ymode=log, ymin=0.07, ymax=0.7, ylabel={Span},
+      ytick={0.1,0.2,0.4}, yticklabels={0.1, 0.2, 0.4},
+      yticklabel style={/pgf/number format/assume math mode=false},
+    ]
+    \nextgroupplot[
+      xlabel={Score offset},
+      xmode=log, xmin=0.055, xmax=0.45,
+      xtick={0.1,0.2,0.4}, xticklabels={0.1, 0.2, 0.4},
+      xticklabel style={/pgf/number format/assume math mode=false},
+      legend columns=4, legend style={at={(1.16,1.05)}, anchor=south, /tikz/every even column/.append style={column sep=0.3cm}, /tikz/every odd column/.append style={column sep=2pt}},
+    ]
+    \addplot[black!60, no marks, line width=0.5pt, domain=0.06:0.42, samples=2, forget plot] {1.711*x^1.18};
+    \addplot[arm b, only marks] table[x=mean_score_span_first, y=bias_span_first] {../data/rq3-geometry-high.csv};
+    \addlegendentry{Whole backbone on Muon}
+    \addplot[experts arm, only arm=muon_experts] table[x=mean_score_span_first, y=bias_span_first] {../data/rq3-geometry-low.csv};
+    \addlegendentry{Experts on Muon}
+    \addplot[attention arm, only arm=muon_attention_dense] table[x=mean_score_span_first, y=bias_span_first] {../data/rq3-geometry-low.csv};
+    \addlegendentry{Attention, dense FFN on Muon}
+    \addplot[other arm, except arm=muon_experts, except arm=muon_attention_dense] table[x=mean_score_span_first, y=bias_span_first] {../data/rq3-geometry-low.csv};
+    \addlegendentry{Other arms}
+
+    \nextgroupplot[
+      xlabel={Input cosine},
+      xmin=0, xmax=0.45, xtick={0,0.1,0.2,0.3,0.4},
+      xticklabel style={/pgf/number format/fixed, /pgf/number format/precision=1, /pgf/number format/fixed zerofill},
+    ]
+    \addplot[arm b, only marks] table[x=router_input_similarity_first, y=bias_span_first] {../data/rq3-geometry-high.csv};
+    \addplot[experts arm, only arm=muon_experts] table[x=router_input_similarity_first, y=bias_span_first] {../data/rq3-geometry-low.csv};
+    \addplot[attention arm, only arm=muon_attention_dense] table[x=router_input_similarity_first, y=bias_span_first] {../data/rq3-geometry-low.csv};
+    \addplot[other arm, except arm=muon_experts, except arm=muon_attention_dense] table[x=router_input_similarity_first, y=bias_span_first] {../data/rq3-geometry-low.csv};
+  \end{groupplot}
+\end{tikzpicture}
+\end{document}

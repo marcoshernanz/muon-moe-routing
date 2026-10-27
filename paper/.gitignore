@@ -1,0 +1,12 @@
+# LaTeX output: latexmk writes it to build/, and editors that skip .latexmkrc write it here
+build/
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+main.pdf

@@ -1,0 +1,607 @@
+% The works the paper cites, each checked against its primary source. arXiv entries were checked against the arXiv API on 2026-10-24 (version and dates in `checked`); the claims the paper attributes to them were read in their full texts, for the memoria in the reference audit of 2026-10-10 (context/writing/reference-audit-2026-10-10.md) and, for the works added here, in the literature check of 2026-10-24 (~/dev/me/context/qna/2026-10-24-tfg-paper-style.md).
+
+% Mixture-of-experts layers and load balancing
+
+@misc{shazeer2017outrageously,
+  title   = {{Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer}},
+  author  = {Shazeer, Noam and Mirhoseini, Azalia and Maziarz, Krzysztof and Davis, Andy and Le, Quoc and Hinton, Geoffrey and Dean, Jeff},
+  year    = {2017},
+  note    = {ICLR~2017, \href{https://arxiv.org/abs/1701.06538}{arXiv:1701.06538}},
+  checked = {arXiv:1701.06538v1, 2017-01-23. ICLR 2017}
+}
+
+@misc{lepikhin2021gshard,
+  title   = {{GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding}},
+  author  = {Lepikhin, Dmitry and Lee, HyoukJoong and Xu, Yuanzhong and Chen, Dehao and Firat, Orhan and Huang, Yanping and Krikun, Maxim and Shazeer, Noam and Chen, Zhifeng},
+  year    = {2021},
+  note    = {ICLR 2021, \href{https://arxiv.org/abs/2006.16668}{arXiv:2006.16668}},
+  checked = {arXiv:2006.16668v1, 2020-06-30. ICLR 2021; busy experts slow down training, Section 2.2}
+}
+
+@misc{fedus2022switch,
+  title   = {{Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity}},
+  author  = {Fedus, William and Zoph, Barret and Shazeer, Noam},
+  year    = {2022},
+  note    = {Journal of Machine Learning Research 23(120), \href{https://arxiv.org/abs/2101.03961}{arXiv:2101.03961}},
+  checked = {arXiv:2101.03961v3, 2021-01-11 (v3: 2022-06-16). JMLR 23(120):1--39, 2022}
+}
+
+@misc{roller2021hash,
+  title   = {{Hash Layers for Large Sparse Models}},
+  author  = {Roller, Stephen and Sukhbaatar, Sainbayar and Szlam, Arthur and Weston, Jason},
+  year    = {2021},
+  note    = {NeurIPS 2021, \href{https://arxiv.org/abs/2106.04426}{arXiv:2106.04426}},
+  checked = {arXiv:2106.04426, 2021-06-08 (last version 2021-07-20). NeurIPS 2021; cited by DeepSeek-V4 for its hash routing}
+}
+
+@misc{dai2022stablemoe,
+  title   = {{StableMoE: Stable Routing Strategy for Mixture of Experts}},
+  author  = {Dai, Damai and Dong, Li and Ma, Shuming and Zheng, Bo and Sui, Zhifang and Chang, Baobao and Wei, Furu},
+  year    = {2022},
+  note    = {ACL 2022, \href{https://arxiv.org/abs/2204.08396}{arXiv:2204.08396}},
+  checked = {arXiv:2204.08396v1, 2022-04-18. ACL 2022, pages 7085--7095; routing fluctuation}
+}
+
+@misc{zoph2022stmoe,
+  title   = {{ST-MoE: Designing Stable and Transferable Sparse Expert Models}},
+  author  = {Zoph, Barret and Bello, Irwan and Kumar, Sameer and Du, Nan and Huang, Yanping and Dean, Jeff and Shazeer, Noam and Fedus, William},
+  year    = {2022},
+  note    = {\href{https://arxiv.org/abs/2202.08906}{arXiv:2202.08906}},
+  checked = {arXiv:2202.08906v2, 2022-02-17 (v2: 2022-04-29). Router z-loss}
+}
+
+@misc{dai2024deepseekmoe,
+  title   = {{DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models}},
+  author  = {Dai, Damai and others},
+  year    = {2024},
+  note    = {ACL 2024, \href{https://arxiv.org/abs/2401.06066}{arXiv:2401.06066}},
+  checked = {arXiv:2401.06066v1, 2024-01-11. ACL 2024, pages 1280--1297; fine-grained and shared experts}
+}
+
+@misc{wang2024lossfree,
+  title   = {{Auxiliary-Loss-Free Load Balancing Strategy for Mixture-of-Experts}},
+  author  = {Wang, Lean and Gao, Huazuo and Zhao, Chenggang and Sun, Xu and Dai, Damai},
+  year    = {2024},
+  note    = {\href{https://arxiv.org/abs/2408.15664}{arXiv:2408.15664}},
+  checked = {arXiv:2408.15664v1, 2024-08-28. The sign rule with update rate u, rates 1e-4, 1e-3 and 1e-2 compared}
+}
+
+@misc{deepseek2024v3,
+  title   = {{DeepSeek-V3 Technical Report}},
+  author  = {{DeepSeek-AI}},
+  year    = {2024},
+  note    = {\href{https://arxiv.org/abs/2412.19437}{arXiv:2412.19437}},
+  checked = {arXiv:2412.19437v2, 2024-12-27 (v2: 2025-02-18). Sigmoid routing, the bias, the sequence-wise balance loss}
+}
+
+@misc{muennighoff2025olmoe,
+  title   = {{OLMoE: Open Mixture-of-Experts Language Models}},
+  author  = {Muennighoff, Niklas and others},
+  year    = {2025},
+  note    = {ICLR 2025, \href{https://arxiv.org/abs/2409.02060}{arXiv:2409.02060}},
+  checked = {arXiv:2409.02060v2, 2024-09-03 (v2: 2025-03-03). ICLR 2025; the first layer's routing settles later; domain specialization}
+}
+
+@misc{hu2025sigmamoe,
+  title   = {{Sigma-MoE-Tiny Technical Report}},
+  author  = {{Sigma v-Team, Microsoft Research}},
+  year    = {2025},
+  note    = {\href{https://arxiv.org/abs/2512.16248}{arXiv:2512.16248}},
+  checked = {arXiv:2512.16248v2, 2025-12-18 (v2: 2025-12-19); Sigma v-Team, Microsoft Research on the title page. AdamW; the 40x overload of preliminary loss-free runs, in its lower layers}
+}
+
+@misc{han2025lossfree,
+  title   = {{A Theoretical Framework for Auxiliary-Loss-Free Load Balancing of Sparse Mixture-of-Experts in Large-Scale AI Models}},
+  author  = {Han, X. Y. and Zhong, Yuan},
+  year    = {2025},
+  note    = {Workshop on Mathematical Foundations and Operational Integration of Machine Learning for Uncertainty-Aware Decision-Making (MLxOR) at NeurIPS 2025, \href{https://arxiv.org/abs/2512.03915}{arXiv:2512.03915}},
+  checked = {arXiv:2512.03915v3, 2025-12-03 (v3: 2026-04-26). Fixed scores and a small enough rate bring every load within E - 1 tokens of its fair share (Theorems 9 and 11); for scores drawn independently each step, a projected gradient step on the load error at rate u/n, in place of the sign rule's u/|L - A_k|, has a logarithmic regret bound (Section 5, Theorem 17). Read 2026-10-25. Venue NeurIPS 2025 Workshop MLxOR, camera-ready, OpenReview sQHZ2w8UzP, from the OpenReview API 2026-10-25}
+}
+
+@misc{falke2026testbed,
+  title   = {{MoE Routing Testbed: Studying Expert Specialization and Routing Behavior at Small Scale}},
+  author  = {Falke, Tobias and Anastassacos, Nicolas and Tan, Samson and Meas, Chankrisna Richy and Prakash, Chandana Satya and Sekhar, Nitesh and Bari, M Saiful and Kompella, Krishna and Elsayed, Gamaleldin F.},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2604.07030}{arXiv:2604.07030}},
+  checked = {arXiv:2604.07030v1, 2026-04-08. Section 1: perplexity-based metrics may not reveal differences between routing techniques when the token budget and the model are small; its own small-scale findings held at a 35 times larger model (Section 4.2.5). Read 2026-10-26}
+}
+
+@misc{jin2026idbalancing,
+  title   = {{ID Balancing: Stable Training of Extremely Sparse MoE via PID-Based Load Control}},
+  author  = {Jin, Peng and others},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2609.39137}{arXiv:2609.39137}},
+  checked = {arXiv:2609.39137v2, 2026-09-30 (v2: 2026-10-18); 11 authors. Reads the loss-free rule and Quantile Balancing as incomplete PID controllers}
+}
+
+@misc{anon2026feedback,
+  title   = {{Rethinking MoE Load Balancing as Feedback Control}},
+  author  = {Anonymous},
+  year    = {2026},
+  note    = {ICLR 2027 submission, \href{https://openreview.net/forum?id=WVxUBbREKd}{OpenReview WVxUBbREKd}},
+  checked = {ICLR 2027 submission 24513, OpenReview WVxUBbREKd, posted 2026-09-16, modified 2026-10-05; full text read 2026-10-24. The auxiliary loss as a proportional controller, the loss-free bias as an integral controller on the sign of the error; AdamW. OLMoE backbones trained from scratch through a mid-run mixture switch, 16 MoE layers: ALF-LB "additionally has a hard first layer, which becomes its worst layer after the shift" (read again in Chrome 2026-10-25)}
+}
+
+@misc{anon2026stuck,
+  title   = {{Stuck in Collapse: Understanding Routing Collapse in Sparse Mixture-of-Experts}},
+  author  = {Anonymous},
+  year    = {2026},
+  note    = {ICLR 2027 submission, \href{https://openreview.net/forum?id=YupgzJiSw9}{OpenReview YupgzJiSw9}},
+  checked = {ICLR 2027 submission 2249, OpenReview YupgzJiSw9, posted 2026-08-21, modified 2026-10-05; full text read 2026-10-24. AdamW; collapse as a failure to correct perturbations that coincide with an early reorganization of the hidden representations}
+}
+
+% Optimizers
+
+@misc{loshchilov2019decoupled,
+  title   = {{Decoupled Weight Decay Regularization}},
+  author  = {Loshchilov, Ilya and Hutter, Frank},
+  year    = {2019},
+  note    = {ICLR 2019, \href{https://arxiv.org/abs/1711.05101}{arXiv:1711.05101}},
+  checked = {arXiv:1711.05101v3, 2017-11-14 (v3: 2019-01-04). ICLR 2019}
+}
+
+@misc{loshchilov2017sgdr,
+  title   = {{SGDR: Stochastic Gradient Descent with Warm Restarts}},
+  author  = {Loshchilov, Ilya and Hutter, Frank},
+  year    = {2017},
+  note    = {ICLR~2017, \href{https://arxiv.org/abs/1608.03983}{arXiv:1608.03983}},
+  checked = {arXiv:1608.03983v5, 2016-08-13 (v5: 2017-05-03), comment "ICLR 2017 conference paper". Cosine annealing of the learning rate. Read 2026-10-25}
+}
+
+@misc{xie2026spectralsphere,
+  title   = {{Controlled LLM Training on Spectral Sphere}},
+  author  = {Xie, Tian and others},
+  year    = {2026},
+  note    = {ICML 2026, \href{https://arxiv.org/abs/2601.08393}{arXiv:2601.08393}},
+  checked = {arXiv:2601.08393v3, 2026-01-13 (v3: 2026-03-05); 12 authors; ICML 2026 spotlight (icml.cc accepted list). Section 6.3: an 8B-A1B MoE that largely follows DeepSeek-V3, dense first layer, 64 experts with top-4 and a shared expert, expert bias at 0.001 and no sequence-level loss; Figure 9: AdamW has a larger MaxVio than Muon, the whole model switched at once; the bias itself is not measured; one curve per optimizer, and the paper never mentions seeds or repeated runs; in Figure 9b the AdamW curve meets Muon's from about step 20,500 of about 23,000 and is lower at the last three points. Section 6.1: the rate of Section 6 comes from an AdamW sweep (5e-3, which the caption of Figure 8 says favors AdamW), and Muon uses their spectral muP scaler instead of the 0.2 RMS alignment of Moonlight. Read 2026-10-25 and 2026-10-26}
+}
+
+@misc{jordan2024muon,
+  title        = {{Muon: An Optimizer for Hidden Layers in Neural Networks}},
+  author       = {Jordan, Keller and Jin, Yuchen and Boza, Vlado and You, Jiacheng and Cesista, Franz and Newhouse, Laker and Bernstein, Jeremy},
+  year         = {2024},
+  note         = {Blog post, \url{https://kellerjordan.github.io/posts/muon/}},
+  checked      = {Blog post of 2024-12-08, read for the memoria (reference audit 2026-10-10). Newton--Schulz coefficients (3.4445, -4.7750, 2.0315); embeddings and head on AdamW}
+}
+
+@misc{liu2025moonlight,
+  title   = {{Muon Is Scalable for LLM Training}},
+  author  = {Liu, Jingyuan and others},
+  year    = {2025},
+  note    = {\href{https://arxiv.org/abs/2502.16982}{arXiv:2502.16982}},
+  checked = {arXiv:2502.16982v1, 2025-02-24. Weight decay and the factor 0.2 sqrt(max(p, q)); Moonlight}
+}
+
+@misc{lion2026muown,
+  title   = {{Muown: Row-Norm Control for Muon Optimization}},
+  author  = {Lion, Kai and H{\"u}bler, Florian and Li, Bingcong and Orvieto, Antonio and He, Niao},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2605.10797}{arXiv:2605.10797}},
+  checked = {arXiv:2605.10797v1, 2026-05-11}
+}
+
+@misc{ren2026hypersphere,
+  title   = {{Rethinking Language Model Scaling Under Transferable Hypersphere Optimization}},
+  author  = {Ren, Liliang and Liu, Yang and Shen, Yelong and Chen, Weizhu},
+  year    = {2026},
+  note    = {NeurIPS 2026, \href{https://arxiv.org/abs/2603.28743}{arXiv:2603.28743}},
+  checked = {arXiv:2603.28743v2, 2026-03-30 (v2: 2026-04-05). NeurIPS 2026 poster (neurips.cc virtual poster page, read 2026-10-25). Rate against tokens with exponent -0.32, fit at 208M parameters}
+}
+
+@misc{wen2025fantastic,
+  title   = {{Fantastic Pretraining Optimizers and Where to Find Them}},
+  author  = {Wen, Kaiyue and Hall, David and Ma, Tengyu and Liang, Percy},
+  year    = {2026},
+  note    = {ICLR 2026, \href{https://arxiv.org/abs/2509.02046}{arXiv:2509.02046}},
+  checked = {arXiv:2509.02046v2, 2025-09-02 (v2: 2025-09-04). ICLR 2026 poster (iclr.cc accepted list, read 2026-10-25). Per-optimizer tuning; loss curves cross during the decay}
+}
+
+@misc{semenov2025benchmarking,
+  title   = {{Benchmarking Optimizers for Large Language Model Pretraining}},
+  author  = {Semenov, Andrei and Pagliardini, Matteo and Jaggi, Martin},
+  year    = {2026},
+  note    = {NeurIPS 2026, \href{https://arxiv.org/abs/2509.01440}{arXiv:2509.01440}},
+  checked = {arXiv:2509.01440v1, 2025-09-01. NeurIPS 2026 poster (neurips.cc accepted list, read 2026-10-25). Tunes each optimizer separately}
+}
+
+@misc{bjorck2025horizons,
+  title   = {{Scaling Optimal LR Across Token Horizons}},
+  author  = {Bjorck, Johan and Benhaim, Alon and Chaudhary, Vishrav and Wei, Furu and Song, Xia},
+  year    = {2025},
+  note    = {ICLR 2025, \href{https://arxiv.org/abs/2409.19913}{arXiv:2409.19913}},
+  checked = {arXiv:2409.19913v3, 2024-09-30 (v3: 2025-02-24). ICLR 2025; exponent -0.32 fit on 760M to 2.7B parameters, a steeper fall below 350M (Table 5)}
+}
+
+% Muon, the router and the balance of the experts
+
+@misc{wang2026depth,
+  title   = {{Depth Scaling and Muon Enable Balanced Expert Usage in MoE Training}},
+  author  = {Wang, Xi and Hayou, Soufiane and Nalisnick, Eric},
+  year    = {2026},
+  note    = {4th Workshop on High-dimensional Learning Dynamics (HiLD) at ICML 2026, \href{https://openreview.net/forum?id=2PAe0L8PME}{OpenReview 2PAe0L8PME}},
+  checked = {OpenReview 2PAe0L8PME, read in Chrome for the memoria (reference audit 2026-10-10). 500M MoE, 2 of 16 experts, no balancer, 2,000 steps, one seed; orthonormal router rows under Muon; usage perplexity. Read again in Chrome 2026-10-25: "balance gets worse under AdamW as there are no load balancing mechanisms, whereas Muon is capable of maintaining balance throughout training". Fig. 2b per layer, as the reference audit of 2026-10-26 read it in Chrome (the page showed a bot check to later reads): the first layer under Muon falls to about 5 to 7 effective experts of 16 by iteration 1,000, above AdamW's 3.5 to 5, and the other layers stay near 12 to 14.5 under Muon against 6 to 10, so the paper says more even under Muon rather than balanced. Fig. 2b is at a learning rate of 1e-3 for both optimizers on Nemotron-CC-Math and plots 1,000 iterations; in Layer 1 without depth scaling AdamW and Muon overlap near 5, the only panel where Muon is not above AdamW (reference audit 2026-10-26)}
+}
+
+@misc{wang2026myth,
+  title   = {{The Myth of Expert Specialization in MoEs: Why Routing Reflects Geometry, Not Necessarily Domain Expertise}},
+  author  = {Wang, Xi and Hayou, Soufiane and Nalisnick, Eric},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2604.09780}{arXiv:2604.09780}},
+  checked = {arXiv:2604.09780v1, 2026-04-10; also an ICLR 2027 submission. The shared direction; Proposition 2 (informal); Section 4.1; Figure 2 on depth under Muon. Figure 15 (b, c), read 2026-10-26: the mean pairwise cosine of the hidden states over 16 sequences (Eq. 10) is about 0.20 to 0.28 in Moonlight (Muon, the bias) against 0.08 to 0.17 in DeepSeek-V2-Lite (AdamW, a balance loss) over the lowest ten layers, and below it in the last layers (about 0.31 against 0.43); re-read 2026-10-27 from the figure SVGs, the Moonlight mean is higher in layers 0 to 19 and lower in 23 to 25; both put one dense layer first. Figure 11 is one sequence at one unnamed layer. The suppression is shown for gpt-oss-20b and DeepSeek-V2-Lite (Figures 2, 16 and 18, AdamW with an auxiliary loss) and not seen in Moonlight and Trinity Mini (Figures 15c, 15d, 17 and 19, Muon without it)}
+}
+
+@misc{li2026spectralcap,
+  title   = {{An Isotropy-Preserving Spectral Cap for Muon: Theory and Three Case Studies}},
+  author  = {Li, Jiachun},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2607.19771}{arXiv:2607.19771}},
+  checked = {arXiv:2607.19771v1, 2026-07-22. 64-expert MoE on Muon with the bias; every MoE result at seed 42 and no MoE run with the router on AdamW (AdamW only for the norms, embeddings and head of its nanoGPT runs), re-read 2026-10-27; top share 0.995 of the covariance of the logits plus the bias in the first MoE layer}
+}
+
+@misc{lau2026symmetry,
+  title   = {{Symmetry-Compatible Principle for Optimizer Design: Embeddings, LM Heads, SwiGLU MLPs, and MoE Routers}},
+  author  = {Lau, Tim Tsz-Kit and Su, Weijie},
+  year    = {2026},
+  note    = {Published at NeurIPS 2026 as ``An Equivariance Principle for Optimizer Design: Symmetry-Compatible Updates for Embeddings, LM Heads, and MoE Routers,'' \href{https://arxiv.org/abs/2605.18106v5}{arXiv:2605.18106v5}},
+  checked = {arXiv:2605.18106v5, 2026-05-18 (v5: 2026-10-14), journal_ref NeurIPS 2026, where its title is "An Equivariance Principle for Optimizer Design: Symmetry-Compatible Updates for Embeddings, LM Heads, and MoE Routers"; the router results cited are those of arXiv v5, Appendix G.4.1 (one seed; the uncentered left-polar update, a plain Muon-style router update, matches the centered one). Re-read 2026-10-25. Attention and experts on Muon-style updates; router rules beat an AdamW router; lower load imbalance with and without auxiliary losses (Section 4.4, Appendix G.4.1); no bias}
+}
+
+@misc{srivastava2026lossfree,
+  title        = {{Loss-Free MoE Routing}},
+  author       = {Srivastava, Varun},
+  year         = {2026},
+  note         = {Essay, \url{https://varunneal.github.io/essays/loss-free-moe}},
+  checked      = {Essay of July 2026, read for the memoria (reference audit 2026-10-10). 1.47B model, 2 of 64 experts, router on Adam or Muon, attention and experts on Muon}
+}
+
+@misc{vaidya2026compass,
+  title   = {{ExpertMuon-Compass: Alignment-Guided Step Sizes for Mixture-of-Experts Training}},
+  author  = {Vaidya, Omatharv Bharat and Vinod, Ashwin and Akbarian, Pedram and Ellendula, Aditya Sai and Jerzak, Connor T. and Ho, Nhat},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2610.04140}{arXiv:2610.04140}},
+  checked = {arXiv:2610.04140v1, 2026-10-02; 6 authors; also an ICLR 2027 submission. Compass changes the step sizes of the expert matrices only, and the router gets a Muon-style orthogonalized update (Section 3.1); "Both runs update the router the same way, so the difference arises from the expert updates" (Section 5); AdamW only for embeddings, head, biases and norms; loss-free sign bias with u = 0.02 (Appendix A.1); FineWeb-Edu; re-read 2026-10-24}
+}
+
+@misc{anon2026sqrt,
+  title   = {{Square-Root Gradient Routing: Geometrical Understanding of Router Optimization in Sparse MoEs}},
+  author  = {Anonymous},
+  year    = {2026},
+  note    = {ICLR 2027 submission, \href{https://openreview.net/forum?id=7T8m7OC23J}{OpenReview 7T8m7OC23J}},
+  checked = {ICLR 2027 submission 23726, OpenReview 7T8m7OC23J, posted 2026-09-16, modified 2026-10-05; full text read 2026-10-24. A router-only update rule whose gain depends on the base optimizer and on the gate normalization: with un-renormalized gates it gains less under Muon than under AdamW, and with renormalized gates it hurts AdamW and is about neutral under Muon (Table 1); its Muon baselines keep the router on AdamW (Appendix D), with an auxiliary loss and a z-loss and no bias. Re-read in the citation audit of 2026-10-24}
+}
+
+% Model reports
+
+@misc{deepseek2026v4,
+  title   = {{DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence}},
+  author  = {{DeepSeek-AI}},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2606.19348}{arXiv:2606.19348}},
+  checked = {arXiv:2606.19348v1, 2026-04-26 per the API. Muon for most parameters, AdamW for the embedding, the head and the RMSNorm weights; bias update speed 0.001 and balance loss weight 0.0001; hash routing in the first 3 MoE layers; spikes "consistently tied to outliers in the MoE layers"; Sqrt(Softplus) affinity. Read again 2026-10-24}
+}
+
+@misc{deepseek2026v41flash,
+  title   = {{DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression}},
+  author  = {{DeepSeek-AI}},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2609.19969}{arXiv:2609.19969}},
+  checked = {arXiv:2609.19969v1, 2026-09-17, the only version; author line DeepSeek-AI. The technical report on the Hugging Face model page, read 2026-10-26: Muon "for the weight matrices of linear transformations in the language-model backbone" and AdamW for normalization weights and other non-matrix parameters (section 2.5), the embeddings and the head with a Sinkhorn-balanced update (section 4.2.2), no exception for the router; auxiliary-loss-free balancing with separate biases for text and image tokens (section 2.1.1); bias update speed 0.001 and a sequence-level balance loss of weight 0.0001 (section 4.2.2). Released configuration: topk_method noaux_tc, scoring_func sqrtsoftplus, 384 routed experts with 6 active and 1 shared}
+}
+
+@misc{kimi2026k3,
+  title   = {{Kimi K3: Open Frontier Intelligence}},
+  author  = {{Kimi Team}},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2607.24653}{arXiv:2607.24653}},
+  checked = {arXiv:2607.24653v2, 2026-07-27 (v2: 2026-08-07). Muon on its weight matrices, no exception listed; the bias set from the scores, since a fixed step adapts slowly or oscillates}
+}
+
+@misc{glm2026glm5,
+  title   = {{GLM-5: From Vibe Coding to Agentic Engineering}},
+  author  = {{GLM-5 Team}},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2602.15763}{arXiv:2602.15763}},
+  checked = {arXiv:2602.15763v2, 2026-02-17 (v2: 2026-02-24). Appendix A: "For training, we follow the setting of GLM-4.5, including the Muon optimizer" and "Other hyper-parameters are the same as those of GLM-4.5"; the router is not named. Read 2026-10-24}
+}
+
+@misc{glm2025glm45,
+  title   = {{GLM-4.5: Agentic, Reasoning, and Coding (ARC) Foundation Models}},
+  author  = {{GLM-4.5 Team}},
+  year    = {2025},
+  note    = {\href{https://arxiv.org/abs/2508.06471}{arXiv:2508.06471}},
+  checked = {arXiv:2508.06471v1, 2025-08-08. Section 2.4: "We employed the Muon optimizer for all parameters except word embedding, bias, and weights for RMSNorm"; loss-free balance routing with a bias update rate of 0.001 for the first 15T tokens and 0 after, and a sequence-level balance loss of weight 0.0001; sigmoid gates (Section 2.1). Read 2026-10-24}
+}
+
+@misc{zai2026glm52,
+  title        = {{GLM-5.2}},
+  author       = {{Z.ai}},
+  year         = {2026},
+  note         = {Hugging Face model card, \url{https://huggingface.co/zai-org/GLM-5.2}},
+  checked      = {Model card read 2026-10-25. "Improved Architecture": IndexShare, one indexer reused across every four sparse attention layers, and an improved MTP layer for speculative decoding; points to the GLM-5 report}
+}
+
+@misc{zai2026glm53,
+  title        = {{GLM-5.3}},
+  author       = {{Z.ai}},
+  year         = {2026},
+  note         = {Hugging Face model card and configuration file, \url{https://huggingface.co/zai-org/GLM-5.3}},
+  checked      = {Model card and configuration of August 2026, read for the memoria (reference audit 2026-10-10). Bias-based balancing; refers to the GLM-5 report}
+}
+
+@misc{qiu2026qwennext,
+  title   = {{On the Design of Qwen3.8-Next Architecture: Evaluation, Efficiency, and Training Stability}},
+  author  = {{Qwen Team}},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2608.30320}{arXiv:2608.30320}},
+  checked = {arXiv:2608.30320v1, 2026-08-31; Qwen Team on the title page and in the model card's citation. Attention and experts on Muon, router on AdamW (Section 3.1); Muon made the router unstable early and gave "no significant performance gains" later, no data shown; the released configuration lists router_aux_loss_coef 0.001 and no selection bias (read 2026-10-24); stress test at 2x and 4x the best rate in a 25B (3B active) MoE, one run per configuration; spike threshold 0.1}
+}
+
+@misc{xiaomi2026mimov26,
+  title        = {{MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement}},
+  author       = {{LLM-Core Xiaomi}},
+  year         = {2026},
+  note         = {\href{https://arxiv.org/abs/2610.11959}{arXiv:2610.11959}},
+  checked      = {arXiv:2610.11959v1, 2026-10-08, the same text as the Hugging Face PDF of September 2026. Muown for the hidden weight matrices from mid-training, with the embeddings, the head and the MoE router on AdamW and no reason given (Section 3.2); router frozen in RL (Section 5.1) after the peak load of decoder layer 9 rose from 6x to 16x the mean (Section 5.4). The released configuration of MiMo-V2.6-Pro-RL has topk_method noaux_tc and sigmoid scores, the bias-based balancer (read 2026-10-24). Read 2026-10-25}
+}
+
+@misc{yang2026iquest,
+  title   = {{IQuest-Q1: Advancing Foundation Capabilities for Agentic CLI Systems}},
+  author  = {{IQuest Research}},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2610.30949}{arXiv:2610.30949}},
+  checked = {arXiv:2610.30949v1, 2026-10-22; IQuest Research on the title page, 177 authors in the arXiv metadata, whose first, "A. Jian Yang", carries a marker from the contribution list (Section 7). Muon for all parameters except the token embeddings, the head, the normalization parameters and the MoE routers, which use Adam, no reason given; a dense first layer "to mitigate expert load imbalance in the earliest layer"; 320B total, 15B active; balancer not specified. Read 2026-10-24}
+}
+
+@misc{singh2026trinity,
+  title   = {{Arcee Trinity Large Technical Report}},
+  author  = {Singh, Varun and others},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2602.17004}{arXiv:2602.17004}},
+  checked = {arXiv:2602.17004v1, 2026-02-19. A damped bias step, since the sign rule oscillates near balance}
+}
+
+@misc{motif2026motif3,
+  title   = {{Motif 3: Technical Report}},
+  author  = {{Motif Technologies}},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2608.09119}{arXiv:2608.09119}},
+  checked = {arXiv:2608.09119v1, 2026-08-10; Motif Technologies on the title page. Muon; a larger balance-loss coefficient in its first MoE layers, the most unbalanced early; occasional collapse}
+}
+
+@misc{k2team2025k2v2,
+  title   = {{K2-V2: A 360-Open, Reasoning-Enhanced LLM}},
+  author  = {{K2 Team}},
+  year    = {2025},
+  note    = {\href{https://arxiv.org/abs/2512.06201}{arXiv:2512.06201}},
+  checked = {arXiv:2512.06201v3, 2025-12-05 (v3: 2026-09-17). Spikes by robust standard deviations from the median absolute deviation}
+}
+
+% Instability
+
+@misc{wortsman2024proxies,
+  title   = {{Small-Scale Proxies for Large-Scale Transformer Training Instabilities}},
+  author  = {Wortsman, Mitchell and others},
+  year    = {2024},
+  note    = {ICLR 2024, \href{https://arxiv.org/abs/2309.14322}{arXiv:2309.14322}},
+  checked = {arXiv:2309.14322v2, 2023-09-25 (v2: 2023-10-16). ICLR 2024; learning-rate sensitivity; divergences, not spikes (footnote 1)}
+}
+
+% Architecture
+
+@misc{vaswani2017attention,
+  title   = {{Attention Is All You Need}},
+  author  = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, {\L}ukasz and Polosukhin, Illia},
+  year    = {2017},
+  note    = {NeurIPS 2017, \href{https://arxiv.org/abs/1706.03762}{arXiv:1706.03762}},
+  checked = {arXiv:1706.03762v7, 2017-06-12 (v7: 2023-08-02). NeurIPS 2017}
+}
+
+@misc{radford2019language,
+  title        = {{Language Models Are Unsupervised Multitask Learners}},
+  author       = {Radford, Alec and Wu, Jeffrey and Child, Rewon and Luan, David and Amodei, Dario and Sutskever, Ilya},
+  year         = {2019},
+  note         = {OpenAI technical report, \url{https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf}},
+  checked      = {PDF read for the memoria (reference audit 2026-10-10). GPT-2; byte-level BPE}
+}
+
+@misc{sennrich2016bpe,
+  title   = {{Neural Machine Translation of Rare Words with Subword Units}},
+  author  = {Sennrich, Rico and Haddow, Barry and Birch, Alexandra},
+  year    = {2016},
+  note    = {ACL 2016, \href{https://arxiv.org/abs/1508.07909}{arXiv:1508.07909}},
+  checked = {arXiv:1508.07909v5, 2015-08-31 (v5: 2016-06-10). ACL 2016, pages 1715--1725}
+}
+
+@misc{su2024roformer,
+  title   = {{RoFormer: Enhanced Transformer with Rotary Position Embedding}},
+  author  = {Su, Jianlin and Ahmed, Murtadha and Lu, Yu and Pan, Shengfeng and Bo, Wen and Liu, Yunfeng},
+  year    = {2024},
+  note    = {Neurocomputing 568, \href{https://arxiv.org/abs/2104.09864}{arXiv:2104.09864}},
+  checked = {arXiv:2104.09864v5, 2021-04-20 (v5: 2023-11-08). Neurocomputing 568:127063, 2024, doi:10.1016/j.neucom.2023.127063 (Crossref)}
+}
+
+@misc{henry2020qknorm,
+  title   = {{Query-Key Normalization for Transformers}},
+  author  = {Henry, Alex and Dachapally, Prudhvi Raj and Pawar, Shubham and Chen, Yuxuan},
+  year    = {2020},
+  note    = {Findings of EMNLP 2020, \href{https://arxiv.org/abs/2010.04245}{arXiv:2010.04245}},
+  checked = {arXiv:2010.04245v1, 2020-10-08. Findings of EMNLP 2020, pages 4246--4253}
+}
+
+@misc{dehghani2023vit22b,
+  title   = {{Scaling Vision Transformers to 22 Billion Parameters}},
+  author  = {Dehghani, Mostafa and others},
+  year    = {2023},
+  note    = {ICML 2023, \href{https://arxiv.org/abs/2302.05442}{arXiv:2302.05442}},
+  checked = {arXiv:2302.05442v1, 2023-02-10. ICML 2023, pages 7480--7512; QK normalization}
+}
+
+@misc{qiu2025gated,
+  title   = {{Gated Attention for Large Language Models: Non-linearity, Sparsity, and Attention-Sink-Free}},
+  author  = {Qiu, Zihan and others},
+  year    = {2025},
+  note    = {NeurIPS 2025, \href{https://arxiv.org/abs/2505.06708}{arXiv:2505.06708}},
+  checked = {arXiv:2505.06708v1, 2025-05-10. NeurIPS 2025}
+}
+
+@misc{shazeer2020glu,
+  title   = {{GLU Variants Improve Transformer}},
+  author  = {Shazeer, Noam},
+  year    = {2020},
+  note    = {\href{https://arxiv.org/abs/2002.05202}{arXiv:2002.05202}},
+  checked = {arXiv:2002.05202v1, 2020-02-12. SwiGLU}
+}
+
+@misc{zhang2019rmsnorm,
+  title   = {{Root Mean Square Layer Normalization}},
+  author  = {Zhang, Biao and Sennrich, Rico},
+  year    = {2019},
+  note    = {NeurIPS 2019, \href{https://arxiv.org/abs/1910.07467}{arXiv:1910.07467}},
+  checked = {arXiv:1910.07467v1, 2019-10-16. NeurIPS 2019}
+}
+
+% Data, software and statistics
+
+@misc{penedo2024fineweb,
+  title   = {{The FineWeb Datasets: Decanting the Web for the Finest Text Data at Scale}},
+  author  = {Penedo, Guilherme and Kydl{\'\i}{\v{c}}ek, Hynek and Ben Allal, Loubna and Lozhkov, Anton and Mitchell, Margaret and Raffel, Colin and von Werra, Leandro and Wolf, Thomas},
+  year    = {2024},
+  note    = {NeurIPS 2024 Datasets and Benchmarks Track, \href{https://arxiv.org/abs/2406.17557}{arXiv:2406.17557}},
+  checked = {arXiv:2406.17557v2, 2024-06-25 (v2: 2024-10-31). NeurIPS 2024 Datasets and Benchmarks; FineWeb-Edu}
+}
+
+@misc{paster2024openwebmath,
+  title   = {{OpenWebMath: An Open Dataset of High-Quality Mathematical Web Text}},
+  author  = {Paster, Keiran and Dos Santos, Marco and Azerbayev, Zhangir and Ba, Jimmy},
+  year    = {2024},
+  note    = {ICLR 2024, \href{https://arxiv.org/abs/2310.06786}{arXiv:2310.06786}},
+  checked = {arXiv:2310.06786v1, 2023-10-10. ICLR 2024}
+}
+
+@misc{codeparrot2022clean,
+  title        = {{codeparrot-clean-valid}},
+  author       = {{CodeParrot}},
+  year         = {2022},
+  note         = {Hugging Face dataset, \url{https://huggingface.co/datasets/codeparrot/codeparrot-clean-valid}},
+  checked      = {Dataset page, read for the memoria (reference audit 2026-10-10)}
+}
+
+@misc{wikimedia2023wikipedia,
+  title        = {{Wikipedia, Configuration 20231101.en}},
+  author       = {{Wikimedia Foundation}},
+  year         = {2023},
+  note         = {Hugging Face dataset, \url{https://huggingface.co/datasets/wikimedia/wikipedia}},
+  checked      = {Dataset page, read for the memoria (reference audit 2026-10-10); Hugging Face API 2026-10-25: dataset wikimedia/wikipedia, English configuration 20231101.en}
+}
+
+@misc{paszke2019pytorch,
+  title   = {{PyTorch: An Imperative Style, High-Performance Deep Learning Library}},
+  author  = {Paszke, Adam and others},
+  year    = {2019},
+  note    = {NeurIPS 2019, \href{https://arxiv.org/abs/1912.01703}{arXiv:1912.01703}},
+  checked = {arXiv:1912.01703v1, 2019-12-03. NeurIPS 2019}
+}
+
+@misc{ansel2024pytorch2,
+  title   = {{PyTorch 2: Faster Machine Learning Through Dynamic Python Bytecode Transformation and Graph Compilation}},
+  author  = {Ansel, Jason and others},
+  year    = {2024},
+  note    = {ASPLOS 2024, \doi{10.1145/3620665.3640366}},
+  checked = {Crossref and the author copy, for the memoria (reference audit 2026-10-10). ASPLOS 2024, Volume 2, pages 929--947}
+}
+
+@misc{efron1993introduction,
+  title     = {{An Introduction to the Bootstrap}},
+  author    = {Efron, Bradley and Tibshirani, Robert J.},
+  note      = {Chapman \& Hall},
+  year      = {1993},
+  checked   = {Crossref and library records, for the memoria (reference audit 2026-10-10); chapter 13, confidence intervals based on bootstrap percentiles. DOI 10.1201/9780429246593 dropped on 2026-10-25, since it is the 1994 Chapman and Hall/CRC printing}
+}
+
+@misc{agarwal2021precipice,
+  title   = {{Deep Reinforcement Learning at the Edge of the Statistical Precipice}},
+  author  = {Agarwal, Rishabh and Schwarzer, Max and Castro, Pablo Samuel and Courville, Aaron and Bellemare, Marc G.},
+  year    = {2021},
+  note    = {NeurIPS 2021, \href{https://arxiv.org/abs/2108.13264}{arXiv:2108.13264}},
+  checked = {arXiv:2108.13264v4, 2021-08-30 (v4: 2022-01-05). NeurIPS 2021; percentile bootstrap intervals too narrow with few runs}
+}
+
+@misc{ethayarajh2019contextual,
+  title   = {{How Contextual Are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings}},
+  author  = {Ethayarajh, Kawin},
+  year    = {2019},
+  note    = {EMNLP 2019, \href{https://arxiv.org/abs/1909.00512}{arXiv:1909.00512}},
+  checked = {arXiv:1909.00512v1, 2019-09-02, comment "Accepted to EMNLP 2019". Anisotropy as the average cosine similarity between the representations of randomly sampled words. Read 2026-10-25}
+}
+
+@misc{mu2018allbutthetop,
+  title   = {{All-but-the-Top: Simple and Effective Postprocessing for Word Representations}},
+  author  = {Mu, Jiaqi and Viswanath, Pramod},
+  year    = {2018},
+  note    = {ICLR 2018, \href{https://arxiv.org/abs/1702.01417}{arXiv:1702.01417}},
+  checked = {arXiv:1702.01417v2, 2017-02-05 (v2: 2018-03-19), where Bhat is a third author; the ICLR 2018 version (OpenReview HkuGJ3kCb) lists Mu and Viswanath. Removes the common mean vector and a few top directions from word vectors. Read 2026-10-25}
+}
+
+@misc{malik2026skewadam,
+  title   = {{Where Should Optimizer State Live? Tiered State Allocation for Memory-Efficient Mixture-of-Experts Training}},
+  author  = {Malik, Nuemaan},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2607.19058}{arXiv:2607.19058}},
+  checked = {arXiv:2607.19058v2, 2026-07-21 (v2: 2026-08-13); 1 author. A 6.78B MoE with 128 experts and top-2 routing, the Switch auxiliary loss with alpha 0.05 and a z-loss, no bias; the Muon arm keeps embeddings, router and vectors on an internal Adam at 1e-3, against 3e-4 for the whole AdamW arm, and neither Muon rate was swept (Section 4, Appendix A); one run per optimizer over 10,000 steps; the balance loss under Muon jumps to 22% above its floor in the final thousand steps (Section 5, Figure 3). Read 2026-10-25}
+}
+
+@misc{chen2026phibalancing,
+  title   = {{$\phi$-Balancing for Mixture-of-Experts Training}},
+  author  = {Chen, Lizhang and Li, Jonathan and Wang, Qi and Liao, Runlong and Li, Shuozhe and Liang, Chen and Lao, Ni and Liu, Qiang},
+  year    = {2026},
+  note    = {ICML 2026, \href{https://arxiv.org/abs/2605.15403}{arXiv:2605.15403}},
+  checked = {arXiv:2605.15403v1, 2026-05-14; 8 authors; ICML 2026 (icml.cc accepted list). Minimizes a convex potential of the expected routing distribution, by convex duality and mirror descent an EMA-based routing adjustment (abstract). Read 2026-10-25}
+}
+
+@misc{miasnikov2026monarch,
+  title   = {{Monarch--Muon: Structure-Aware Muon for Fast and Memory-Efficient Pretraining}},
+  author  = {Miasnikov, Alexander and others},
+  year    = {2026},
+  note    = {Workshop on Optimization for Machine Learning (OPT 2026) at NeurIPS 2026, with R.~Kabirov listed first, \href{https://arxiv.org/abs/2610.17429}{arXiv:2610.17429}},
+  checked = {arXiv:2610.17429v1, 2026-10-12; 10 authors. A 1.029B-total, 280M-active MoE with a dense first layer and 64 experts, top-8 sigmoid routing with auxiliary-loss-free expert biases; the Muon runs keep embeddings, head, norms and routers on AdamW; one peak rate of 1.63e-3 for all runs; each configuration a single run (Appendix A); validation loss 2.68 for AdamW against 2.65 for Muon (Table 1) and its curve over training (Figure 2); no loads or biases reported. Read 2026-10-25. Venue OPT 2026 poster, NeurIPS 2026 workshop, OpenReview TOUrP5VzcN, from the OpenReview API 2026-10-25; its forum page, read 2026-10-26, lists Ruslan Kabirov first and Miasnikov second, while arXiv v1 lists Miasnikov first; the PDF and OpenReview titles have an en dash and the arXiv metadata a hyphen}
+}
+
+@misc{nvidia2026ultra,
+  title   = {{Nemotron 3 Ultra: Open, Efficient Mixture-of-Experts Hybrid Mamba-Transformer Model for Agentic Reasoning}},
+  author  = {{NVIDIA}},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2606.15007}{arXiv:2606.15007}},
+  checked = {arXiv:2606.15007v1, 2026-06-12. Follows the training recipe and hyperparameters of Nemotron 3 Super (Section 2.4); MaxVio, the busiest expert's tokens over the mean, was 1.2 in the median layer and 4.8 in the first MoE layer early in training, and the first layer rose to about 12 by 12T tokens while the median stayed near 1.2 (Section 2.7), computed per checkpoint on 500M tokens of training and of validation data, read separately (always lower on the training data, in its words for Nano, Super and Ultra), without saying which data the Ultra figures come from. The imbalance is the first of two phenomena found while studying the cause of the divergence near 16T tokens, and in its words MaxVio seems correlated with training instability (Section 2.7). Read 2026-10-25 and 2026-10-26}
+}
+
+@misc{nvidia2026super,
+  title   = {{Nemotron 3 Super: Open, Efficient Mixture-of-Experts Hybrid Mamba-Transformer Model for Agentic Reasoning}},
+  author  = {{NVIDIA}},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2604.12374}{arXiv:2604.12374}},
+  checked = {arXiv:2604.12374v1, 2026-04-14. AdamW with beta 0.9 and 0.95 and weight decay 0.1; sigmoid router with the auxiliary-loss-free bias at an update rate of 1e-3 and a balance loss of 1e-4 (Section 2.4). Read 2026-10-25}
+}
+
+@misc{poolside2026laguna,
+  title   = {{Laguna M.1/XS.2 Technical Report}},
+  author  = {{Poolside Team}},
+  year    = {2026},
+  note    = {\href{https://arxiv.org/abs/2605.27605}{arXiv:2605.27605}},
+  checked = {arXiv:2605.27605v1, 2026-05-26; 96 authors on arXiv, Poolside Team on the title page. Sigmoid routing, an auxiliary balance loss over the global batch and a dense first layer (Section 3.1); Muon with Moonlight-style rate scaling, and in preliminary runs without it and with standard weight decay an expert collapse from about 450B tokens that spread layer by layer through the first three MoE layers until training diverged (Section 3.1.3). Read 2026-10-25}
+}
+
+@misc{qwen2026flashnextcard,
+  title   = {{Qwen3.8-Flash-Next}},
+  author  = {{Qwen Team}},
+  year    = {2026},
+  note    = {Hugging Face model card and configuration file, \url{https://huggingface.co/Qwen/Qwen3.8-Flash-Next}},
+  checked = {config.json read 2026-10-25: text_config.router_aux_loss_coef 0.001, output_router_logits false, num_experts 512, num_experts_per_tok 10, no topk_method and no selection-bias field}
+}
+
+@misc{xiaomi2026mimoprocard,
+  title   = {{MiMo-V2.6-Pro-RL}},
+  author  = {{Xiaomi MiMo Team}},
+  year    = {2026},
+  note    = {Hugging Face model card and configuration file, \url{https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL}},
+  checked = {config.json read 2026-10-25: topk_method noaux_tc, scoring_func sigmoid, n_routed_experts 384, num_experts_per_tok 8; author as in the card's own citation block}
+}

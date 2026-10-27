@@ -1,0 +1,39 @@
+% The figure of RQ3 (../arms.pdf): the span, the input cosine and the score offset of the first MoE layer for each balanced arm, one row per arm, in three groups split by dashed lines (the optimizers of the router and of the backbone crossed, Muon at half rate, one part of the backbone on Muon). The bars are the means over seeds 3 to 5 and the marks are the seeds; blue marks the arms with the whole backbone on Muon. The memoria's thesis/tex/figures/results-rq3.tex, resized for the paper. Data: ../data/rq3-arms.csv and rq3-arms-mean.csv, written by code/ai-experiments/thesis_figures_2026_09/extract.py.
+% Build: cd paper/figures/src && ./build.sh
+\documentclass[11pt, border=1pt]{standalone}
+\input{style}
+\begin{document}
+\begin{tikzpicture}
+  \begin{groupplot}[
+      paper,
+      group style={group size=3 by 1, horizontal sep=0.6cm, yticklabels at=edge left},
+      width=3.2cm, height=3.9cm,
+      y dir=reverse, ymin=-0.6, ymax=8.6,
+      ytick={0,...,8},
+      yticklabels={AdamW, {AdamW, router on Muon}, {Muon, router on AdamW}, Muon, {Muon, half rate}, Experts on Muon, Attention on Muon, Dense FFN on Muon, {Attention, dense FFN on Muon}},
+      yticklabel style={font=\footnotesize},
+      xmin=0, xticklabel style={/pgf/number format/fixed, /pgf/number format/precision=1, /pgf/number format/fixed zerofill},
+      unbounded coords=discard,
+      ymajorgrids, grid style={black!8},
+      extra y ticks={3.5, 4.5}, extra y tick labels={}, extra y tick style={grid=major, major tick length=0pt, major grid style={black!40, densely dashed}},
+    ]
+    \nextgroupplot[xlabel={Span}, xmax=0.6, xtick={0,0.2,0.4}]
+    \addplot[xbar, bar width=5pt, draw=none, fill=black!15, forget plot] table[x expr={\thisrow{high} == 0 ? \thisrow{bias_span_first} : nan}, y=row] {../data/rq3-arms-mean.csv};
+    \addplot[xbar, bar width=5pt, draw=none, fill=moeblue!30, forget plot] table[x expr={\thisrow{high} == 1 ? \thisrow{bias_span_first} : nan}, y=row] {../data/rq3-arms-mean.csv};
+    \addplot[only marks, mark=*, mark size=1.1pt, black!60, mark options={fill=white}, forget plot] table[x expr={\thisrow{high} == 0 ? \thisrow{bias_span_first} : nan}, y=row] {../data/rq3-arms.csv};
+    \addplot[only marks, mark=square*, mark size=1.0pt, moeblue, forget plot] table[x expr={\thisrow{high} == 1 ? \thisrow{bias_span_first} : nan}, y=row] {../data/rq3-arms.csv};
+
+    \nextgroupplot[xlabel={Input cosine}, xmax=0.45, xtick={0,0.2,0.4}]
+    \addplot[xbar, bar width=5pt, draw=none, fill=black!15, forget plot] table[x expr={\thisrow{high} == 0 ? \thisrow{router_input_similarity_first} : nan}, y=row] {../data/rq3-arms-mean.csv};
+    \addplot[xbar, bar width=5pt, draw=none, fill=moeblue!30, forget plot] table[x expr={\thisrow{high} == 1 ? \thisrow{router_input_similarity_first} : nan}, y=row] {../data/rq3-arms-mean.csv};
+    \addplot[only marks, mark=*, mark size=1.1pt, black!60, mark options={fill=white}, forget plot] table[x expr={\thisrow{high} == 0 ? \thisrow{router_input_similarity_first} : nan}, y=row] {../data/rq3-arms.csv};
+    \addplot[only marks, mark=square*, mark size=1.0pt, moeblue, forget plot] table[x expr={\thisrow{high} == 1 ? \thisrow{router_input_similarity_first} : nan}, y=row] {../data/rq3-arms.csv};
+
+    \nextgroupplot[xlabel={Score offset}, xmax=0.45, xtick={0,0.2,0.4}]
+    \addplot[xbar, bar width=5pt, draw=none, fill=black!15, forget plot] table[x expr={\thisrow{high} == 0 ? \thisrow{mean_score_span_first} : nan}, y=row] {../data/rq3-arms-mean.csv};
+    \addplot[xbar, bar width=5pt, draw=none, fill=moeblue!30, forget plot] table[x expr={\thisrow{high} == 1 ? \thisrow{mean_score_span_first} : nan}, y=row] {../data/rq3-arms-mean.csv};
+    \addplot[only marks, mark=*, mark size=1.1pt, black!60, mark options={fill=white}, forget plot] table[x expr={\thisrow{high} == 0 ? \thisrow{mean_score_span_first} : nan}, y=row] {../data/rq3-arms.csv};
+    \addplot[only marks, mark=square*, mark size=1.0pt, moeblue, forget plot] table[x expr={\thisrow{high} == 1 ? \thisrow{mean_score_span_first} : nan}, y=row] {../data/rq3-arms.csv};
+  \end{groupplot}
+\end{tikzpicture}
+\end{document}

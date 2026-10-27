@@ -1,0 +1,33 @@
+% The setup every figure of the paper shares, read by each standalone source in this folder. The text is STIX Two at the size of the paper's \footnotesize (9 pt), so a figure included at its natural width matches the captions and the text. The colors, marks and the band style are those of the memoria (thesis/tex/main.tex), and each partition keeps its color and mark in every figure.
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{stix2}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots, fillbetween}
+\pgfplotsset{compat=1.18}
+\definecolor{moeblue}{RGB}{49,101,156}
+\definecolor{moegreen}{RGB}{84,130,53}
+\definecolor{moeamber}{RGB}{176,124,0}
+\pgfplotsset{
+  table/col sep=comma,
+  paper/.style={
+      scale only axis, font=\footnotesize, line width=0.5pt,
+      tick label style={font=\footnotesize, /pgf/number format/assume math mode=true},
+      every axis plot/.append style={line width=0.8pt},
+      legend style={font=\footnotesize, draw=none, fill=none, inner sep=1pt, row sep=-1pt},
+      legend cell align=left,
+      /pgf/number format/1000 sep={,},
+    },
+  arm a/.style={moeamber, mark=*, mark size=1.2pt},
+  arm b/.style={moeblue, mark=square*, mark size=1.1pt},
+  arm c/.style={moegreen, mark=triangle*, mark size=1.5pt},
+  arm f/.style={black!55, mark=diamond*, mark size=1.5pt},
+  band/.style={opacity=0.18, draw=none},
+  % The y labels of a column of panels at one distance from the axis, whatever the width of the tick labels.
+  aligned ylabel/.style={every axis y label/.append style={at={(axis description cs:#1,0.5)}, anchor=south, text depth=0pt}},
+  % Keep only the rows of one arm, or drop them, from a table with an arm column.
+  only arm/.style={x filter/.append code={\edef\armrow{\thisrow{arm}}\edef\armkept{#1}\ifx\armrow\armkept\else\def\pgfmathresult{inf}\fi}},
+  except arm/.style={x filter/.append code={\edef\armrow{\thisrow{arm}}\edef\armkept{#1}\ifx\armrow\armkept\def\pgfmathresult{inf}\fi}},
+}
+% The end of the warmup, drawn as a thin vertical line.
+\tikzset{warmup/.style={black!35, line width=0.4pt}}

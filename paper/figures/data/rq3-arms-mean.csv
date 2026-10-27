@@ -1,0 +1,10 @@
+row,arm,high,bias_span_first,router_input_similarity_first,mean_score_span_first
+0,adamw,0,0.09508,0.07062,0.09499
+1,muon_router,0,0.09876,0.07378,0.09991
+2,muon_except_router,1,0.17461,0.39139,0.13714
+3,muon,1,0.19779,0.40820,0.13968
+4,muon-muonlr0.5x,1,0.11906,0.40106,0.09955
+5,muon_experts,0,0.40889,0.14560,0.29822
+6,muon_attention,0,0.12958,0.05344,0.10919
+7,muon_dense,0,0.09386,0.03315,0.08994
+8,muon_attention_dense,0,0.22878,0.05385,0.18280
