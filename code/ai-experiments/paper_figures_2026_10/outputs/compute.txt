@@ -1,0 +1,13 @@
+== GPU-hours of the training steps, by block
+  balance_loss      9 runs     14.68 h
+  balancer         12 runs     17.41 h
+  confirmation     17 runs    108.64 h
+  offset-probe     12 runs      3.81 h
+  pilot             8 runs      5.16 h
+  rq1               6 runs      8.84 h
+  rq2              51 runs     39.17 h
+  rq3              33 runs     51.64 h
+  scale-probe      10 runs      6.68 h
+  tuning           17 runs     12.19 h
+  program         145 runs    252.58 h
+  all             175 runs    268.23 h

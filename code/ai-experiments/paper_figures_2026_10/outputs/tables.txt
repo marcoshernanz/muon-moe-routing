@@ -1,0 +1,39 @@
+% RQ1: metric & AdamW & Muon & difference [range]
+Validation loss & 3.255 & 3.177 & $-0.078$ \seedrange{-0.086}{-0.062} \\
+Span & 0.105 & 0.137 & $+0.033$ \seedrange{+0.030}{+0.036} \\
+Span, first MoE layer & 0.084 & 0.194 & $+0.110$ \seedrange{+0.085}{+0.151} \\
+Update--load correlation & 0.379 & 0.024 & $-0.355$ \seedrange{-0.362}{-0.345} \\
+Update--load correlation, spectral norm & 0.102 & 0.035 & $-0.068$ \seedrange{-0.073}{-0.061} \\
+Load churn & 0.032 & 0.038 & $+0.006$ \seedrange{+0.004}{+0.008} \\
+Load churn, early & 0.049 & 0.064 & $+0.015$ \seedrange{+0.011}{+0.017} \\
+Warmup churn & 0.102 & 0.083 & $-0.019$ \seedrange{-0.020}{-0.018} \\
+Specialization & 0.105 & 0.118 & $+0.014$ \seedrange{+0.006}{+0.017} \\
+% RQ3: arm & loss & span & cosine & offset & early overload & common share & span all & warmup churn
+AdamW & 3.253 & 0.095 & 0.071 & 0.095 & 1.14 & 0.129 & 0.103 & 0.102 \\
+Router on Muon & 3.248 & 0.099 & 0.074 & 0.100 & 1.16 & 0.151 & 0.117 & 0.092 \\
+Muon, router on AdamW & 3.177 & 0.175 & 0.391 & 0.137 & 6.63 & 0.497 & 0.123 & 0.122 \\
+Muon & 3.175 & 0.198 & 0.408 & 0.140 & 4.06 & 0.160 & 0.140 & 0.084 \\
+Muon, half rate & 3.166 & 0.119 & 0.401 & 0.100 & 1.73 & 0.161 & 0.115 & 0.074 \\
+Experts on Muon & 3.205 & 0.409 & 0.146 & 0.298 & 3.24 & 0.201 & 0.175 & 0.103 \\
+Attention on Muon & 3.220 & 0.130 & 0.053 & 0.109 & 2.06 & 0.213 & 0.118 & 0.104 \\
+Dense FFN on Muon & 3.227 & 0.094 & 0.033 & 0.090 & 1.24 & 0.169 & 0.110 & 0.100 \\
+Attention, dense FFN on Muon & 3.210 & 0.229 & 0.054 & 0.183 & 5.07 & 0.226 & 0.140 & 0.100 \\
+% Rise: experiment & arm & span & early overload & cosine & loss, each arm minus AdamW with the same balancer
+RQ1 & Muon & $+0.110$ \seedrange{+0.085}{+0.151} & $+3.15$ \seedrange{+1.47}{+4.58} & -- & $-0.078$ \seedrange{-0.086}{-0.062} \\
+RQ3 & Muon & $+0.103$ \seedrange{+0.045}{+0.174} & $+2.93$ \seedrange{+2.17}{+3.52} & $+0.338$ \seedrange{+0.324}{+0.345} & $-0.077$ \seedrange{-0.083}{-0.067} \\
+RQ3 & Muon, router on AdamW & $+0.080$ \seedrange{+0.065}{+0.091} & $+5.50$ \seedrange{+5.06}{+5.75} & $+0.321$ \seedrange{+0.313}{+0.335} & $-0.075$ \seedrange{-0.081}{-0.066} \\
+RQ3 & Muon, half rate & $+0.024$ \seedrange{+0.010}{+0.037} & $+0.59$ \seedrange{+0.48}{+0.78} & $+0.330$ \seedrange{+0.321}{+0.342} & $-0.087$ \seedrange{-0.095}{-0.075} \\
+Bias speed & Muon, usual bias & $+0.075$ \seedrange{+0.041}{+0.095} & $+2.84$ \seedrange{+2.20}{+3.34} & $+0.329$ \seedrange{+0.324}{+0.332} & $-0.082$ \seedrange{-0.094}{-0.069} \\
+Bias speed & Muon, fast bias & $+0.040$ \seedrange{+0.013}{+0.066} & $+0.54$ \seedrange{+0.46}{+0.69} & $+0.324$ \seedrange{+0.320}{+0.327} & $-0.082$ \seedrange{-0.088}{-0.071} \\
+Balance loss & Muon & $+0.081$ \seedrange{+0.045}{+0.121} & $+1.67$ \seedrange{+1.41}{+2.00} & $+0.338$ \seedrange{+0.329}{+0.347} & $-0.077$ \seedrange{-0.080}{-0.073} \\
+Balance loss & Muon, router on AdamW & $+0.055$ \seedrange{+0.039}{+0.073} & $+5.11$ \seedrange{+4.97}{+5.34} & $+0.328$ \seedrange{+0.321}{+0.338} & $-0.076$ \seedrange{-0.079}{-0.071} \\
+Large model & Muon & $+0.152$ \seedrange{+0.087}{+0.240} & $+5.19$ \seedrange{+4.46}{+6.10} & $+0.525$ \seedrange{+0.495}{+0.583} & $-0.045$ \seedrange{-0.048}{-0.040} \\
+Large model & Muon, router on AdamW & $+0.125$ \seedrange{+0.068}{+0.186} & $+6.09$ \seedrange{+5.32}{+6.57} & $+0.642$ \seedrange{+0.604}{+0.714} & $-0.041$ \seedrange{-0.044}{-0.037} \\
+% Router: setting & warmup churn & early overload & common share & span & loss, router on AdamW minus Muon
+Small model & $+0.038$ \seedrange{+0.038}{+0.039} & $+2.57$ \seedrange{+1.96}{+3.52} & $+0.337$ \seedrange{+0.328}{+0.342} & $-0.023$ \seedrange{-0.092}{+0.020} & $+0.002$ \seedrange{+0.001}{+0.004} \\
+Small model, balance loss & $+0.045$ \seedrange{+0.043}{+0.046} & $+3.44$ \seedrange{+2.96}{+3.93} & $+0.339$ \seedrange{+0.334}{+0.346} & $-0.025$ \seedrange{-0.048}{-0.005} & $+0.001$ \seedrange{+0.001}{+0.002} \\
+Large model & $+0.038$ \seedrange{+0.037}{+0.039} & $+0.91$ \seedrange{-0.78}{+1.94} & $+0.377$ \seedrange{+0.339}{+0.429} & $-0.027$ \seedrange{-0.119}{+0.058} & $+0.004$ \seedrange{+0.003}{+0.004} \\
+% Signs per seed of the same differences
+% Small model: +++ +++ +++ +-+ +++
+% Small model, balance loss: +++ +++ +++ --- +++
+% Large model: +++ +-+ +++ --+ +++
