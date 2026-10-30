@@ -1,8 +1,10 @@
-# How the Optimizer Shapes Routing
+# Muon Makes the First Mixture-of-Experts Layer Harder to Balance
 
-The code and the LaTeX source of the bachelor's thesis *How the Optimizer Shapes Routing: Load Balancing, Specialization, and Stability in Mixture-of-Experts Language Models Trained with Muon*, by Marcos Hernanz Antón, supervised by Daniel Hernández Lobato (Grado en Ingeniería Informática, Escuela Politécnica Superior, Universidad Autónoma de Madrid).
+The code and the LaTeX source of the paper [*Muon Makes the First Mixture-of-Experts Layer Harder to Balance*](https://arxiv.org/abs/2610.37914), by Marcos Hernanz, arXiv:2610.37914 (October 2026). Every run is public on Hugging Face (see [Data](#data)).
 
-Its short version is the paper [*Muon Makes the First Mixture-of-Experts Layer Harder to Balance*](https://arxiv.org/abs/2610.37914), arXiv:2610.37914 (October 2026).
+In mixture-of-experts language models with 55M and 108M active parameters, Muon on the rest of the network makes the inputs to the router of the first MoE layer share a direction, and soon after the warmup the busiest expert of that layer averages four to seven times its fair share. Moving only the router to AdamW made the loads shift more during the warmup, while subtracting the batch mean from the router's inputs removed the overload over the first 3,000 steps.
+
+The paper is the short version of the bachelor's thesis *How the Optimizer Shapes Routing: Load Balancing, Specialization, and Stability in Mixture-of-Experts Language Models Trained with Muon*, by Marcos Hernanz Antón, supervised by Daniel Hernández Lobato (Grado en Ingeniería Informática, Escuela Politécnica Superior, Universidad Autónoma de Madrid), whose LaTeX source is also here.
 
 ## Contents
 
